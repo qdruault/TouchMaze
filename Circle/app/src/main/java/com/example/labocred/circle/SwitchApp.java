@@ -11,16 +11,21 @@ import android.widget.Toast;
  */
 
 public class SwitchApp {
+    /**
+     *
+     * @param applicationContext
+     * @param pack : le nom de l'appli à lancer (ex: bluetooth, dial, waveleft, waveright).
+     */
     public SwitchApp(final Context applicationContext, final String pack) {
-        Intent i;
+        Intent intent;
 
-        //On vérifie si l'appli est bien présente sur l'appareil
-
-        android.content.pm.PackageManager mPm = applicationContext.getPackageManager();
+        // On vérifie si l'appli est bien présente sur l'appareil.
+        android.content.pm.PackageManager packageManager = applicationContext.getPackageManager();
         PackageInfo info;
 
         try {
-            info = mPm.getPackageInfo("com.example.labocred." + pack, 0);
+            // On essaye de récupèrer l'appli.
+            info = packageManager.getPackageInfo("com.example.labocred." + pack, 0);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             info = null;
@@ -28,16 +33,19 @@ public class SwitchApp {
 
         boolean installed = info != null;
 
-        //Si l'appli est présente, on la démarre
-
+        // Si l'appli est présente, on la démarre.
         if (installed) {
-            i = applicationContext.getPackageManager().getLaunchIntentForPackage("com.example.labocred." + pack); //pack équivaut au nom de l'appli à lancer
-            i.addCategory(Intent.CATEGORY_LAUNCHER);
-            applicationContext.startActivity(i);
-        }else{
+            // On récupère l'intent nécessaire pour lancer l'appli.
+            intent = packageManager.getLaunchIntentForPackage("com.example.labocred." + pack);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            applicationContext.startActivity(intent);
 
-            //Sinon on prévient qu'elle n'est pas présente
-            Toast.makeText(applicationContext, "L'application \"" + pack + "\" n'existe pas ou n'est pas installée.", Toast.LENGTH_SHORT).show();
+        } else {
+            // Sinon on prévient qu'elle n'est pas présente.
+            Toast.makeText(applicationContext,
+                    "L'application \"" + pack + "\" n'existe pas ou n'est pas installée.",
+                    Toast.LENGTH_SHORT
+            ).show();
         }
     }
 }

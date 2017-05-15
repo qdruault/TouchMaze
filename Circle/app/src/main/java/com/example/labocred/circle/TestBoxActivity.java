@@ -29,7 +29,9 @@ public class TestBoxActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // On précise l'activité.
         setContentView(R.layout.activity_test_box);
+        // Bindings.
         ButterKnife.bind(this);
 
         Button b1 = (Button) findViewById(R.id.launchSequence);
@@ -38,23 +40,25 @@ public class TestBoxActivity extends AppCompatActivity implements View.OnClickLi
         Button b2 = (Button) findViewById(R.id.stopSequence);
         b2.setEnabled(false);
 
-        //Vérifie que l'application Bluetooth est bien allumée et connectée à un boîtier
-
+        // Vérifie que l'application Bluetooth est bien allumée et connectée à un boîtier.
         boolean isBluetoothOn = false;
 
+        // On récupère toutes les applications qui sont en cours.
         List<ActivityManager.RunningAppProcessInfo> processes = AndroidProcesses.getRunningAppProcessInfo(getApplicationContext());
         for (int i = 0; i < processes.size(); i++) {
+            // On regarde si l'application qui gère la connexion au boitier est lancée.
             if(processes.get(i).processName.equals("com.example.labocred.bluetooth")) {
                 isBluetoothOn = true;
             }
         }
 
+        // Si elle n'est pas lancée.
         if(!isBluetoothOn){
+            // On la lance via la classe SwitchApp.
             new SwitchApp(getApplicationContext(),"bluetooth");
         }
 
-        //Initialisation de la barre d'action
-
+        // Initialisation de la barre d'action.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
@@ -62,8 +66,7 @@ public class TestBoxActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    //Création du menu
-
+    // Création du menu.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -72,15 +75,16 @@ public class TestBoxActivity extends AppCompatActivity implements View.OnClickLi
         return super.onCreateOptionsMenu(menu);
     }
 
-    //Sélection menu
-
+    // Sélection menu.
     public boolean onOptionsItemSelected(MenuItem item){
         byte[] stop = {27,1,0,0};
         sendData.putExtra("BStream", stop);
         sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+        // Envoie un "message" à l'appli gérant la connexion au boitier.
         sendBroadcast(sendData);
 
         switch (item.getItemId()){
+            // Ouvre l'application correspondante.
             case R.id.menu:
                 new SwitchApp(getApplicationContext(),"bluetooth");
                 return true;
