@@ -28,18 +28,23 @@ public class TestBoxActivity extends AppCompatActivity implements TactileDialogV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // La vue.
         setContentView(R.layout.activity_test_box);
+        // Bindings.
         ButterKnife.bind(this);
 
         boolean launch = false;
 
+        // On récupère la liste des applis en cours d'execution.
         List<ActivityManager.RunningAppProcessInfo> processes = AndroidProcesses.getRunningAppProcessInfo(getApplicationContext());
         for (int i = 0; i < processes.size(); i++) {
+            // Si on trouve celle qui gère le bluetooth OK.
             if(processes.get(i).processName.equals("com.example.labocred.bluetooth")) {
                 launch = true;
             }
         }
 
+        // Sinon on la lance.
         if(!launch){
             new SwitchApp(getApplicationContext(),"bluetooth");
         }
@@ -61,6 +66,11 @@ public class TestBoxActivity extends AppCompatActivity implements TactileDialogV
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Pour changer d'application.
+     * @param item
+     * @return
+     */
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menu:
@@ -80,16 +90,22 @@ public class TestBoxActivity extends AppCompatActivity implements TactileDialogV
         }
     }
 
+    /**
+     * Réagit à l'evenement de toucher.
+     * @param event : l'évenement.
+     */
     public void onDialogTouch(DialogTouchEvent event) {
+        // Ecris dans la console les propriétés de l'event.
         String message = event.makeMessage();
         byte[] data;
         String lastMessage = "";
         if (!message.equals(lastMessage)) {
-
+            // Récupère le tableau de bytes correspondnt aux picots à lever.
             data = TouchConverter.SetToByte(event.getAffectedBoxes());
             Intent sendData = new Intent();
             sendData.putExtra("BStream", data);
             sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+            // Envoie l'info à l'appli qui gère le bluetooth.
             sendBroadcast(sendData);
         }
     }
