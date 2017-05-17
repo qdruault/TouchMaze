@@ -102,70 +102,81 @@ public class TestBoxActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    //Thread d'allumage de la séquence
-
+    // Thread d'allumage de la séquence.
     private class ReceiverThread extends Thread{
         @Override
         public void run() {
             while (flagThread) {
+                // Tant que le flag est levé, on lance la séquence.
                 traitementData();
             }
         }
     }
 
-    //Gestion des boutons concernant la séquence
-
+    // Gestion des boutons concernant la séquence.
     public void onClick(View v){
         switch (v.getId()){
+            // Clic sur "lancer".
             case R.id.launchSequence:
+                // On désactive le bouton "lancer".
                 Button b1 = (Button)findViewById(R.id.launchSequence);
                 b1.setEnabled(false);
+                // On active le bouton "stopper".
                 Button b2 = (Button)findViewById(R.id.stopSequence);
                 b2.setEnabled(true);
+                // On crée le thread qui va lancer la séquence.
                 ReceiverThread receiverThread = new ReceiverThread();
-                    receiverThread.start();
+                receiverThread.start();
+                // On lève le flag.
                 flagThread = true;
                 break;
+            // Clic sur "stopper".
             case R.id.stopSequence:
+                // On baisse le flag.
                 flagThread = false;
+                // On active le bouton "lancer".
                 b1 = (Button) findViewById(R.id.launchSequence);
                 b1.setEnabled(true);
+                // On désactive le bouton "stopper".
                 b2 = (Button)findViewById(R.id.stopSequence);
                 b2.setEnabled(false);
                 break;
         }
     }
 
-    //Méthode d'envoi des données à l'appli Bluetooth
-
+    // Méthode d'envoi des données à l'appli Bluetooth.
     public void traitementData(){
+        // Création du tableau de bytes à envoyer.
         byte[] data;
+        // On le remplit.
         data = TouchConverter.SetToByte();
         sendData.putExtra("BStream", data);
         sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+        // On l'envoie à l'appli bluetooth.
         sendBroadcast(sendData);
     }
 
-    //Gère la mise en arrière-plan de l'appli + la sortie du Thread
-
+    // Gère la mise en arrière-plan de l'appli + la sortie du Thread.
     @Override
     public void onPause(){
         flagThread = false;
+        // Attend 100 ms.
         TouchConverter.stopThread();
         byte[] stop = {27,1,0,0};
         sendData.putExtra("BStream", stop);
         sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+        // On envoie STOP à l'appli bluetooth.
         sendBroadcast(sendData);
         super.onPause();
     }
 
-    //Réinitialisation de l'appli au retour en avant-plan
-
+    // Réinitialisation de l'appli au retour en avant-plan.
     public void onResume(){
         super.onResume();
         Button b1 = (Button)findViewById(R.id.launchSequence);
         Button b2 = (Button)findViewById(R.id.stopSequence);
         if(b2.isEnabled()){
+            // On remet en config de départ.
             b1.setEnabled(true);
             b2.setEnabled(false);
         }

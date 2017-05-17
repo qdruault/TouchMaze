@@ -5,79 +5,78 @@ package com.example.labocred.circle;
  */
 
 public class TouchConverter {
+
+    // Pour connaitre l'étape de dessin du motif.
     static int compteur = 0;
+
+    /**
+     * Fonction appelée toutes les 100 ms pour lever des picots
+     * qui simulent le mouvement d'une spirale.
+     * @return le tableau à transmettre à l'appli bluetooth.
+     */
     static byte[] SetToByte() {
         boolean[] rightTouches = {false, false, false, false, false, false, false, false};
         boolean[] leftTouches = {false, false, false, false, false, false, false, false};
 
-        //Permet l'allumage des picots dans l'ordre indiqué
+        // Leve le picot qu'il faut.
+        switch (compteur) {
+            case 0:
+                rightTouches[1] = true;
+                break;
+            case 1:
+                rightTouches[3] = true;
+                break;
+            case 2:
+                rightTouches[5] = true;
+                break;
+            case 3:
+                rightTouches[7] = true;
+                break;
+            case 4:
+                rightTouches[6] = true;
+                break;
+            case 5:
+                leftTouches[7] = true;
+                break;
+            case 6:
+                leftTouches[6] = true;
+                break;
+            case 7:
+                leftTouches[4] = true;
+                break;
+            case 8:
+                leftTouches[2] = true;
+                break;
+            case 9:
+                leftTouches[0] = true;
+                break;
+            case 10:
+                leftTouches[1] = true;
+                break;
+            case 11:
+                rightTouches[0] = true;
+                break;
+            case 12:
+                rightTouches[2] = true;
+                break;
+            case 13:
+                rightTouches[4] = true;
+                break;
+            case 14:
+                leftTouches[5] = true;
+                break;
+            case 15:
+                leftTouches[3] = true;
+                break;
 
-        if (compteur == 0) {
-            rightTouches[1] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 1){
-            rightTouches[3] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 2){
-            rightTouches[5] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 3){
-            rightTouches[7] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 4) {
-            rightTouches[6] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 5) {
-            leftTouches[7] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 6) {
-            leftTouches[6] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 7) {
-            leftTouches[4] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 8) {
-            leftTouches[2] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 9) {
-            leftTouches[0] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 10) {
-            leftTouches[1] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 11) {
-            rightTouches[0] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 12) {
-            rightTouches[2] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 13) {
-            rightTouches[4] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 14) {
-            leftTouches[5] = true;
-            stopThread();
-            compteur++;
-        }else if(compteur == 15) {
-            leftTouches[3] = true;
-            stopThread();
-            compteur = 0;
         }
 
+        // On attend 100 ms.
+        stopThread();
+        // On passe à l'étape suivante.
+        compteur = (compteur + 1) % 16;
+
+        // On prépare les données à envoyer.
         byte[] data = new byte[4];
         data[0] = 0x1b;
         data[1] = 0x01;
@@ -87,28 +86,34 @@ public class TouchConverter {
         return data;
     }
 
-    //Permet l'attente du Thread pour un temps donné
-
+    // Permet l'attente du Thread pour un temps donné.
     static void stopThread(){
         try {
+            // Pause de 100 ms.
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Convertir le tableau de bool en byte.
+     * @param p_tab : le tableau de bool à convertir
+     * @return
+     */
     static byte regularBoolToByte(boolean[] p_tab) {
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < 8; i++) {
+            // Remplace les false par 0 et les true par 1.
             output.append(p_tab[i] ? '1' : '0');
         }
         return (byte) Integer.parseInt(output.toString(), 2);
     }
 
     /**
+     * Remet le tableau dans l'ordre.
      * Don't ask me why. I don't know
      */
-
     static boolean[] rectifyTouches(boolean[] t) {
         return new boolean[]{t[1], t[0], t[3], t[5], t[7], t[2], t[4], t[6]};
     }
