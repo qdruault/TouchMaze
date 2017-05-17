@@ -55,7 +55,9 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // La vue.
         setContentView(R.layout.activity_bluetooth_settings);
+        // Binding.
         ButterKnife.bind(this);
 
         app = (DialogApp) getApplication();
@@ -66,16 +68,19 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
             actionBar.setTitle("Bluetooth");
         }
 
+        // Récupère le bluetooth.
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             finish();
         }
 
         if (!bluetoothAdapter.isEnabled()) {
+            // Ouvre une fenetre pour se connecter au bluetooth.
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
 
+        // Récupère tous les appareils auquel on est déjà apparié.
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
         devices = new ArrayList<>(pairedDevices);
 
@@ -83,36 +88,49 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
         devicesListView.setAdapter(devicesAdapter);
 
 
+        // Methode onReceive(Context context, Intent intent).
         pairingReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                // On récupère l'action.
                 String action = intent.getAction();
 
+                // Appareil bluetooth détecté.
                 if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    // On récupère l'appareil détecté.
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     boolean newDevice = true;
+                    // On parcourt chaque appareil auquel on est déjà apparié.
                     for(BluetoothDevice d: devices) {
+                        // S'ils ont la même adresse MAC.
                         if (d.getAddress().equals(device.getAddress())) {
                             newDevice = false;
+                            // On se connecte au boitier.
                             connectToBox(device);
                             break;
                         }
                     }
+                    // S'il n'est pas dans la liste.
                     if (newDevice) {
+                        // On l'ajoute.
                         devices.add(device);
                         devicesAdapter.notifyDataSetChanged();
                     }
                 }
+                // Connexion établie.
                 else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 }
+                // Déconnexion.
                 else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 }
+                // Détection terminée.
                 else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                     refreshMenuItem.setIcon(R.drawable.ic_autorenew_white_48dp);
                     progressBar.setVisibility(View.GONE);
                     progressBar.animate().cancel();
+                // Début de la détection.
                 } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
                     refreshMenuItem.setIcon(R.drawable.ic_pause_circle_outline_white_48dp);
                     progressBar.animate().start();
@@ -173,17 +191,24 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    /**
+     * Connexion au boitier.
+     * @param device : le boitier.
+     */
     private void connectToBox(BluetoothDevice device) {
+        // Fenetre d'attente.
         final ProgressDialog progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Déconnexion");
 
         try {
+            // On ferme la socket.
             if (app.socket != null) {
                 app.socket.close();
             }
+            // Crée une socket.
             final BluetoothSocket trySocket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
-            progressDialog.setMessage("Connection au boîtier");
+            progressDialog.setMessage("Connexion au boîtier");
             progressDialog.show();
 
             new Thread() {
@@ -191,15 +216,18 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
                 public void run() {
                     bluetoothAdapter.cancelDiscovery();
                     try {
+                        // Connexion à la socket.
                         trySocket.connect();
+                        // On stocke la socket.
                         app.socket = trySocket;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(BluetoothSettingsActivity.this,"Connection effectuée", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BluetoothSettingsActivity.this,"Connexion effectuée", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } catch (IOException e) {
+                        // Problème de connexion.
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -223,6 +251,10 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Décoonnexion du boitier.
+     * @param device : le boitier.
+     */
     private void disconnectBox (BluetoothDevice device) {
         final ProgressDialog progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
