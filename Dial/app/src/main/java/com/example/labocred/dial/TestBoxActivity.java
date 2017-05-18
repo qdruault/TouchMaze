@@ -108,7 +108,7 @@ public class TestBoxActivity extends AppCompatActivity implements TactileDialogV
             // Pour les tests.
             if(testMode) {
                 sendData.setAction("com.example.labocred.bluetooth.Test");
-                sendData.putExtra("Message", message);
+                sendData.putExtra("Picots", event.getBoxesText());
             } else {
                 // Récupère le tableau de bytes correspondnt aux picots à lever.
                 data = TouchConverter.SetToByte(event.getAffectedBoxes());

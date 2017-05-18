@@ -41,9 +41,9 @@ public class BluetoothReceiver extends BroadcastReceiver{
             try {
                 // On extrait le tableau de bytes passé en extra.
                 Bundle extras = intent.getExtras();
-                String message = extras.getString("Message");
+                String picots = extras.getString("Picots");
                 // On fait l'affichage des picots à lever.
-                Log.d("Picots", message);
+                Log.d("Picots", picots);
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
