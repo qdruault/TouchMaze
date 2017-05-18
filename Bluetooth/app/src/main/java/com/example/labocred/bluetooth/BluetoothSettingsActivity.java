@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -46,6 +47,9 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
     static BluetoothSettingsActivity BSA;
     private MenuItem refreshMenuItem;
 
+    // Flag pour les tests.
+    private boolean testMode = true;
+
     @Bind(R.id.bluetooth_devices_list)
     ListView devicesListView;
 
@@ -68,84 +72,89 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
             actionBar.setTitle("Bluetooth");
         }
 
-        // Récupère le bluetooth.
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null) {
-            finish();
-        }
+        // Si on n'est pas en phase de test, on se connecte au bluetooth.
+        if (!testMode) {
+            // Récupère le bluetooth.
+            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (bluetoothAdapter == null) {
+                finish();
+            }
 
-        if (!bluetoothAdapter.isEnabled()) {
-            // Ouvre une fenetre pour se connecter au bluetooth.
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
+            if (!bluetoothAdapter.isEnabled()) {
+                // Ouvre une fenetre pour se connecter au bluetooth.
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
 
-        // Récupère tous les appareils auquel on est déjà apparié.
-        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-        devices = new ArrayList<>(pairedDevices);
+            // Récupère tous les appareils auquel on est déjà apparié.
+            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+            devices = new ArrayList<>(pairedDevices);
 
-        devicesAdapter = new BluetoothDevicesAdapter(this, R.layout.item_bluetooth_device, devices);
-        devicesListView.setAdapter(devicesAdapter);
+            devicesAdapter = new BluetoothDevicesAdapter(this, R.layout.item_bluetooth_device, devices);
+            devicesListView.setAdapter(devicesAdapter);
 
+            // Methode onReceive(Context context, Intent intent).
+            pairingReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    // On récupère l'action.
+                    String action = intent.getAction();
 
-        // Methode onReceive(Context context, Intent intent).
-        pairingReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                // On récupère l'action.
-                String action = intent.getAction();
-
-                // Appareil bluetooth détecté.
-                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                    // On récupère l'appareil détecté.
-                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    boolean newDevice = true;
-                    // On parcourt chaque appareil auquel on est déjà apparié.
-                    for(BluetoothDevice d: devices) {
-                        // S'ils ont la même adresse MAC.
-                        if (d.getAddress().equals(device.getAddress())) {
-                            newDevice = false;
-                            // On se connecte au boitier.
-                            connectToBox(device);
-                            break;
+                    // Appareil bluetooth détecté.
+                    if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                        // On récupère l'appareil détecté.
+                        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                        boolean newDevice = true;
+                        // On parcourt chaque appareil auquel on est déjà apparié.
+                        for(BluetoothDevice d: devices) {
+                            // S'ils ont la même adresse MAC.
+                            if (d.getAddress().equals(device.getAddress())) {
+                                newDevice = false;
+                                // On se connecte au boitier.
+                                connectToBox(device);
+                                break;
+                            }
+                        }
+                        // S'il n'est pas dans la liste.
+                        if (newDevice) {
+                            // On l'ajoute.
+                            devices.add(device);
+                            devicesAdapter.notifyDataSetChanged();
                         }
                     }
-                    // S'il n'est pas dans la liste.
-                    if (newDevice) {
-                        // On l'ajoute.
-                        devices.add(device);
-                        devicesAdapter.notifyDataSetChanged();
+                    // Connexion établie.
+                    else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+                        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    }
+                    // Déconnexion.
+                    else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+                        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    }
+                    // Détection terminée.
+                    else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                        refreshMenuItem.setIcon(R.drawable.ic_autorenew_white_48dp);
+                        progressBar.setVisibility(View.GONE);
+                        progressBar.animate().cancel();
+                        // Début de la détection.
+                    } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+                        refreshMenuItem.setIcon(R.drawable.ic_pause_circle_outline_white_48dp);
+                        progressBar.animate().start();
+                        progressBar.setVisibility(View.VISIBLE);
                     }
                 }
-                // Connexion établie.
-                else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
-                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                }
-                // Déconnexion.
-                else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
-                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                }
-                // Détection terminée.
-                else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                    refreshMenuItem.setIcon(R.drawable.ic_autorenew_white_48dp);
-                    progressBar.setVisibility(View.GONE);
-                    progressBar.animate().cancel();
-                // Début de la détection.
-                } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-                    refreshMenuItem.setIcon(R.drawable.ic_pause_circle_outline_white_48dp);
-                    progressBar.animate().start();
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-            }
-        };
+            };
 
-        registerReceiver(pairingReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-        registerReceiver(pairingReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-        registerReceiver(pairingReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
-        registerReceiver(pairingReceiver, new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
-        registerReceiver(pairingReceiver, new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED));
-        registerReceiver(pairingReceiver, new IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST));
-        registerReceiver(pairingReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+            registerReceiver(pairingReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+            registerReceiver(pairingReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+            registerReceiver(pairingReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
+            registerReceiver(pairingReceiver, new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
+            registerReceiver(pairingReceiver, new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED));
+            registerReceiver(pairingReceiver, new IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST));
+            registerReceiver(pairingReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+
+        } else {
+            // On est en test.
+        }
     }
 
     @Override
@@ -291,7 +300,7 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
         } else {
             final String [] items = new String[] {"Dial","WaveLeft","WaveRight","Circle"};
             final Integer[] icons = new Integer[] {R.drawable.ic_grid_on_black_24dp, R.drawable.ic_blur_linear_black_left_24dp,
-                R.drawable.ic_blur_linear_black_right_24dp,R.drawable.ic_refresh_black_24dp};
+                    R.drawable.ic_blur_linear_black_right_24dp,R.drawable.ic_refresh_black_24dp};
             ListAdapter adapter = new ArrayAdapterWithIcon(this, items, icons);
 
             new AlertDialog.Builder(this).setTitle("Sélectionnez l'application")
