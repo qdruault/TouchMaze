@@ -1,0 +1,56 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sample="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Paramètres généraux"
+        android:key="pref_dialog">
+
+        <com.pavelsikun.seekbarpreference.SeekBarPreference
+            android:key="pref_touch_size"
+            android:title="@string/touch_size"
+            android:defaultValue="10"
+            sample:msbp_minValue="1"
+            sample:msbp_maxValue="100"
+            sample:msbp_interval="1"
+            sample:msbp_measurementUnit="%"/>
+
+        <CheckBoxPreference
+            android:key="pref_show_my_touch"
+            android:title="@string/show_my_touch" />
+
+        <CheckBoxPreference
+            android:key="pref_show_parthner_touch"
+            android:title="@string/show_partner_touch" />
+
+        <SwitchPreference
+            android:key="pref_ModeTT"
+            android:title="@string/mode_TT" />
+     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Paramètres TouchThrough"
+        android:key="pref_tt">
+
+        <MultiSelectListPreference
+            android:key="pref_signal_TT"
+            android:title="@string/tt_output"
+            android:dialogTitle="TT_output"
+            android:entries="@array/pref_tt_output_options"
+            android:entryValues="@array/pref_tt_output_values"
+            android:defaultValue="@array/pref_tt_output_default_values"/>
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:title="@string/application"
+        android:key="pref_application">
+
+        <EditTextPreference
+            android:defaultValue="300"
+            android:key="pref_disconnect_timeout"
+            android:title="@string/idle_time_before_logout_in_seconds"
+            android:inputType="number" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

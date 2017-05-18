@@ -1,0 +1,58 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:id="@+id/contact"
+    >
+
+    <ImageView
+        android:id="@+id/contact_status_image"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_highlight_off_black_48dp"/>
+
+    <TextView
+        android:id="@+id/contact_name"
+        android:textSize="30sp"
+        android:paddingRight="5dp"
+        android:layout_toRightOf="@id/contact_status_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/contact_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/contact_name"
+        android:layout_alignBottom="@id/contact_name"
+        android:scrollHorizontally="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingRight="48dp" />
+
+    <TextView
+        android:id="@+id/contact_invitation_active"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/contact_name"
+        android:layout_alignTop="@id/contact_name"
+        android:scrollHorizontally="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingRight="48dp"
+        android:textColor="#24fc03"
+        android:textStyle="bold|italic" />
+
+    <ImageButton
+        android:id="@+id/contact_start_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_fingerprint_black_48dp"
+        android:layout_alignParentRight="true"
+        android:background="@null"
+        android:onClick="startDialog"
+        android:visibility="gone"/>
+
+</RelativeLayout>

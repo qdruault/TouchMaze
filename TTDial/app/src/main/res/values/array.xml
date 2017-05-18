@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_signal_output_options">
+        <item>Tactile</item>
+        <item>Visual</item>
+        <item>Common</item>
+    </string-array>
+
+    <string-array name="pref_signal_output_values">
+        <item>TACTILE</item>
+        <item>VISUAL</item>
+        <item>COMMON</item>
+    </string-array>
+
+    <string-array name="pref_signal_output_default_values">
+        <item>TACTILE</item>
+    </string-array>
+
+    <string-array name="pref_tt_output_options">
+        <item>Visual</item>
+        <item>Vibrator</item>
+        <item>Sound</item>
+    </string-array>
+
+    <string-array name="pref_tt_output_values">
+        <item>VISUAL</item>
+        <item>VIBRATOR</item>
+        <item>SOUND</item>
+    </string-array>
+
+    <string-array name="pref_tt_output_default_values">
+        <item>VIBRATOR</item>
+    </string-array>
+
+
+</resources>

@@ -1,0 +1,114 @@
+<resources>
+    <string-array name="pref_example_list_titles">
+        <item>Toujours</item>
+        <item>Si possible</item>
+        <item>Jamais</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 heure</item>
+        <item>3 heures</item>
+        <item>6 heures</item>
+        <item>Jamais</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="access">Accéder</string>
+    <string name="application">Application</string>
+    <string name="app_name">SimpleTouch</string>
+    <string name="authenticating">Authentification&#8230;</string>
+
+    <string name="cannot_connect_to_device">Echec de connexion</string>
+    <string name="connexion_to_box">Connexion au boîtier</string>
+    <string name="connected_successfully">Connexion réussie</string>
+    <string name="connecting_to_device">Veuillez patienter. Connexion en cours&#8230;</string>
+    <string name="create_account">Créer le compte</string>
+    <string name="create_new_account">Créer un nouveau compte</string>
+
+    <string name="dialog">Dialog</string>
+    <string name="disconnecting">Deconnexion&#8230;</string>
+    <string name="disconnected_successfully">Déconnexion réussie</string>
+
+    <string name="error_adding_contact">Erreur de l\'ajout du contact</string>
+    <string name="end_dialog_title">La fin du dialogue</string>
+    <string name="end_dialog_message">Votre partenaire a terminé la conversation. La page de dialogue sera fermée</string>
+
+    <string name="finish_dialog">Terminer le dialogue</string>
+
+    <string name="idle_time_before_logout_in_seconds">Temps d\'inactivité avant la deconnexion (en secondes)</string>
+    <string name="invited_you">vous invite</string>
+
+    <string name="login">Identifiant</string>
+    <string name="login_failed">Echec de connexion</string>
+    <string name="login_invalid">Identifiant invalide</string>
+    <string name="logout">Déconnexion</string>
+
+    <string name="make_surface_square">Faire la surface carrée</string>
+    <string name="minimum_3_alphanumeric_characters">Entrer minimum 3 caractères</string>
+    <string name="my_status">Mon statut</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="ok">OK</string>
+
+    <string name="partners_login">Identifiant du contact</string>
+    <string name="password">Mot de passe</string>
+    <string name="passwords_are_not_equals">Mot de passe différent</string>
+
+    <string name="registered_and_authenticated_successfully">Enregistrement et authentification réussie</string>
+    <string name="registering">Enregistrement&#8230;</string>
+    <string name="repeat_password">Repétez le mot de passe</string>
+
+    <string name="save">Sauvegarder</string>
+    <string name="settings">Réglages</string>
+    <string name="signal_output">Mode d\'affichage</string>
+    <string name="surface">Surface</string>
+    <string name="surface_horizontal_size">Taille horizontale</string>
+    <string name="surface_vertical_size">Taille verticale</string>
+    <string name="surface_horizontal_position">Position horizontale</string>
+    <string name="surface_vertical_position">Position verticale</string>
+    <string name="tt_output">Mode d\'affichage</string>
+
+    <string name="test_my_box">Tester ma boîte</string>
+    <string name="this_name_is_already_in_use">L\'identifiant est déjà utilisé</string>
+    <string name="touch_size">Taille du curseur (en % largeur écran)</string>
+    <string name="background_image">Image de fond</string>
+    <string name="show_my_touch">Voir mon toucher</string>
+    <string name="show_partner_touch">Voir le toucher de mon partenaire</string>
+    <string name="mode_dialtact">DialTact</string>
+    <string name="mode_TT">TouchThrough</string>
+
+    <string name="title_activity_settings">Réglages</string>
+    <string name="title_activity_test_box">Tester la boîte</string>
+    <string name="title_activity_status">Statut</string>
+    <string name="title_activity_dialog">Dialogue</string>
+    <string name="title_activity_home">Accueil</string>
+    <string name="title_activity_main">Contacts</string>
+    <string name="title_activity_bluetooth">Bluetooth</string>
+    <string name="title_activity_sign_up">S\'enregistrer</string>
+
+    <string name="unexpected_error_occurred">Une erreur est survenue</string>
+
+    <string name="you_must_connect_to_the_box_firstly">Vous devez vous connecter à la boîte tactile pour dialoguer</string>
+    <string name="your_partner_is_here">Votre contact est présent</string>
+    <string name="your_status">Votre statut</string>
+    <string name="your_status_has_been_successfully_updated">Votre statut a été mis à jour</string>
+
+    <string name="waiting_for_your_partner">En attente d\'une réponse de votre contact&#8230;</string>
+    <string name="we_will_add_a_contact_once_a_person_logs_in">Votre contact a été ajouté</string>
+</resources>
