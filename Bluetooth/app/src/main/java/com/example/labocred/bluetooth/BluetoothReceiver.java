@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import static com.example.labocred.bluetooth.BluetoothSettingsActivity.app;
 
@@ -30,6 +31,19 @@ public class BluetoothReceiver extends BroadcastReceiver{
                 byte[] bytes = extras.getByteArray("BStream");
                 // On se connecte à la socket du bluetooth et on lui envoie le message.
                 new BluetoothReceiverSettings.ConnectedThread(app.socket).write(bytes);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Action pour les tests.
+        if(intent.getAction().equals("com.example.labocred.bluetooth.Test")){
+            try {
+                // On extrait le tableau de bytes passé en extra.
+                Bundle extras = intent.getExtras();
+                String picots = extras.getString("Picots");
+                // On fait l'affichage des picots à lever.
+                Log.d("Picots", picots);
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }

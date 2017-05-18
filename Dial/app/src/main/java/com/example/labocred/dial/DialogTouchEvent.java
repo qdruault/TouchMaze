@@ -71,4 +71,35 @@ public class DialogTouchEvent {
 
         return message;
     }
+
+    /**
+     * Génère une représentation texte des picots levés.
+     * @return
+     */
+    public String getBoxesText() {
+        String res = "";
+
+        // On initialise le tableau avec des 0.
+        int[][] boxes = new int[4][4];
+        for (int x = 0; x < 4; ++x) {
+            for (int y = 0; y < 4; ++y) {
+                boxes[x][y] = 0;
+            }
+        }
+        
+        // On met des 1 pour les picots levés.
+        for (Point point : affectedBoxes) {
+            boxes[point.x][point.y] = 1;
+        }
+
+        // On écrit.
+        for (int x = 0; x < 4; ++x) {
+            for (int y = 0; y < 4; ++y) {
+                res += boxes[y][x] == 1 ? "X" : "O";
+            }
+            res += "\n";
+        }
+
+        return res;
+    }
 }

@@ -30,7 +30,9 @@
             android:name=".BluetoothReceiver">
             <intent-filter android:priority="100">
                 <action android:name="com.example.labocred.bluetooth.StreamBluetooth" />
+                <action android:name="com.example.labocred.bluetooth.Test" />
             </intent-filter>
         </receiver>
     </application>
 </manifest>
+
