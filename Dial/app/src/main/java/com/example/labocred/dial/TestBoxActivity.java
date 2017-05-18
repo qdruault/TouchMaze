@@ -25,6 +25,9 @@ public class TestBoxActivity extends AppCompatActivity implements TactileDialogV
     @Bind(R.id.test_tactile_area)
     MainLayout tactileArea;
 
+    // Mode de test.
+    boolean testMode = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,7 @@ public class TestBoxActivity extends AppCompatActivity implements TactileDialogV
         if(!launch){
             new SwitchApp(getApplicationContext(),"bluetooth");
         }
+
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -100,11 +104,18 @@ public class TestBoxActivity extends AppCompatActivity implements TactileDialogV
         byte[] data;
         String lastMessage = "";
         if (!message.equals(lastMessage)) {
-            // Récupère le tableau de bytes correspondnt aux picots à lever.
-            data = TouchConverter.SetToByte(event.getAffectedBoxes());
             Intent sendData = new Intent();
-            sendData.putExtra("BStream", data);
-            sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+            // Pour les tests.
+            if(testMode) {
+                sendData.setAction("com.example.labocred.bluetooth.Test");
+                sendData.putExtra("Message", message);
+            } else {
+                // Récupère le tableau de bytes correspondnt aux picots à lever.
+                data = TouchConverter.SetToByte(event.getAffectedBoxes());
+                sendData.putExtra("BStream", data);
+                sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+            }
+
             // Envoie l'info à l'appli qui gère le bluetooth.
             sendBroadcast(sendData);
         }
