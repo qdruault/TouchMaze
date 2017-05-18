@@ -31,6 +31,8 @@ public class TouchConverter {
             }
         }
 
+        PinsDisplayer.setAndDisplay(leftTouches, rightTouches);
+
         byte[] data = new byte[4];
         data[0] = 0x1b;
         data[1] = 0x01;
@@ -51,6 +53,7 @@ public class TouchConverter {
             // Remplace les false par 0 et les true par 1.
             output.append(p_tab[i] ? '1' : '0');
         }
+
         return (byte) Integer.parseInt(output.toString(), 2);
     }
 
