@@ -194,11 +194,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .setView(layout)
                     .setPositiveButton("Ajout", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            // On récupère la connexion.
                             AbstractXMPPConnection connection = ((DialogApp)getActivity().getApplication()).getConn();
+                            // On prépare la requete à envoyer.
                             Presence presence = new Presence(Presence.Type.subscribe);
+                            // On ajoute le destinataire.
                             presence.setTo(addPartnerEditText.getText().toString() + "@" + connection.getHost());
                             String feedback = getResources().getString(R.string.we_will_add_a_contact_once_a_person_logs_in);
                             try {
+                                // On envoie la requete.
                                 connection.sendStanza(presence);
                             } catch (SmackException.NotConnectedException e){
                                 feedback = getResources().getString(R.string.error_adding_contact);
