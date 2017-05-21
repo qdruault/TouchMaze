@@ -25,9 +25,13 @@ import fr.UTC_CosTech_CRED.SimpleTouch.util.DialogApp;
 public class DialogActivity extends AppCompatActivity implements ChatMessageListener {
 
     private DialogApp app;
+    // Connexion.
     private AbstractXMPPConnection conn;
+    // Gestionnaire de tchat.
     private ChatManager chatManager;
+    // Le tchat.
     private Chat chat;
+    // Les messages échangés.
     private ArrayList<String> messages;
     private ArrayAdapter<String> adapter;
 
@@ -44,14 +48,16 @@ public class DialogActivity extends AppCompatActivity implements ChatMessageList
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, messages);
         _listMessages.setAdapter(adapter);
 
-
+        // Récupère la connexion.
         app = (DialogApp)getApplicationContext();
         conn = app.getConn();
 
+        // Crée le tchat pour cette connexion.
         chatManager = ChatManager.getInstanceFor(conn);
         Intent i = getIntent();
         chat = chatManager.createChat(i.getStringExtra("PARTNER"), this);
 
+        // Listener sur la création d'un nouveau tchat.
         chatManager.addChatListener(
                 new ChatManagerListener() {
                     @Override
@@ -63,24 +69,38 @@ public class DialogActivity extends AppCompatActivity implements ChatMessageList
                 });
     }
 
+    /**
+     * Envoie un message sur le tchat.
+     * @param view
+     */
     public void sendMessage(View view) {
 
+        // Récupère le message.
         String message = _newMessageText.getText().toString();
         try {
+            // Enioe le message.
             chat.sendMessage(message);
+            // On ajoute le message à la liste (historique).
             messages.add(0, message);
             adapter.notifyDataSetChanged();
+            // On vide le champ texte.
             _newMessageText.setText("");
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Réception d'un message ?
+     * @param chat
+     * @param message
+     */
     public void processMessage(Chat chat, final Message message) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (message.getBodies().size() > 0) {
+                    // On ajoute le message à la liste.
                     messages.add(0, message.getBody());
                     adapter.notifyDataSetChanged();
                 }
