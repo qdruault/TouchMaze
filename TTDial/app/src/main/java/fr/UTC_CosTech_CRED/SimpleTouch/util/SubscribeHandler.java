@@ -17,8 +17,13 @@ public class SubscribeHandler implements StanzaListener
         this.connection = connection;
     }
 
+    /**
+     * Traitement d'un message reçu.
+     * @param packet : le message.
+     */
     @Override
     public void processPacket(Stanza packet) {
+        // On envoie un message subscribe à l'expéditeur.
         Presence subscribeBack = new Presence(Presence.Type.subscribe);
         subscribeBack.setTo(packet.getFrom());
         try {

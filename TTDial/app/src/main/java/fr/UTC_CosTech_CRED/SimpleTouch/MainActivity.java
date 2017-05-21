@@ -158,14 +158,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        // Pour changer de statut.
         if (id == R.id.status_drawer_button) {
             Intent i = new Intent(this, StatusActivity.class);
             startActivity(i);
         } else if (id == R.id.status_settings_button) {
+            // Pour charger des paramètres.
             Intent i = new Intent(this, SettingsActivity.class);
             startActivity(i);
         }
         else if (id == R.id.log_out_drawer_button) {
+            // Pour se connecter.
             app.disconnect();
             Intent i = new Intent(this, LoginActivity.class);
             startActivity(i);
