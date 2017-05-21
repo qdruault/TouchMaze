@@ -11,23 +11,87 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>-->
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/circle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="circle" />
+
+            <Button
+                android:id="@+id/wave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="WAVE" />
+
+            <Button
+                android:id="@+id/split"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="SPLIT" />
+
+            <Button
+                android:id="@+id/snow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="SNOW" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+        </LinearLayout>
+    </ScrollView>
+
     <Button
         android:id="@+id/launchSequence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="98dp"
+        android:layout_marginBottom="15dp"
         android:onClick="onClick"
         android:text="Lancer la séquence"
-        android:layout_alignBottom="@+id/stopSequence"
+        android:layout_above="@+id/stopSequence"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/stopSequence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="175dp"
+        android:layout_marginBottom="26dp"
         android:onClick="onClick"
-        android:text="Stopper la séquence" />
+        android:text="Stopper la séquence"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/launchSequence"
+        android:layout_alignStart="@+id/launchSequence" />
 </RelativeLayout>

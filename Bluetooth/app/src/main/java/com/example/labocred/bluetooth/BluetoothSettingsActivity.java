@@ -48,7 +48,7 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
     private MenuItem refreshMenuItem;
 
     // Flag pour les tests.
-    private boolean testMode = true;
+    private boolean testMode = false;
 
     @Bind(R.id.bluetooth_devices_list)
     ListView devicesListView;
