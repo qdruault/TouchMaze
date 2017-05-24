@@ -40,10 +40,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // On vérifie que les champs sont remplis.
-                if (loginText.getText().toString().isEmpty() || passwordText.getText().toString().isEmpty()) {
-                    onLoginFailed();
-                } else {
-                    onLoginSuccess();
+                if (checkFields()) {
+                    tryLogin();
                 }
             }
         };
@@ -63,5 +61,37 @@ public class MainActivity extends AppCompatActivity {
      */
     private void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login ou mot de passe incorrect :(", Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * Vérifie sue les champs login/password sont bien remplis.
+     * @return
+     */
+    private boolean checkFields() {
+        // Pas de login.
+        if (loginText.getText().toString().isEmpty()) {
+            loginText.setError("Login invalide");
+            return false;
+        } else {
+            loginText.setError(null);
+        }
+
+        // Pas de mot de passe.
+        if (passwordText.getText().toString().isEmpty()) {
+            passwordText.setError("Mot de passe invalide");
+            return false;
+        } else {
+            passwordText.setError(null);
+        }
+
+        // Tout va bien.
+        return true;
+    }
+
+    /**
+     * On se connecte.
+     */
+    private void tryLogin() {
+        Toast.makeText(getBaseContext(), "OK !", Toast.LENGTH_LONG).show();
     }
 }
