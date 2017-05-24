@@ -62,5 +62,17 @@ public class GameEnigma extends Enigma {
 	
 	//jsonContent = mapper.writeValueAsString(grille.getEnsembles()[ID]);
 	//Ensemble afterAnalysisEns = mapper.readValue(content, Ensemble.class);
+	
+	//lorsque le guide recoit les x y de l'explor quii est au bon endroit
+	//on cree un guide enigma
+	//puis un explorator enigma
+	//l'explorator enigma est envoyé en json
+	
+	//l'enigme est resolue blabla
+	//verif sur l'explorateur
+	//une fois que la grille est complete
+	//envoie de message au guide
+	//si reponse ok on renvoi le truc et ca repart
+	
 
 }
