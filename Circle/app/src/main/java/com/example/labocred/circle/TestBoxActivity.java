@@ -26,6 +26,14 @@ public class TestBoxActivity extends AppCompatActivity implements View.OnClickLi
     boolean flagThread = true;
     Intent sendData = new Intent();
 
+    public enum Tacticons {
+        SPIRALE,
+        CIRCLE,
+        WAVE,
+        SPLIT,
+        SNOW;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,60 +110,6 @@ public class TestBoxActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    // Thread d'allumage de la séquence.
-    private class ReceiverThread extends Thread{
-        @Override
-        public void run() {
-            while (flagThread) {
-                // Tant que le flag est levé, on lance la séquence.
-                traitementData();
-            }
-        }
-    }
-
-    // Gestion des boutons concernant la séquence.
-    public void onClick(View v){
-        switch (v.getId()){
-            // Clic sur "lancer".
-            case R.id.launchSequence:
-                // On désactive le bouton "lancer".
-                Button b1 = (Button)findViewById(R.id.launchSequence);
-                b1.setEnabled(false);
-                // On active le bouton "stopper".
-                Button b2 = (Button)findViewById(R.id.stopSequence);
-                b2.setEnabled(true);
-                // On crée le thread qui va lancer la séquence.
-                ReceiverThread receiverThread = new ReceiverThread();
-                receiverThread.start();
-                // On lève le flag.
-                flagThread = true;
-                break;
-            // Clic sur "stopper".
-            case R.id.stopSequence:
-                // On baisse le flag.
-                flagThread = false;
-                // On active le bouton "lancer".
-                b1 = (Button) findViewById(R.id.launchSequence);
-                b1.setEnabled(true);
-                // On désactive le bouton "stopper".
-                b2 = (Button)findViewById(R.id.stopSequence);
-                b2.setEnabled(false);
-                break;
-        }
-    }
-
-    // Méthode d'envoi des données à l'appli Bluetooth.
-    public void traitementData(){
-        // Création du tableau de bytes à envoyer.
-        byte[] data;
-        // On le remplit.
-        data = TouchConverter.SetToByte();
-        sendData.putExtra("BStream", data);
-        sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
-        // On l'envoie à l'appli bluetooth.
-        sendBroadcast(sendData);
-    }
-
     // Gère la mise en arrière-plan de l'appli + la sortie du Thread.
     @Override
     public void onPause(){
@@ -181,5 +135,165 @@ public class TestBoxActivity extends AppCompatActivity implements View.OnClickLi
             b2.setEnabled(false);
         }
         flagThread = true;
+    }
+
+
+    // Thread d'allumage de la séquence.
+    private class ReceiverThread extends Thread{
+        @Override
+        public void run() {
+            while (flagThread) {
+                // Tant que le flag est levé, on lance la séquence.
+                traitementData(Tacticons.SPIRALE);
+            }
+        }
+    }
+
+    // Thread d'allumage du CIRCLE.
+    private class CircleThread extends Thread{
+        @Override
+        public void run() {
+            while (flagThread) {
+                // Tant que le flag est levé, on lance la séquence.
+                traitementData(Tacticons.CIRCLE);
+            }
+        }
+    }
+
+    // Thread d'allumage du WAVE.
+    private class WaveThread extends Thread{
+        @Override
+        public void run() {
+            while (flagThread) {
+                // Tant que le flag est levé, on lance la séquence.
+                traitementData(Tacticons.WAVE);
+            }
+        }
+    }
+
+    // Thread d'allumage du SPLIT.
+    private class SplitThread extends Thread{
+        @Override
+        public void run() {
+            while (flagThread) {
+                // Tant que le flag est levé, on lance la séquence.
+                traitementData(Tacticons.SPLIT);
+            }
+        }
+    }
+
+    // Thread d'allumage du SNOW.
+    private class SnowThread extends Thread{
+        @Override
+        public void run() {
+            while (flagThread) {
+                // Tant que le flag est levé, on lance la séquence.
+                traitementData(Tacticons.SNOW);
+            }
+        }
+    }
+
+    // Gestion des boutons concernant la séquence.
+    public void onClick(View v){
+        switch (v.getId()){
+            // Clic sur "circle".
+            case R.id.circle:
+                // On active le bouton "stopper".
+                Button b2 = (Button)findViewById(R.id.stopSequence);
+                b2.setEnabled(true);
+                // On crée le thread qui va lancer la séquence.
+                CircleThread circleThread = new CircleThread();
+                circleThread.start();
+                // On lève le flag.
+                flagThread = true;
+                break;
+            // Clic sur "circle".
+            case R.id.wave:
+                // On active le bouton "stopper".
+                b2 = (Button)findViewById(R.id.stopSequence);
+                b2.setEnabled(true);
+                // On crée le thread qui va lancer la séquence.
+                WaveThread waveThread = new WaveThread();
+                waveThread.start();
+                // On lève le flag.
+                flagThread = true;
+                break;
+            case R.id.split:
+                // On active le bouton "stopper".
+                b2 = (Button)findViewById(R.id.stopSequence);
+                b2.setEnabled(true);
+                // On crée le thread qui va lancer la séquence.
+                SplitThread splitThread = new SplitThread();
+                splitThread.start();
+                // On lève le flag.
+                flagThread = true;
+                break;
+            case R.id.snow:
+                // On active le bouton "stopper".
+                b2 = (Button)findViewById(R.id.stopSequence);
+                b2.setEnabled(true);
+                // On crée le thread qui va lancer la séquence.
+                SnowThread snowThread = new SnowThread();
+                snowThread.start();
+                // On lève le flag.
+                flagThread = true;
+                break;
+            // Clic sur "lancer".
+            case R.id.launchSequence:
+                // On désactive le bouton "lancer".
+                Button b1 = (Button)findViewById(R.id.launchSequence);
+                b1.setEnabled(false);
+                // On active le bouton "stopper".
+                b2 = (Button)findViewById(R.id.stopSequence);
+                b2.setEnabled(true);
+                // On crée le thread qui va lancer la séquence.
+                ReceiverThread receiverThread = new ReceiverThread();
+                receiverThread.start();
+                // On lève le flag.
+                flagThread = true;
+                break;
+            // Clic sur "stopper".
+            case R.id.stopSequence:
+                // On baisse le flag.
+                flagThread = false;
+                // On active le bouton "lancer".
+                b1 = (Button) findViewById(R.id.launchSequence);
+                b1.setEnabled(true);
+                // On désactive le bouton "stopper".
+                b2 = (Button)findViewById(R.id.stopSequence);
+                b2.setEnabled(false);
+                break;
+        }
+    }
+
+    // Méthode d'envoi des données à l'appli Bluetooth.
+    public void traitementData(Tacticons t) {
+        // Création du tableau de bytes à envoyer.
+        byte[] data;
+        data = new byte[4];
+        // On le remplit.
+        switch (t) {
+            case SPIRALE:
+                data = TouchConverter.SetToByte();
+                break;
+            case CIRCLE:
+                data = Circle.SetToByte();
+                break;
+            case WAVE:
+                data = Wave.SetToByte();
+                break;
+            case SPLIT:
+                data = Split.SetToByte();
+                break;
+            case SNOW:
+                data = Snow.SetToByte();
+                break;
+        }
+
+
+        sendData.putExtra("BStream", data);
+        sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+        // On l'envoie à l'appli bluetooth.
+        sendBroadcast(sendData);
     }
 }
