@@ -3,13 +3,14 @@ package nf28.touchmaze;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import nf28.touchmaze.login.DialogApp;
+import nf28.touchmaze.login.DialogHandler;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -17,16 +18,20 @@ public class MainActivity extends AppCompatActivity {
     EditText loginText;
     EditText passwordText;
     Button loginButton;
-    DialogApp app;
+    DialogHandler dialogHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // ???
-        app = (DialogApp)getApplicationContext();
-        app.stopIdleTimer();
+        // Classe gérant la connexion.
+        dialogHandler = new DialogHandler();
+
+        // On regarde si on est déjà connecté.
+        if (dialogHandler.getConn() != null && dialogHandler.getConn().isConnected()) {
+            onLoginSuccess();
+        }
 
         // Binding.
         loginText = (EditText)findViewById(R.id.text_login);
@@ -59,14 +64,14 @@ public class MainActivity extends AppCompatActivity {
      * Connexion réussie.
      */
     private void onLoginSuccess() {
-        Toast.makeText(getBaseContext(), "Connexion réussie ! :D", Toast.LENGTH_LONG).show();
+        Log.d("connexion", "Connexion réussie ! :D");
     }
 
     /**
      * Echec de connexion.
      */
     private void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login ou mot de passe incorrect :(", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Echec de la connexion", Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -109,26 +114,24 @@ public class MainActivity extends AppCompatActivity {
         final String password = passwordText.getText().toString();
 
         // On crée et lance le thread de la connexion.
-        final Thread thread = createThreadConnection(login, password);
+        final Thread thread = createThreadConnection(login, password, progressDialog);
         thread.start();
-
-        // On arrête le spinner.
-        progressDialog.dismiss();
     }
 
     /**
      * Crée le thread gérant la connexion.
      * @param login
      * @param password
+     * @param progressDialog : le spinner
      * @return
      */
-    private Thread createThreadConnection(final String login, final String password) {
+    private Thread createThreadConnection(final String login, final String password, final ProgressDialog progressDialog) {
         Thread thread = new Thread() {
             @Override
             public void run() {
                 try {
                     // On se connecte.
-                    app.connect(login, password);
+                    dialogHandler.connect(login, password);
                     onLoginSuccess();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -138,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
                             onLoginFailed();
                         }
                     });
+                } finally {
+                    // On arrête le spinner.
+                    progressDialog.dismiss();
                 }
             }
         };
