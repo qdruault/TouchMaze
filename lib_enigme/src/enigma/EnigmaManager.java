@@ -1,6 +1,7 @@
 package enigma;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import resource.PredefinedEnigmas;
@@ -24,21 +25,27 @@ public class EnigmaManager {
 		}
 	}
 	
-	public GameEnigma createNewEnigma(){
+	public HashMap<ExplorerEnigma, GuideEnigma> createNewEnigma(){
 		
 		int index = ThreadLocalRandom.current().nextInt(0, usablePredefinedTabs.size());
 		int enigmaNb = usablePredefinedTabs.get(index);
-		Enigma predefinedEnigma = PredefinedEnigmas.getInstance().enigmas[enigmaNb];
+		
+		ExplorerEnigma predefinedExEnigma = PredefinedEnigmas.getInstance().exEnigmas[enigmaNb];
+		GuideEnigma predefinedGuideEnigma = PredefinedEnigmas.getInstance().guideEnigmas[enigmaNb];
+
+		HashMap<ExplorerEnigma, GuideEnigma> enigma = new HashMap<ExplorerEnigma, GuideEnigma>();
+		
+		enigma.put(predefinedExEnigma, predefinedGuideEnigma);
+		
 		System.out.println(enigmaNb);
 		System.out.println("restants");
-		GameEnigma newGE = new GameEnigma(predefinedEnigma);
 		
 		usablePredefinedTabs.remove(enigmaNb);
 		for (Integer integer : usablePredefinedTabs) {
 			System.out.println(integer);
 		}
 		
-		return newGE;
+		return enigma;
 	}
 	
 	
