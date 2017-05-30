@@ -3,12 +3,20 @@ package enigma;
 import tacticon.Circle;
 import tacticon.Tacticon;
 
+/**
+ * Classe Enigma pour l'explorateur.
+ * Contient le tableau de l'explorateur et son tableau complémentaire.
+ * 
+ * @author Baptiste
+ *
+ */
 public class ExplorerEnigma extends Enigma {
 	
 	private Tacticon[] explorerTab;
 	
 	private Tacticon[] explorerComplementaryTab;
 
+	// Indicateur de la résolution de l'énigme.
 	private boolean isOver;
 	
 	public ExplorerEnigma(){
@@ -27,6 +35,10 @@ public class ExplorerEnigma extends Enigma {
 		loadTabs(predefinedEnigma);
 	}
 	
+	/**
+	 * Copie les tableaux de l'enigme passée en paramètre dans ceux de l'objet.
+	 * @param p_enigma
+	 */
 	public void loadTabs(ExplorerEnigma p_enigma) {
 		chosenGuideTab = p_enigma.getchosenGuideTab();
 		
@@ -35,10 +47,15 @@ public class ExplorerEnigma extends Enigma {
 		generateComplementaryTab();
 	}
 	
+	/**
+	 * Génère le tableau complémentaire à partir du tableau explorateur.
+	 */
 	public void generateComplementaryTab() {
 		int i = 0;
+		// Pour chacun des tacticons "Off" du tableau explorateur
 		for (Tacticon tacticon : explorerTab) {
 			if (!tacticon.isOn()) {
+				// On crée un tacticon de meme type dans le tableau complémentaire
 				Class<? extends Tacticon> c = tacticon.getClass();
 				 switch (c.getName()){
 				 	case "tacticon.Circle":
@@ -53,17 +70,27 @@ public class ExplorerEnigma extends Enigma {
 		}
 	}
 	
+	/**
+	 * Permet de modifier le tacticon d'une case du tableau explorateur
+	 * @param p_tacticon
+	 * @param p_exploTabIndex
+	 */
 	public void proposeTacticon(Tacticon p_tacticon, int p_exploTabIndex){
 		explorerTab[p_exploTabIndex]=p_tacticon;
 	}
 	
+	/**
+	 * Vérifie si le tableau explorateur modifié correspond au tableau initial.
+	 * @return
+	 */
 	public boolean isCompleted(){
 		for (int i = 0; i < chosenGuideTab.length; i++) {
-			if (explorerTab[i].isOn() && chosenGuideTab[i].getClass().equals(explorerTab[i].getClass())){
-				return true;
+			// Si le tacticon est "Off" ou si le tacticon ne correspond pas à celui attendu
+			if (!explorerTab[i].isOn() || !chosenGuideTab[i].getClass().equals(explorerTab[i].getClass())){
+				return false;
 			}	
 		}
-		return false;
+		return true;
 	}
 
 

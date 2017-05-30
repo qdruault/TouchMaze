@@ -2,6 +2,12 @@ package enigma;
 
 import tacticon.Tacticon;
 
+/**
+ * Classe mère Enigma, contient le tableau de tacticon initial.
+ * 
+ * @author Baptiste
+ *
+ */
 public class Enigma {
 	
 	protected Tacticon[] chosenGuideTab;

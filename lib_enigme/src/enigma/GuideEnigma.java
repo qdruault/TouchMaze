@@ -2,6 +2,13 @@ package enigma;
 
 import tacticon.Tacticon;
 
+/**
+ * Classe Enigma pour le guide.
+ * Contient les deux tableaux supplémentaires pour le guide.
+ * 
+ * @author Baptiste
+ *
+ */
 public class GuideEnigma extends Enigma {
 
 	private Tacticon[] secondGuideTab;
@@ -23,6 +30,10 @@ public class GuideEnigma extends Enigma {
 		loadTabs(predefinedEnigma);
 	}
 	
+	/**
+	 * Copie les tableaux de l'enigme passée en paramètre dans ceux de l'objet.
+	 * @param p_enigma
+	 */
 	public void loadTabs(GuideEnigma p_enigma) {
 		chosenGuideTab = p_enigma.getchosenGuideTab();
 		secondGuideTab = p_enigma.getSecondGuideTab();
