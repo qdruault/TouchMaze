@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         statusNameTextView.setText(username.substring(0, username.indexOf("@")));
     }
 
+    // Lance l'invitation pour "jouer".
     public void startDialog(View v) {
         Intent i = new Intent(this, TactileDialogActivity.class);
         i.putExtra("PARTNER", (String)v.getTag());
