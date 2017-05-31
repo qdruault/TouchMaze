@@ -1,5 +1,6 @@
 package nf28.touchmaze.login;
 
+import android.app.Application;
 import android.os.Handler;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
@@ -20,7 +21,7 @@ import java.util.Map;
 /**
  * Created by Binova on 10/12/2015.
  */
-public class DialogHandler {
+public class DialogHandler extends Application {
     // Infos du serveur.
     public static final String HOST = "servgsp.utc.fr";
     public static final String SERVICE = "servgsp.utc.fr";

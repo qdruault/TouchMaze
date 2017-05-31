@@ -1,6 +1,8 @@
 package nf28.touchmaze;
 
+import android.app.Application;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         // Classe gérant la connexion.
-        dialogHandler = new DialogHandler();
+        dialogHandler = (DialogHandler)getApplicationContext();        
+
+        setContentView(R.layout.activity_main);
 
         // On regarde si on est déjà connecté.
         if (dialogHandler.getConn() != null && dialogHandler.getConn().isConnected()) {
