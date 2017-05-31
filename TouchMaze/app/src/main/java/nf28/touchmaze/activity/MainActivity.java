@@ -1,17 +1,16 @@
-package nf28.touchmaze;
+package nf28.touchmaze.activity;
 
-import android.app.Application;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import nf28.touchmaze.R;
 import nf28.touchmaze.login.DialogHandler;
 
 
@@ -66,7 +65,10 @@ public class MainActivity extends AppCompatActivity {
      * Connexion réussie.
      */
     private void onLoginSuccess() {
-        Log.d("connexion", "Connexion réussie ! :D");
+        // On lance l'activité qui va afficher les contacts.
+        Intent intent = new Intent(this, InvitationActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**
