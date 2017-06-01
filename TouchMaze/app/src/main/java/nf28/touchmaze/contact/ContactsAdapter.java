@@ -87,9 +87,18 @@ public class ContactsAdapter extends ArrayAdapter<RosterContactInfo> {
             statusView.setText(statusType.getText());
             startDialogButton.setVisibility(View.VISIBLE);
             // On ajoute dans le Tag l'id du contact pour le récupérer après.
-            startDialogButton.setTag(bareJID);
-            invitationView.setText(dialogHandler.hasInvited(bareJID) ? "vous invite" : "");
+            startDialogButton.setTag(R.string.tag_partner, bareJID);
 
+            // Si on a reçu une invitation de ce contact.
+            if (dialogHandler.hasInvited(bareJID)) {
+                invitationView.setText("vous invite");
+                startDialogButton.setText("REJOINDRE");
+                startDialogButton.setTag(R.string.tag_role, "guest");
+            } else {
+                invitationView.setText("");
+                startDialogButton.setText("INVITER");
+                startDialogButton.setTag(R.string.tag_role, "host");
+            }
         }
 
         return rowView;

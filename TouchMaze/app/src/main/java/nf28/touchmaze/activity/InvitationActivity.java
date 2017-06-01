@@ -1,7 +1,9 @@
 package nf28.touchmaze.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
@@ -52,5 +54,24 @@ public class InvitationActivity extends AppCompatActivity {
 
         contactsAdapter = new ContactsAdapter(this, R.layout.item_contact, contactList);
         contactListView.setAdapter(contactsAdapter);
+    }
+
+    // Lance l'invitation pour "jouer".
+    public void startGame(View v) {
+        // On récupère le nom de l'autre joueur.
+        String partner = (String)v.getTag(R.string.tag_partner);
+        // On récupère son propre rôle.
+        String role = (String)v.getTag(R.string.tag_role);
+        Intent intentGame;
+        // Pour l'hote = guide.
+        if ("host".equals(role)) {
+            intentGame = new Intent(this, GameMapActivity.class);
+        } else {
+            // Pour celui qui rejoint la partie = explorateur.
+            intentGame = new Intent(this, GameMazeActivity.class);
+        }
+
+        intentGame.putExtra("PARTNER", partner);
+        startActivity(intentGame);
     }
 }
