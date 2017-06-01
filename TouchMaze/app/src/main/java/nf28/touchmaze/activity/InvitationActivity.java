@@ -10,7 +10,9 @@ import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
+import org.jivesoftware.smack.roster.RosterListener;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +47,35 @@ public class InvitationActivity extends AppCompatActivity {
 
         // On récupère la liste des contacts.
         Roster roster = Roster.getInstanceFor(connection);
+        // On ajoute les listeners.
+        roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
+        roster.addRosterListener(new RosterListener() {
+            public void entriesAdded(Collection<String> addresses) {
+                Roster roster = Roster.getInstanceFor(connection);
+                for (RosterEntry entry : roster.getEntries()) {
+                    contactList.contactInfoChanged(entry);
+                    contactList.presenceChanged(roster.getAllPresences(entry.getUser()).get(0));
+                }
+                updateListOnUIThread();
+            }
+            public void entriesDeleted(Collection<String> addresses) {
+                return;
+            }
+            public void entriesUpdated(Collection<String> addresses) {
+                Roster roster = Roster.getInstanceFor(connection);
+                for (RosterEntry entry : roster.getEntries()) {
+                    contactList.contactInfoChanged(entry);
+                    contactList.presenceChanged(roster.getAllPresences(entry.getUser()).get(0));
+                }
+                updateListOnUIThread();
+            }
+            public void presenceChanged(Presence presence) {
+                contactList.presenceChanged(presence);
+                if (contactsAdapter != null) {
+                    updateListOnUIThread();
+                }
+            }
+        });
 
         // On la met à jour.
         for (RosterEntry entry : roster.getEntries()) {
@@ -54,6 +85,18 @@ public class InvitationActivity extends AppCompatActivity {
 
         contactsAdapter = new ContactsAdapter(this, R.layout.item_contact, contactList);
         contactListView.setAdapter(contactsAdapter);
+    }
+
+    /**
+     * Lance un thread qui met à jour la liste de contacts.
+     */
+    private void updateListOnUIThread() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                contactsAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     // Lance l'invitation pour "jouer".
