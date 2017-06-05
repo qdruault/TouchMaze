@@ -160,6 +160,11 @@ public class TactileDialogActivity extends AppCompatActivity implements TactileD
         }
     }
 
+    /**
+     * Réception d'un message du partenaire.
+     * @param chat
+     * @param message
+     */
     @Override
     public void processMessage(Chat chat, Message message) {
         if (message.getFrom().equals(partnerJID + "/Smack")) {

@@ -1,4 +1,4 @@
-package fr.UTC_CosTech_CRED.SimpleTouch.util;
+package nf28.touchmaze.contact;
 
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.RosterEntry;

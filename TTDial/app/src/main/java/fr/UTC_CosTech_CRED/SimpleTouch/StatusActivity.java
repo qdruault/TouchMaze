@@ -45,6 +45,7 @@ public class StatusActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        // Ajoute les différents status.
         ArrayList<Presence.Mode> modes = new ArrayList<Presence.Mode>();
         modes.add(Presence.Mode.available);
         modes.add(Presence.Mode.away);
@@ -74,6 +75,7 @@ public class StatusActivity extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
         app.setMode((Presence.Mode) modeSpinner.getAdapter().getItem(modeSpinner.getSelectedItemPosition()));
+        // Mise à jour du statut.
         app.setStatus(statusEditText.getText().toString());
         app.updatePresence();
         Toast.makeText(this, R.string.your_status_has_been_successfully_updated, Toast.LENGTH_SHORT).show();

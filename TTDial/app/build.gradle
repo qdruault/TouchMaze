@@ -4,9 +4,9 @@ android {
     signingConfigs {
         test {
             keyAlias 'test'
-            keyPassword 'testtest'
-            storeFile file('C:/Users/LaboCred/desktop/Test Signature/test.jks')
-            storePassword 'testtest'
+            keyPassword 'touchmaze'
+            storeFile file('D:\\files\\work\\gi04\\nf28\\nf28-touchmaze\\TTDial\\test_key.jks')
+            storePassword 'touchmaze'
         }
     }
     compileSdkVersion 23

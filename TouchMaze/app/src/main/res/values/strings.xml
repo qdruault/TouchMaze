@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TouchMaze</string>
+    <string name="tag_role">ROLE</string>
+    <string name="tag_partner">PARTNER</string>
 </resources>

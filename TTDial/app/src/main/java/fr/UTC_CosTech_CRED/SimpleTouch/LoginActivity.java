@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         app = (DialogApp)getApplicationContext();
         app.stopIdleTimer();
 
+        // On regarde si on est déjà connecté.
         if (app.getConn() != null && app.getConn().isConnected()) {
             onLoginSuccess();
         }
@@ -53,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        // On préremplit le champ login.
         String oldLogin = app.getOldLogin();
         if (oldLogin != null) {
             loginEditText.setText(oldLogin);
@@ -69,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
 
+            // Mise à jour du login.
             @Override
             public void afterTextChanged(Editable s) {
                 app.saveOldLogin(s.toString());
@@ -94,6 +97,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Connexion réussie.
+     */
     public void onLoginSuccess() {
         app.resetIdleTimer("LoginActivity");
         Intent intent = new Intent(this, MainActivity.class);
@@ -101,13 +107,20 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Echec de connexion.
+     */
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), R.string.login_failed, Toast.LENGTH_LONG).show();
 
         loginButton.setEnabled(true);
     }
 
+    /**
+     * Connexion.
+     */
     private void login() {
+        // Si les champs ne sont pas remplis.
         if (!validate()) {
             onLoginFailed();
             return;
@@ -115,11 +128,13 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setEnabled(false);
 
+        // Spinner.
         final ProgressDialog progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage(getResources().getString(R.string.authenticating));
         progressDialog.show();
 
+        // On récupère les identifiants.
         final String email = loginEditText.getText().toString();
         final String password = passwordEditText.getText().toString();
 
@@ -128,6 +143,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+                    // On se connecte.
                     app.connect(email, password);
                     onLoginSuccess();
                 } catch (Exception e) {
@@ -147,6 +163,10 @@ public class LoginActivity extends AppCompatActivity {
         thread.start();
     }
 
+    /**
+     * Renvoie true si les champs login et password sont correctement remplis.
+     * @return
+     */
     private boolean validate() {
         boolean valid = true;
 

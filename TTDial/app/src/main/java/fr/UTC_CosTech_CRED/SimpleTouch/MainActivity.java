@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         statusNameTextView.setText(username.substring(0, username.indexOf("@")));
     }
 
+    // Lance l'invitation pour "jouer".
     public void startDialog(View v) {
         Intent i = new Intent(this, TactileDialogActivity.class);
         i.putExtra("PARTNER", (String)v.getTag());
@@ -158,14 +159,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        // Pour changer de statut.
         if (id == R.id.status_drawer_button) {
             Intent i = new Intent(this, StatusActivity.class);
             startActivity(i);
         } else if (id == R.id.status_settings_button) {
+            // Pour charger des paramètres.
             Intent i = new Intent(this, SettingsActivity.class);
             startActivity(i);
         }
         else if (id == R.id.log_out_drawer_button) {
+            // Pour se connecter.
             app.disconnect();
             Intent i = new Intent(this, LoginActivity.class);
             startActivity(i);
@@ -194,11 +198,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .setView(layout)
                     .setPositiveButton("Ajout", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            // On récupère la connexion.
                             AbstractXMPPConnection connection = ((DialogApp)getActivity().getApplication()).getConn();
+                            // On prépare la requete à envoyer.
                             Presence presence = new Presence(Presence.Type.subscribe);
+                            // On ajoute le destinataire.
                             presence.setTo(addPartnerEditText.getText().toString() + "@" + connection.getHost());
                             String feedback = getResources().getString(R.string.we_will_add_a_contact_once_a_person_logs_in);
                             try {
+                                // On envoie la requete.
                                 connection.sendStanza(presence);
                             } catch (SmackException.NotConnectedException e){
                                 feedback = getResources().getString(R.string.error_adding_contact);
