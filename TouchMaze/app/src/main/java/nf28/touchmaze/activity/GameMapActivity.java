@@ -1,26 +1,21 @@
 package nf28.touchmaze.activity;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.StanzaListener;
+import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Stanza;
 
 import java.util.UUID;
 
 import nf28.touchmaze.R;
-import nf28.touchmaze.login.DialogHandler;
 
-public class GameMapActivity extends AppCompatActivity {
+public class GameMapActivity extends ChatActivity {
 
-    private AbstractXMPPConnection conn;
-    private String partnerJID;
-    private DialogHandler dialogHandler;
     private boolean partnerConnected;
     private InvitationResultHandler invitationResultHandler;
 
@@ -29,20 +24,14 @@ public class GameMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_map);
 
-        // On récupère la connexion.
-        dialogHandler = (DialogHandler)getApplicationContext();
-        conn = dialogHandler.getConn();
-
-        // On récupère le nom du partenaire.
-        Intent i = getIntent();
-        partnerJID = i.getStringExtra("PARTNER");
+        // On affiche le nom du joueur.
         TextView guestname = (TextView) findViewById(R.id.textGuestName);
         String partner = partnerJID.substring(0, partnerJID.indexOf("@"));
         guestname.setText("Vous guidez " + partner);
 
         // On envoie l'invitation.
         invite();
-        }
+    }
 
     /**
      * Envoie l'invitation au guest.
@@ -99,5 +88,23 @@ public class GameMapActivity extends AppCompatActivity {
      */
     private void setPartnerConnected(boolean partnerConnected) {
         this.partnerConnected = partnerConnected;
+    }
+
+    /**
+     * Réception d'un message du partenaire.
+     * @param chat
+     * @param message
+     */
+    @Override
+    public void processMessage(Chat chat, Message message) {
+        String displayMessage;
+        // On récupère le contenu du message.
+        String messageBody = message.getBody();
+        // Fin du game.
+        if (END_DIALOG_MESSAGE.equals(messageBody)) {
+            displayMessage = "Coéquipier parti.";
+        } else {
+            displayMessage = messageBody;
+        }
     }
 }
