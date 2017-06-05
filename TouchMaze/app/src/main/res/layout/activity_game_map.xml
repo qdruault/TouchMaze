@@ -7,8 +7,12 @@
     tools:context="nf28.touchmaze.activity.GameMapActivity">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Carte" />
+        android:id="@+id/textGuestName"
+        android:layout_width="388dp"
+        android:layout_height="37dp"
+        android:gravity="center_horizontal"
+        android:text="Carte"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 </android.support.constraint.ConstraintLayout>
