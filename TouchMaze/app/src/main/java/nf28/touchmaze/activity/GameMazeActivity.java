@@ -23,6 +23,7 @@ public class GameMazeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_maze);
 
         // On récupère la connexion.
+        dialogHandler = (DialogHandler)getApplicationContext();
         conn = dialogHandler.getConn();
 
         // On récupère le nom du partenaire.
