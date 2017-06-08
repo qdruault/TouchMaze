@@ -19,6 +19,7 @@ public class GameMapActivity extends ChatActivity {
     private boolean partnerConnected;
     private InvitationResultHandler invitationResultHandler;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +105,17 @@ public class GameMapActivity extends ChatActivity {
         if (END_DIALOG_MESSAGE.equals(messageBody)) {
             displayMessage = "Coéquipier parti.";
         } else {
+            // On récupère la direction voulue.
             displayMessage = messageBody;
+            // On essaye de bouger l'explorateur.
+
+            // On lui renvoie les murs autour de lui.
+            String wallsMessage = "{\"right\" : true, \"left\" : false, \"bottom\" : true, \"top\" : false }";
+            try {
+                chatOut.sendMessage(wallsMessage);
+            } catch (SmackException.NotConnectedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
