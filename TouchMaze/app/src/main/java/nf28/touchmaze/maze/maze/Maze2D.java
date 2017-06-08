@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static nf28.touchmaze.maze.position.PositionBuilder.p;
+
 
 /**
  * Created by theohordequin on 08/06/2017.
