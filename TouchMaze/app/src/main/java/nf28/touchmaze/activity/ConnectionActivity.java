@@ -37,26 +37,22 @@ public class ConnectionActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_connection);
 
-        // Ignorer le bluetooth en testmode
-        if (!TESTMODE) {
+        // Vérifie que l'application Bluetooth est bien allumée et connectée à un boîtier.
+        boolean isBluetoothOn = false;
 
-            // Vérifie que l'application Bluetooth est bien allumée et connectée à un boîtier.
-            boolean isBluetoothOn = false;
-
-            // On récupère toutes les applications qui sont en cours.
-            List<ActivityManager.RunningAppProcessInfo> processes = AndroidProcesses.getRunningAppProcessInfo(getApplicationContext());
-            for (int i = 0; i < processes.size(); i++) {
-                // On regarde si l'application qui gère la connexion au boitier est lancée.
-                if (processes.get(i).processName.equals("com.example.labocred.bluetooth")) {
-                    isBluetoothOn = true;
-                }
+        // On récupère toutes les applications qui sont en cours.
+        List<ActivityManager.RunningAppProcessInfo> processes = AndroidProcesses.getRunningAppProcessInfo(getApplicationContext());
+        for (int i = 0; i < processes.size(); i++) {
+            // On regarde si l'application qui gère la connexion au boitier est lancée.
+            if (processes.get(i).processName.equals("com.example.labocred.bluetooth")) {
+                isBluetoothOn = true;
             }
+        }
 
-            // Si elle n'est pas lancée.
-            if (!isBluetoothOn) {
-                // On la lance via la classe SwitchApp.
-                new SwitchApp(getApplicationContext(), "bluetooth");
-            }
+        // Si elle n'est pas lancée.
+        if (!isBluetoothOn) {
+            // On la lance via la classe SwitchApp.
+            new SwitchApp(getApplicationContext(), "bluetooth");
         }
 
         // On regarde si on est déjà connecté.
