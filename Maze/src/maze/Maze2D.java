@@ -1,7 +1,6 @@
 package maze;
 
 import maze.obstacle.*;
-import position.Position;
 import position.Position2D;
 
 import java.io.BufferedReader;
@@ -27,7 +26,7 @@ public class Maze2D extends Maze{
     private List<Position2D> enigmas;
     public Obstacle[][] hobstacles;
     public Obstacle[][] vobstacles;
-
+    private GuideCommunicator gc;
 
     public Maze2D() throws InstantiationException, IllegalAccessException {
         BufferedReader br = null;
@@ -144,15 +143,29 @@ public class Maze2D extends Maze{
         return d.obstacle.apply(this).isTraversable();
     }
 
-    public void moveTo(Direction2D d){
+    public void init(GuideCommunicator gc){
+        this.gc = gc;
+        gc.addDirectionListener(direction2D -> {
+            moveTo(direction2D);
+            String s = "";
+            s += Direction2D.FRONT.obstacle.apply(this).isTouchableByExplorer()+",";
+            s += Direction2D.RIGHT.obstacle.apply(this).isTouchableByExplorer()+",";
+            s += Direction2D.REAR.obstacle.apply(this).isTouchableByExplorer()+",";
+            s += Direction2D.LEFT.obstacle.apply(this).isTouchableByExplorer();
+            gc.sendMessage("WALLS: "+s);
+        });
+        gc.startGame();
+    }
+
+    private void moveTo(Direction2D d){
         if(canMoveTo(d)){
             d.move.accept(explorer);
             enigmas.stream().filter(p -> p.is(explorer)).findFirst().ifPresent( p -> {
-            	//startNewEnigma();
+            	gc.startEnigma();
             	enigmas.remove(p);
             });
             if(explorer.is(exit) && enigmas.isEmpty()){
-            	//endOfTheGame();
+            	gc.endGame(true);
             }
         }
         else{

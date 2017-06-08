@@ -1,7 +1,7 @@
 import static org.junit.Assert.*;
 
-import maze.Direction2D;
 import maze.Maze2D;
+import maze.GuideCommunicator;
 import maze.obstacle.*;
 import static maze.Direction2D.*;
 import org.junit.Test;
@@ -21,15 +21,15 @@ public class Tests {
 		p1.toLeft();
 		assertTrue(p1.x == 0);
 		p1.toLeft();
-		assertTrue(p1.x == 0);
+		assertTrue(p1.x == -1);
 		p1.toRear();
-		assertTrue(p1.x == 0);
+		assertTrue(p1.x == -1);
 		assertTrue(p1.toRight().is(p1));
-		assertTrue(p1.is(p(1)));
+		assertTrue(p1.is(p(0)));
 		p1.toRight().toRight().toRight().toRight();
-		assertTrue(p1.x == 5);
+		assertTrue(p1.x == 4);
 		p1.toRight().toRight();
-		assertTrue(p1.x == 5);
+		assertTrue(p1.x == 6);
 		System.out.println(p1);
 	}
 	
@@ -48,15 +48,21 @@ public class Tests {
 	@Test
 	public void testMaze() throws IllegalAccessException, InstantiationException {
 		Maze2D m = new Maze2D();
+		GuideCommunicator gc = new GuideCommunicator();
+		m.init(gc);
 		assertTrue(m.getExplorerPosition().is(p(19,0)));
-		assertTrue(REAR.obstacle.apply(m).getID() == ExplorerWall.ID);
-		m.moveTo(REAR);
+		assertEquals(FRONT.obstacle.apply(m).getID(), ExplorerWall.ID);
+		gc.receiveMessage("MOVE REAR");
 		assertTrue(m.getExplorerPosition().is(p(19,0)));
-		assertTrue(REAR.obstacle.apply(m).getID() == ExplorerWall.ID);
-		m.moveTo(LEFT);
+		assertEquals(REAR.obstacle.apply(m).getID(), GuideWall.ID);
+		gc.receiveMessage("MOVE LEFT");
 		assertTrue(m.getExplorerPosition().is(p(18,0)));
-		assertTrue(RIGHT.obstacle.apply(m).getID() == Nothing.ID);
-
+		assertTrue(LEFT.obstacle.apply(m).getID() == Nothing.ID);
+		gc.receiveMessage("MOVE LEFT");
+		assertTrue(m.getExplorerPosition().is(p(17,0)));
+		assertTrue(LEFT.obstacle.apply(m).getID() == Nothing.ID);
+		gc.receiveMessage("MOVE LEFT");
+		gc.receiveMessage("MOVE LEFT");
 	}
 
 
