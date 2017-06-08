@@ -9,12 +9,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -48,7 +48,7 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
     private MenuItem refreshMenuItem;
 
     // Flag pour les tests.
-    private boolean testMode = false;
+    private boolean testMode = true;
 
     @Bind(R.id.bluetooth_devices_list)
     ListView devicesListView;
@@ -74,6 +74,7 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
 
         // Si on n'est pas en phase de test, on se connecte au bluetooth.
         if (!testMode) {
+            Log.d("Bluetooth", "Mode réel");
             // Récupère le bluetooth.
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (bluetoothAdapter == null) {
@@ -154,6 +155,7 @@ public class BluetoothSettingsActivity extends AppCompatActivity {
 
         } else {
             // On est en test.
+            Log.d("Bluetooth", "Mode de test");
         }
     }
 
