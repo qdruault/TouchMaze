@@ -16,7 +16,7 @@ import nf28.touchmaze.util.touch.DialogTouchEvent;
 import nf28.touchmaze.util.touch.TactileDialogViewHolder;
 
 import static nf28.touchmaze.activity.ConnectionActivity.TESTMODE;
-import static nf28.touchmaze.util.PinsDisplayer.setAndDisplay;
+import nf28.touchmaze.util.PinsDisplayer;
 
 public class GameMazeActivity extends ChatActivity implements TactileDialogViewHolder {
 
@@ -109,7 +109,7 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
         boolean[] rightTouches = new boolean[]{true, true, true, true, true, true, true, true};
 
         // Affichage.
-        setAndDisplay(leftTouches, rightTouches);
+        String picots = PinsDisplayer.setAndDisplay(leftTouches, rightTouches);
 
         byte[] data = new byte[4];
         data[0] = 0x1b;
@@ -119,11 +119,13 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
 
         Intent sendData = new Intent();
 
-        sendData.putExtra("BStream", data);
-
-        if (!TESTMODE)
+        if (!TESTMODE) {
+            sendData.putExtra("BStream", data);
             sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
-        sendData.setAction("com.example.labocred.bluetooth..Test");
+        } else {
+            sendData.putExtra("Picots", picots);
+            sendData.setAction("com.example.labocred.bluetooth.Test");
+        }
 
         // Envoie de l'intent pour le module tactos.
         sendBroadcast(sendData);

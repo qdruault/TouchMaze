@@ -12,7 +12,13 @@ public class PinsDisplayer {
 
     public PinsDisplayer(){}
 
-    public static void setAndDisplay(boolean[] leftTouches, boolean[] rightTouches){
+    /**
+     * Etablit la grille.
+     * @param leftTouches
+     * @param rightTouches
+     * @return
+     */
+    public static String setAndDisplay(boolean[] leftTouches, boolean[] rightTouches){
 
         resetPins();
 
@@ -39,24 +45,31 @@ public class PinsDisplayer {
             }
         }
 
-        displayPins();
-
+        return displayPins();
     }
 
-    public static void resetPins(){
+    /**
+     * Vide la grille.
+     */
+    private static void resetPins(){
         for (int i = 0; i < 16 ; ++i) {
             pins[i] = 'o';
         }
     }
 
-    public static void displayPins(){
+    /**
+     * Retourne la grille à afficher.
+     * @return
+     */
+    private static String displayPins(){
         String grid = "";
         for (int i = 0; i < 16; i++) {
             if (i%4==0)
                 grid += "\n";
             grid += pins[i];
         }
-        Log.d("pinsDisplayer", grid);
+
+        return grid;
     }
 
 }
