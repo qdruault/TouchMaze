@@ -34,18 +34,21 @@
                 android:layout_weight="1" />
 
             <nf28.touchmaze.layout.SurfaceLayout
+                android:id="@+id/ex_tab_0"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:background="@android:color/holo_blue_bright" />
 
             <nf28.touchmaze.layout.SurfaceLayout
+                android:id="@+id/ex_tab_1"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:background="@android:color/holo_blue_bright" />
 
             <nf28.touchmaze.layout.SurfaceLayout
+                android:id="@+id/ex_tab_2"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
@@ -70,18 +73,21 @@
                 android:layout_weight="1" />
 
             <nf28.touchmaze.layout.SurfaceLayout
+                android:id="@+id/ex_tab_3"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:background="@android:color/holo_blue_bright" />
 
             <nf28.touchmaze.layout.SurfaceLayout
+                android:id="@+id/ex_tab_4"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:background="@android:color/holo_blue_bright" />
 
             <nf28.touchmaze.layout.SurfaceLayout
+                android:id="@+id/ex_tab_5"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
@@ -119,18 +125,21 @@
 
 
         <nf28.touchmaze.layout.SurfaceLayout
+            android:id="@+id/comp_tab_0"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:background="@android:color/holo_blue_bright" />
 
         <nf28.touchmaze.layout.SurfaceLayout
+            android:id="@+id/comp_tab_1"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:background="@android:color/holo_blue_bright" />
 
         <nf28.touchmaze.layout.SurfaceLayout
+            android:id="@+id/comp_tab_2"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
