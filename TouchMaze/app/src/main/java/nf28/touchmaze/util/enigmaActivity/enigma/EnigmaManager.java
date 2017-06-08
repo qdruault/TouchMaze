@@ -76,4 +76,6 @@ public class EnigmaManager {
     // Les deux change d'activité lorsque l'enigme est terminée
 
     // On peut decider d'hoster d'un coté ou de l'autre en fonction de ce qui est plus simple
+
+    //EnigmaManager.getInstance().createNewEnigma();
 }
