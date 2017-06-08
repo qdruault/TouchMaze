@@ -8,24 +8,23 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 
 import nf28.touchmaze.R;
-import nf28.touchmaze.layout.SurfaceLayout;
-import nf28.touchmaze.login.DialogHandler;
+import nf28.touchmaze.layout.EnigmaSurfaceLayout;
 import nf28.touchmaze.util.enigmaActivity.enigma.EnigmaManager;
 import nf28.touchmaze.util.enigmaActivity.enigma.ExplorerEnigma;
 import nf28.touchmaze.util.enigmaActivity.enigma.GuideEnigma;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon;
+import nf28.touchmaze.util.enigmaActivity.touch.EnigmaTactileViewHolder;
+import nf28.touchmaze.util.enigmaActivity.touch.EnigmaTouchEvent;
+
+import static android.R.color.background_dark;
+import static android.R.color.black;
+import static android.R.color.holo_blue_bright;
 
 /**
  * Created by Baptiste on 08/06/2017.
  */
 
-public class EnigmaExploActivity extends AppCompatActivity {
-
-  //faire un nouveau dialogviewhandler specialement pour les enigmes
-
-  // faire un nouveau surfacelayout pour les tacticons / enigmes
-  //avec form active
-  // form mobile
-  // numéro
+public class EnigmaExploActivity extends AppCompatActivity implements EnigmaTactileViewHolder {
 
   //on touch qui marche si active
   //qui appelle le on touche de l'act avec le num dans l'event
@@ -40,7 +39,6 @@ public class EnigmaExploActivity extends AppCompatActivity {
   // si on touche le meme tacticon ca annule le flag
   //du coup il faut le stocker quelque part.
   // le flag est dans l'activité pas dans le surface layout
-  //il faudrait du coup désactiver les surfacelayout du tableau complémentaire
 
   //et a chaque changement, verifier
   // si la verif est a true
@@ -52,61 +50,146 @@ public class EnigmaExploActivity extends AppCompatActivity {
   // et etre pret a recevoir la fin d'enigme
   // si fin, on repasse à l'activité lab
 
+    private boolean moveAction;
+
     private ExplorerEnigma enigma;
     private GuideEnigma gEnigma;
     private HashMap<ExplorerEnigma, GuideEnigma> enigmasMap;
 
-    private SurfaceLayout ex_tab_0;
-    private SurfaceLayout ex_tab_1;
-    private SurfaceLayout ex_tab_2;
-    private SurfaceLayout ex_tab_3;
-    private SurfaceLayout ex_tab_4;
-    private SurfaceLayout ex_tab_5;
+    private EnigmaSurfaceLayout ex_tab_0;
+    private EnigmaSurfaceLayout ex_tab_1;
+    private EnigmaSurfaceLayout ex_tab_2;
+    private EnigmaSurfaceLayout ex_tab_3;
+    private EnigmaSurfaceLayout ex_tab_4;
+    private EnigmaSurfaceLayout ex_tab_5;
 
-    private SurfaceLayout comp_tab_0;
-    private SurfaceLayout comp_tab_1;
-    private SurfaceLayout comp_tab_2;
+    private EnigmaSurfaceLayout comp_tab_0;
+    private EnigmaSurfaceLayout comp_tab_1;
+    private EnigmaSurfaceLayout comp_tab_2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enigma_explo);
 
-        ex_tab_0 = (SurfaceLayout)findViewById(R.id.ex_tab_0);
-        ex_tab_1 = (SurfaceLayout)findViewById(R.id.ex_tab_1);
-        ex_tab_2 = (SurfaceLayout)findViewById(R.id.ex_tab_2);
-        ex_tab_3 = (SurfaceLayout)findViewById(R.id.ex_tab_3);
-        ex_tab_4 = (SurfaceLayout)findViewById(R.id.ex_tab_4);
-        ex_tab_5 = (SurfaceLayout)findViewById(R.id.ex_tab_5);
+        ex_tab_0 = (EnigmaSurfaceLayout)findViewById(R.id.ex_tab_0);
+        ex_tab_1 = (EnigmaSurfaceLayout)findViewById(R.id.ex_tab_1);
+        ex_tab_2 = (EnigmaSurfaceLayout)findViewById(R.id.ex_tab_2);
+        ex_tab_3 = (EnigmaSurfaceLayout)findViewById(R.id.ex_tab_3);
+        ex_tab_4 = (EnigmaSurfaceLayout)findViewById(R.id.ex_tab_4);
+        ex_tab_5 = (EnigmaSurfaceLayout)findViewById(R.id.ex_tab_5);
 
-        comp_tab_0 = (SurfaceLayout)findViewById(R.id.comp_tab_0);
-        comp_tab_1 = (SurfaceLayout)findViewById(R.id.comp_tab_1);
-        comp_tab_2 = (SurfaceLayout)findViewById(R.id.comp_tab_2);
+        comp_tab_0 = (EnigmaSurfaceLayout)findViewById(R.id.comp_tab_0);
+        comp_tab_1 = (EnigmaSurfaceLayout)findViewById(R.id.comp_tab_1);
+        comp_tab_2 = (EnigmaSurfaceLayout)findViewById(R.id.comp_tab_2);
+
+        ex_tab_0.setNum(0);
+        ex_tab_1.setNum(1);
+        ex_tab_2.setNum(2);
+        ex_tab_3.setNum(3);
+        ex_tab_4.setNum(4);
+        ex_tab_5.setNum(5);
+
+        comp_tab_0.setNum(10);
+        comp_tab_1.setNum(11);
+        comp_tab_2.setNum(12);
+
+        initSurfaceLayout(ex_tab_0);
+        initSurfaceLayout(ex_tab_1);
+        initSurfaceLayout(ex_tab_2);
+        initSurfaceLayout(ex_tab_3);
+        initSurfaceLayout(ex_tab_4);
+        initSurfaceLayout(ex_tab_5);
+
+        initSurfaceLayout(comp_tab_0);
+        initSurfaceLayout(comp_tab_1);
+        initSurfaceLayout(comp_tab_2);
 
         enigmasMap = EnigmaManager.getInstance().createNewEnigma();
 
         for (HashMap.Entry<ExplorerEnigma, GuideEnigma> entry : enigmasMap.entrySet()) {
-
             enigma = entry.getKey();
             gEnigma = entry.getValue();
         }
 
         //envoie de l'enigme en JSON
         new Gson().toJson(gEnigma);
+        // ENVOI
 
         //new Gson().fromJson(jsonStr, MyClass.class);
 
     }
 
-    public void initSurfaceLayout(SurfaceLayout p_surfaceLayout){
-     for (int i = 0; i < enigma.getexplotab; ++i){
-       if (p_surfaceLayout.getNum() == i){
-         if (enigma.getexplotab.get(i).isactive)
-          p_surfaceLayout.activewall = true
-        if (enigma.getexplotab.get(i).isremovable)
-           p_surfaceLayout.mobiletacticon = true
-       }
+    public void initSurfaceLayout(EnigmaSurfaceLayout p_surfaceLayout){
+        for (int i = 0; i < enigma.getExplorerTab().length; ++i){
+            if (p_surfaceLayout.getNum() == i){
+                p_surfaceLayout.setBackgroundColor(getResources().getColor(black));
+                if (enigma.getExplorerTab()[i].isOn())
+                    p_surfaceLayout.setActiveTacticon(true);
+                    p_surfaceLayout.setBackgroundColor(getResources().getColor(holo_blue_bright));
+                if (enigma.getExplorerTab()[i].isReplaceable())
+                    p_surfaceLayout.setMobileTacticon(true);
+            }
+        }
 
-     }
+        for (int i = 0; i < enigma.getExplorerComplementaryTab().length; ++i){
+            if (10 - p_surfaceLayout.getNum() == i){
+                p_surfaceLayout.setBackgroundColor(getResources().getColor(background_dark));
+                if (enigma.getExplorerTab()[i].isOn())
+                    p_surfaceLayout.setActiveTacticon(true);
+                if (enigma.getExplorerTab()[i].isReplaceable())
+                    p_surfaceLayout.setMobileTacticon(true);
+            }
+        }
+
+    }
+
+
+
+    @Override
+    public void onDialogTouch(EnigmaTouchEvent event) {
+        Tacticon tacticonToRun;
+        Tacticon tacticonToMove;
+        int numberToRun;
+        int numberToMoveSource;
+        int numberToMoveDestination;
+
+        // Lancement d'un tacticon
+        if (event.getAction().equals(EnigmaTouchEvent.Action.RunT)) {
+
+            // Index du tacticon à déclencher
+            numberToRun = event.getEnigmaSurfaceLayoutNumber();
+            // Tacticon du tableau principal
+            if (numberToRun < 10)
+                tacticonToRun = enigma.getExplorerTab()[numberToRun];
+            // Tacticon du tableau secondaire
+            else
+                tacticonToRun = enigma.getExplorerComplementaryTab()[10 - numberToRun];
+
+            // LANCER LE TACTICON
+        }
+
+        // Déplacement d'un tacticon
+        else if (event.getAction().equals(EnigmaTouchEvent.Action.MoveT)) {
+            // Index du tacticon à déplacer
+            numberToMoveSource = event.getEnigmaSurfaceLayoutToMove();
+            // Index de la destination
+            numberToMoveDestination = event.getEnigmaSurfaceLayoutNumber();
+
+            // Récupération du tacticon à déplacer
+            if (numberToMoveSource < 10)
+                tacticonToMove = enigma.getExplorerTab()[numberToMoveSource];
+            else
+                tacticonToMove = enigma.getExplorerComplementaryTab()[10 - numberToMoveSource];
+
+            // Déplacement du tacticon
+            enigma.proposeTacticon(tacticonToMove, numberToMoveDestination);
+            // CHANGEMENT DE LA COULEUR
+
+            if(enigma.isCompleted()) {
+                //ENVOIE LA FIN DE L'ACTIVITE à L'AUTRE
+            }
+
+        }
     }
 }

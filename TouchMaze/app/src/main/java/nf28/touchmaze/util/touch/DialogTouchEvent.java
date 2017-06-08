@@ -12,6 +12,7 @@ public class DialogTouchEvent {
     private ArrayList<PointF> touches;
     private TactileDialogViewHolder.OPTIONS Opt;
 
+
     public DialogTouchEvent(ArrayList<PointF> touches, TactileDialogViewHolder.OPTIONS opt) {
         this.touches = touches;
         this.Opt = opt;
@@ -49,4 +50,5 @@ public class DialogTouchEvent {
 
         return message;
     }
+
 }
