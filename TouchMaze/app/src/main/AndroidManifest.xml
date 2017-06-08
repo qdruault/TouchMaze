@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.ConnectionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +22,8 @@
         </activity>
         <activity android:name=".activity.InvitationActivity" />
         <activity android:name=".activity.GameMazeActivity" />
-        <activity android:name=".activity.GameMapActivity"></activity>
+        <activity android:name=".activity.GameMapActivity" />
+        <activity android:name=".activity.ChatActivity"></activity>
     </application>
 
 </manifest>
