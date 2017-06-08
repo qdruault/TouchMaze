@@ -9,6 +9,8 @@ import android.widget.TextView;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.packet.Message;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import nf28.touchmaze.R;
 import nf28.touchmaze.layout.SurfaceLayout;
@@ -98,7 +100,26 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
      */
     @Override
     public void processMessage(Chat chat, final Message message) {
-        // MAJ DES BOOLEAN MURS DES TACTILES AREAS DE LA VUE
+        if (message.getFrom().equals(partnerJID + "/Smack")) {
+            final String messageBody = message.getBody();
+
+            if (END_DIALOG_MESSAGE.equals(messageBody)) {
+                // User déconnecté.
+            } else {
+                try {
+                    // On récupère le JSON envoyé.
+                    JSONObject json = new JSONObject(messageBody);
+                    // On récupère les propriétés et on les affecte.
+                    tactileAreaRight.setActiveWall(json.getBoolean("right"));
+                    tactileAreaLeft.setActiveWall(json.getBoolean("left"));
+                    tactileAreaTop.setActiveWall(json.getBoolean("top"));
+                    tactileAreaBottom.setActiveWall(json.getBoolean("bottom"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
