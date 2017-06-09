@@ -70,6 +70,7 @@ public class EnigmaExploActivity extends AppCompatActivity{
 
     private Tacticon touchedTacticon;
     private Tacticon selectedTacticon;
+    private int runningAreaIndex = -1;
     private int selectedAreaIndex;
 
     private ArrayList<EnigmaSurfaceLayout> surfaceLayouts;
@@ -146,6 +147,21 @@ public class EnigmaExploActivity extends AppCompatActivity{
                     Log.d("Touch", String.valueOf(threadEnCours));
                     if (!threadEnCours) {
 
+                        if (runningAreaIndex!=-1) {
+                            // Changement de la couleur
+                            for (final EnigmaSurfaceLayout colorsf : surfaceLayouts) {
+                                Log.d("Touch", "dans le for");
+                                if (colorsf.getNum() == runningAreaIndex) {
+                                    Log.d("Touch", "dans le if");
+                                    refreshColors(colorsf);
+                                    Log.d("Touch", "apes refresh color");
+                                }
+                            }
+                            runningAreaIndex = -1;
+                        }
+
+                        Log.d("Touch", "fin du thread");
+
                         touchTap++;
                         Log.d("Touch", "Debut" + String.valueOf(touchTap));
                         Log.d("Touch", "Debut" + String.valueOf(sf.getNum()));
@@ -177,6 +193,9 @@ public class EnigmaExploActivity extends AppCompatActivity{
                                         startTime.setTime(System.currentTimeMillis());
                                         endTime.setTime(System.currentTimeMillis() + 5000);
                                         threadEnCours = true;
+                                        runningAreaIndex = sf.getNum();
+                                        sf.setBackgroundColor(getResources().getColor(R.color.green));
+
                                     } else {
                                         Log.d("Touch", "Tacticon off");
                                     }
@@ -256,17 +275,28 @@ public class EnigmaExploActivity extends AppCompatActivity{
     }
 
     public void refreshColors(EnigmaSurfaceLayout p_esl){
+
+        Log.d("Touch", "au debut du refresh color");
+
         Tacticon tacticon;
+
+        Log.d("Touch", "1");
 
         if (p_esl.getNum() < 10)
             tacticon = enigma.getExplorerTab()[p_esl.getNum()];
         else
             tacticon = enigma.getExplorerComplementaryTab()[p_esl.getNum()-10];
 
+        Log.d("Touch", "2");
+
         if (tacticon.getStatus().equals(Tacticon.Status.COMPLEMENTARY))
             p_esl.setBackgroundColor(getResources().getColor(R.color.orange));
         else if (tacticon.getStatus().equals(Tacticon.Status.ADDED))
             p_esl.setBackgroundColor(getResources().getColor(R.color.darkorange));
+        else if (tacticon.getStatus().equals(Tacticon.Status.FIXED))
+            p_esl.setBackgroundColor(getResources().getColor(R.color.lightblue));
+
+        Log.d("Touch", "colors");
     }
 
     public void debuginitSurfaceLayout(EnigmaSurfaceLayout p_surfaceLayout){
@@ -286,8 +316,25 @@ public class EnigmaExploActivity extends AppCompatActivity{
                 // Tant que le flag est levé, on lance la séquence.
                 traitementData(Tacticons.CIRCLE);
                 startTime.setTime(System.currentTimeMillis());
+                Log.d("Touch", "dans le thread");
             }
             threadEnCours = false;
+            Log.d("Touch", "apres false");
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // Changement de la couleur
+                    for (final EnigmaSurfaceLayout colorsf : surfaceLayouts) {
+                        if (colorsf.getNum() == runningAreaIndex) {
+                            refreshColors(colorsf);
+                        }
+                    }
+                }
+            });
+
+            Log.d("Touch", "test");
+
         }
     }
 
