@@ -2,6 +2,7 @@ package nf28.touchmaze.util.enigmaActivity.enigma;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import nf28.touchmaze.util.enigmaActivity.resource.PredefinedEnigmas;
@@ -35,7 +36,8 @@ public class EnigmaManager {
     public HashMap<ExplorerEnigma, GuideEnigma> createNewEnigma(){
 
         // Numéro d'enigme déterminé au hasard.
-        int index = ThreadLocalRandom.current().nextInt(0, usablePredefinedTabs.size());
+        Random rand = new Random();
+        int index = rand.nextInt(usablePredefinedTabs.size());
         int enigmaNb = usablePredefinedTabs.get(index);
 
         // Création des enigmes à partir de la classe ressource

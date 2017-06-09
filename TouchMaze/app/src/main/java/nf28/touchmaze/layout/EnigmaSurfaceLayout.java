@@ -35,13 +35,13 @@ public class EnigmaSurfaceLayout extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    @Override
+    /*@Override
     public boolean onTouchEvent(MotionEvent e) {
         if (activeTacticon) {
             dialogViewHolder.onDialogTouch(new EnigmaTouchEvent(RunT, num));
         }
         return true;
-    }
+    }*/
 
     public boolean isActiveTacticon() {
         return activeTacticon;
