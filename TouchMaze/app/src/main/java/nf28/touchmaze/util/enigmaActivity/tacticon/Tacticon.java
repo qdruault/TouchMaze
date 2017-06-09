@@ -20,6 +20,7 @@ public class Tacticon {
     public Tacticon(){
         isOn=true;
         isReplaceable=false;
+        status = Tacticon.Status.FIXED;
     }
 
     public boolean isOn() {

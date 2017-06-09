@@ -41,8 +41,8 @@ public class EnigmaManager {
         int enigmaNb = usablePredefinedTabs.get(index);
 
         // Création des enigmes à partir de la classe ressource
-        ExplorerEnigma predefinedExEnigma = PredefinedEnigmas.getInstance().exEnigmas[enigmaNb];
-        GuideEnigma predefinedGuideEnigma = PredefinedEnigmas.getInstance().guideEnigmas[enigmaNb];
+        ExplorerEnigma predefinedExEnigma = new ExplorerEnigma(PredefinedEnigmas.getInstance().exEnigmas[enigmaNb]);
+        GuideEnigma predefinedGuideEnigma = new GuideEnigma(PredefinedEnigmas.getInstance().guideEnigmas[enigmaNb]);
 
         // Création de la variable de retour
         HashMap<ExplorerEnigma, GuideEnigma> enigma = new HashMap<ExplorerEnigma, GuideEnigma>();

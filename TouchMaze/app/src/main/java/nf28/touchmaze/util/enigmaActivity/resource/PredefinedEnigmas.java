@@ -3,6 +3,7 @@ package nf28.touchmaze.util.enigmaActivity.resource;
 import nf28.touchmaze.util.enigmaActivity.enigma.ExplorerEnigma;
 import nf28.touchmaze.util.enigmaActivity.enigma.GuideEnigma;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Circle;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon;
 
 /**
  * Created by Baptiste on 08/06/2017.
@@ -42,6 +43,10 @@ public class PredefinedEnigmas {
         exEnigmas[0].getExplorerTab()[4].setReplaceable(true);
         exEnigmas[0].getExplorerTab()[5].setReplaceable(true);
 
+        exEnigmas[0].getExplorerTab()[3].setStatus(Tacticon.Status.REPLECEABLE);
+        exEnigmas[0].getExplorerTab()[4].setStatus(Tacticon.Status.REPLECEABLE);
+        exEnigmas[0].getExplorerTab()[5].setStatus(Tacticon.Status.REPLECEABLE);
+
         guideEnigmas[0] = new GuideEnigma();
 
         guideEnigmas[0].setchosenGuideTab(exEnigmas[0].getchosenGuideTab());
@@ -78,6 +83,10 @@ public class PredefinedEnigmas {
         exEnigmas[1].getExplorerTab()[2].setReplaceable(true);
         exEnigmas[1].getExplorerTab()[4].setReplaceable(true);
 
+        exEnigmas[1].getExplorerTab()[0].setStatus(Tacticon.Status.REPLECEABLE);
+        exEnigmas[1].getExplorerTab()[2].setStatus(Tacticon.Status.REPLECEABLE);
+        exEnigmas[1].getExplorerTab()[4].setStatus(Tacticon.Status.REPLECEABLE);
+
         guideEnigmas[1] = new GuideEnigma();
 
         guideEnigmas[1].setchosenGuideTab(exEnigmas[1].getchosenGuideTab());
@@ -113,6 +122,11 @@ public class PredefinedEnigmas {
         exEnigmas[2].getExplorerTab()[2].setReplaceable(true);
         exEnigmas[2].getExplorerTab()[4].setReplaceable(true);
         exEnigmas[2].getExplorerTab()[5].setReplaceable(true);
+
+        exEnigmas[2].getExplorerTab()[2].setStatus(Tacticon.Status.REPLECEABLE);
+        exEnigmas[2].getExplorerTab()[4].setStatus(Tacticon.Status.REPLECEABLE);
+        exEnigmas[2].getExplorerTab()[5].setStatus(Tacticon.Status.REPLECEABLE);
+
 
         guideEnigmas[2] = new GuideEnigma();
 

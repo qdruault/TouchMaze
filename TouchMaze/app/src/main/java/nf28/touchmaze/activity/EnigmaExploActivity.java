@@ -1,11 +1,16 @@
 package nf28.touchmaze.activity;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -62,6 +67,8 @@ public class EnigmaExploActivity extends AppCompatActivity implements EnigmaTact
     private GuideEnigma gEnigma;
     private HashMap<ExplorerEnigma, GuideEnigma> enigmasMap;
 
+    private LinearLayout main_layout;
+
     private EnigmaSurfaceLayout ex_tab_0;
     private EnigmaSurfaceLayout ex_tab_1;
     private EnigmaSurfaceLayout ex_tab_2;
@@ -86,6 +93,8 @@ public class EnigmaExploActivity extends AppCompatActivity implements EnigmaTact
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enigma_explo);
+
+        main_layout = (LinearLayout) findViewById(R.id.main_layout);
 
         ex_tab_0 = (EnigmaSurfaceLayout) findViewById(R.id.ex_tab_0);
         ex_tab_1 = (EnigmaSurfaceLayout) findViewById(R.id.ex_tab_1);
@@ -152,11 +161,14 @@ public class EnigmaExploActivity extends AppCompatActivity implements EnigmaTact
 
                     touchTap++;
                     Log.d("Touch", "Debut" + String.valueOf(touchTap));
+                    Log.d("Touch", "Debut" + String.valueOf(sf.getNum()));
 
                     if (sf.getNum() < 10)
                         touchedTacticon = enigma.getExplorerTab()[sf.getNum()];
                     else
-                        touchedTacticon = enigma.getExplorerComplementaryTab()[10 - sf.getNum()];
+                        touchedTacticon = enigma.getExplorerComplementaryTab()[sf.getNum()-10];
+
+                    Log.d("Touch", String.valueOf(touchedTacticon.getStatus()));
 
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -173,8 +185,9 @@ public class EnigmaExploActivity extends AppCompatActivity implements EnigmaTact
                                     // LANCER LE TACTICON
                                     Log.d("Touch", "Lance le tacticon");
                                 }
-                                else
+                                else {
                                     Log.d("Touch", "Tacticon off");
+                                }
                             }
 
                             // Déplacement d'un tacticon
@@ -186,6 +199,8 @@ public class EnigmaExploActivity extends AppCompatActivity implements EnigmaTact
                                 if (touchedTacticon.getStatus().equals(Tacticon.Status.REPLECEABLE) || touchedTacticon.getStatus().equals(Tacticon.Status.ADDED)) {
                                     // Déplacement du tacticon
                                     enigma.proposeTacticon(selectedTacticon, sf.getNum());
+
+                                    refreshColors(sf);
 
                                     // Changement de la couleur
                                     for (final EnigmaSurfaceLayout colorsf : surfaceLayouts) {
@@ -202,8 +217,11 @@ public class EnigmaExploActivity extends AppCompatActivity implements EnigmaTact
 
                                     Log.d("Touch", "Déplacement");
                                 }
-                                else
+                                else {
                                     Log.d("Touch", "Tacticon non remplacable");
+                                    Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
+                                    main_layout.startAnimation(shakeAnim);
+                                }
 
                             }
 
@@ -222,8 +240,17 @@ public class EnigmaExploActivity extends AppCompatActivity implements EnigmaTact
 
                                     Log.d("Touch", "Selection du taction");
                                 }
-                                else
+                                else {
                                     Log.d("Touch", "Taction non complementaire");
+                                    Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
+                                    main_layout.startAnimation(shakeAnim);
+                                }
+                            }
+
+                            else if (touchTap == 2 && moveAction) {
+                                Log.d("Touch", "Tacticon selectionné : double tap impossible");
+                                Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
+                                main_layout.startAnimation(shakeAnim);
                             }
 
                             touchTap = 0;
@@ -243,7 +270,7 @@ public class EnigmaExploActivity extends AppCompatActivity implements EnigmaTact
         if (p_esl.getNum() < 10)
             tacticon = enigma.getExplorerTab()[p_esl.getNum()];
         else
-            tacticon = enigma.getExplorerComplementaryTab()[10 - p_esl.getNum()];
+            tacticon = enigma.getExplorerComplementaryTab()[p_esl.getNum()-10];
 
         if (tacticon.getStatus().equals(Tacticon.Status.FIXED))
             p_esl.setBackgroundColor(getResources().getColor(R.color.lightblue));

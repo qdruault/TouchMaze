@@ -53,13 +53,14 @@ public class ExplorerEnigma extends Enigma {
         int i = 0;
         // Pour chacun des tacticons "Off" du tableau explorateur
         for (Tacticon tacticon : explorerTab) {
-            if (!tacticon.isOn()) {
+            if (tacticon.getStatus().equals(Tacticon.Status.REPLECEABLE)) {
                 // On crée un tacticon de meme type dans le tableau complémentaire
                 Class<? extends Tacticon> c = tacticon.getClass();
                 switch (c.getName()){
-                    case "tacticon.Circle":
+                    case "nf28.touchmaze.util.enigmaActivity.tacticon.Circle":
                         explorerComplementaryTab[i] = new Circle();
                         explorerComplementaryTab[i].setReplaceable(true);
+                        explorerComplementaryTab[i].setStatus(Tacticon.Status.COMPLEMENTARY);
                         break;
                     default:
                         break;
@@ -75,8 +76,15 @@ public class ExplorerEnigma extends Enigma {
      * @param p_exploTabIndex
      */
     public void proposeTacticon(Tacticon p_tacticon, int p_exploTabIndex){
-        explorerTab[p_exploTabIndex]=p_tacticon;
-        p_tacticon.setStatus(Tacticon.Status.ADDED);
+        Class<? extends Tacticon> c = p_tacticon.getClass();
+        switch (c.getName()){
+            case "nf28.touchmaze.util.enigmaActivity.tacticon.Circle":
+                explorerTab[p_exploTabIndex] = new Circle();
+                explorerTab[p_exploTabIndex].setStatus(Tacticon.Status.ADDED);
+                break;
+            default:
+                break;
+        }
     }
 
     /**
