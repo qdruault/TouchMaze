@@ -35,13 +35,12 @@ public class PredefinedEnigmas {
         exEnigmas[0].getchosenGuideTab()[4] = new Circle();
         exEnigmas[0].getchosenGuideTab()[5] = new Circle();
 
-        exEnigmas[0].setExplorerTab(exEnigmas[0].getchosenGuideTab());
-        exEnigmas[0].getExplorerTab()[3].setOn(false);
-        exEnigmas[0].getExplorerTab()[4].setOn(false);
-        exEnigmas[0].getExplorerTab()[5].setOn(false);
-        exEnigmas[0].getExplorerTab()[3].setReplaceable(true);
-        exEnigmas[0].getExplorerTab()[4].setReplaceable(true);
-        exEnigmas[0].getExplorerTab()[5].setReplaceable(true);
+        exEnigmas[0].getExplorerTab()[0] = new Circle();
+        exEnigmas[0].getExplorerTab()[1] = new Circle();
+        exEnigmas[0].getExplorerTab()[2] = new Circle();
+        exEnigmas[0].getExplorerTab()[3] = new Circle();
+        exEnigmas[0].getExplorerTab()[4] = new Circle();
+        exEnigmas[0].getExplorerTab()[5] = new Circle();
 
         exEnigmas[0].getExplorerTab()[3].setStatus(Tacticon.Status.REPLECEABLE);
         exEnigmas[0].getExplorerTab()[4].setStatus(Tacticon.Status.REPLECEABLE);
@@ -75,13 +74,12 @@ public class PredefinedEnigmas {
         exEnigmas[1].getchosenGuideTab()[4] = new Circle();
         exEnigmas[1].getchosenGuideTab()[5] = new Circle();
 
-        exEnigmas[1].setExplorerTab(exEnigmas[1].getchosenGuideTab());
-        exEnigmas[1].getExplorerTab()[0].setOn(false);
-        exEnigmas[1].getExplorerTab()[2].setOn(false);
-        exEnigmas[1].getExplorerTab()[4].setOn(false);
-        exEnigmas[1].getExplorerTab()[0].setReplaceable(true);
-        exEnigmas[1].getExplorerTab()[2].setReplaceable(true);
-        exEnigmas[1].getExplorerTab()[4].setReplaceable(true);
+        exEnigmas[1].getExplorerTab()[0] = new Circle();
+        exEnigmas[1].getExplorerTab()[1] = new Circle();
+        exEnigmas[1].getExplorerTab()[2] = new Circle();
+        exEnigmas[1].getExplorerTab()[3] = new Circle();
+        exEnigmas[1].getExplorerTab()[4] = new Circle();
+        exEnigmas[1].getExplorerTab()[5] = new Circle();
 
         exEnigmas[1].getExplorerTab()[0].setStatus(Tacticon.Status.REPLECEABLE);
         exEnigmas[1].getExplorerTab()[2].setStatus(Tacticon.Status.REPLECEABLE);
@@ -115,13 +113,12 @@ public class PredefinedEnigmas {
         exEnigmas[2].getchosenGuideTab()[4] = new Circle();
         exEnigmas[2].getchosenGuideTab()[5] = new Circle();
 
-        exEnigmas[2].setExplorerTab(exEnigmas[2].getchosenGuideTab());
-        exEnigmas[2].getExplorerTab()[2].setOn(false);
-        exEnigmas[2].getExplorerTab()[4].setOn(false);
-        exEnigmas[2].getExplorerTab()[5].setOn(false);
-        exEnigmas[2].getExplorerTab()[2].setReplaceable(true);
-        exEnigmas[2].getExplorerTab()[4].setReplaceable(true);
-        exEnigmas[2].getExplorerTab()[5].setReplaceable(true);
+        exEnigmas[2].getExplorerTab()[0] = new Circle();
+        exEnigmas[2].getExplorerTab()[1] = new Circle();
+        exEnigmas[2].getExplorerTab()[2] = new Circle();
+        exEnigmas[2].getExplorerTab()[3] = new Circle();
+        exEnigmas[2].getExplorerTab()[4] = new Circle();
+        exEnigmas[2].getExplorerTab()[5] = new Circle();
 
         exEnigmas[2].getExplorerTab()[2].setStatus(Tacticon.Status.REPLECEABLE);
         exEnigmas[2].getExplorerTab()[4].setStatus(Tacticon.Status.REPLECEABLE);

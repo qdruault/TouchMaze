@@ -59,7 +59,6 @@ public class ExplorerEnigma extends Enigma {
                 switch (c.getName()){
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Circle":
                         explorerComplementaryTab[i] = new Circle();
-                        explorerComplementaryTab[i].setReplaceable(true);
                         explorerComplementaryTab[i].setStatus(Tacticon.Status.COMPLEMENTARY);
                         break;
                     default:
@@ -94,7 +93,7 @@ public class ExplorerEnigma extends Enigma {
     public boolean isCompleted(){
         for (int i = 0; i < chosenGuideTab.length; i++) {
             // Si le tacticon est "Off" ou si le tacticon ne correspond pas à celui attendu
-            if (!explorerTab[i].isOn() || !chosenGuideTab[i].getClass().equals(explorerTab[i].getClass())){
+            if (!explorerTab[i].getStatus().equals(Tacticon.Status.REPLECEABLE) || !chosenGuideTab[i].getClass().equals(explorerTab[i].getClass())){
                 return false;
             }
         }

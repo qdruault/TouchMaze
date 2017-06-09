@@ -1,5 +1,9 @@
 package nf28.touchmaze.util.enigmaActivity.tacticon;
 
+import android.util.Log;
+
+import nf28.touchmaze.util.PinsDisplayer;
+
 /**
  * Created by Baptiste on 08/06/2017.
  */
@@ -15,7 +19,7 @@ public class Circle extends Tacticon{
      *
      * @return le tableau à transmettre à l'appli bluetooth.
      */
-    static byte[] SetToByte() {
+    public static byte[] SetToByte() {
         boolean[] rightTouches = { false, false, false, false, false, false, false, false };
         boolean[] leftTouches = { false, false, false, false, false, false, false, false };
 
@@ -58,6 +62,8 @@ public class Circle extends Tacticon{
                 leftTouches[2] = true;
                 break;
         }
+
+        Log.d("Pins", PinsDisplayer.setAndDisplay(leftTouches, rightTouches));
 
         // On attend 100 ms.
         stopThread();
