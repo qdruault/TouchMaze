@@ -6,6 +6,14 @@ package nf28.touchmaze.util.enigmaActivity.tacticon;
 
 public class Tacticon {
 
+    public enum Status {
+        FIXED,
+        REPLECEABLE,
+        COMPLEMENTARY,
+        ADDED
+    }
+
+    private Status status;
     private boolean isOn;
     private boolean isReplaceable;
 
@@ -28,5 +36,13 @@ public class Tacticon {
 
     public void setReplaceable(boolean isReplaceable) {
         this.isReplaceable = isReplaceable;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

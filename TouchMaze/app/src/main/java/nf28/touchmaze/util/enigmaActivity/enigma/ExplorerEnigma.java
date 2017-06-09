@@ -76,6 +76,7 @@ public class ExplorerEnigma extends Enigma {
      */
     public void proposeTacticon(Tacticon p_tacticon, int p_exploTabIndex){
         explorerTab[p_exploTabIndex]=p_tacticon;
+        p_tacticon.setStatus(Tacticon.Status.ADDED);
     }
 
     /**

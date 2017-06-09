@@ -129,21 +129,21 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@android:color/holo_blue_bright" />
+            android:background="@color/orange" />
 
         <nf28.touchmaze.layout.EnigmaSurfaceLayout
             android:id="@+id/comp_tab_1"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@android:color/holo_blue_bright" />
+            android:background="@color/orange" />
 
         <nf28.touchmaze.layout.EnigmaSurfaceLayout
             android:id="@+id/comp_tab_2"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@android:color/holo_blue_bright" />
+            android:background="@color/orange" />
 
         <Space
             android:layout_width="wrap_content"
