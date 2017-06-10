@@ -14,7 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import nf28.touchmaze.R;
-import nf28.touchmaze.layout.SurfaceLayout;
+import nf28.touchmaze.layout.WallLayout;
 import nf28.touchmaze.util.touch.DialogTouchEvent;
 import nf28.touchmaze.util.touch.TactileDialogViewHolder;
 
@@ -25,10 +25,10 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
 
     private boolean partnerConnected;
 
-    SurfaceLayout tactileAreaTop;
-    SurfaceLayout tactileAreaBottom;
-    SurfaceLayout tactileAreaLeft;
-    SurfaceLayout tactileAreaRight;
+    WallLayout tactileAreaTop;
+    WallLayout tactileAreaBottom;
+    WallLayout tactileAreaLeft;
+    WallLayout tactileAreaRight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +53,22 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             btn.setOnClickListener(clickMove(btn));
         }
 
-        tactileAreaTop = (SurfaceLayout) findViewById(R.id.tactile_area_top);
-        tactileAreaBottom = (SurfaceLayout) findViewById(R.id.tactile_area_bottom);
-        tactileAreaLeft = (SurfaceLayout) findViewById(R.id.tactile_area_left);
-        tactileAreaRight = (SurfaceLayout) findViewById(R.id.tactile_area_right);
+        tactileAreaTop = (WallLayout) findViewById(R.id.tactile_area_top);
+        tactileAreaBottom = (WallLayout) findViewById(R.id.tactile_area_bottom);
+        tactileAreaLeft = (WallLayout) findViewById(R.id.tactile_area_left);
+        tactileAreaRight = (WallLayout) findViewById(R.id.tactile_area_right);
 
         tactileAreaTop.setDialogViewHolder(this);
         tactileAreaBottom.setDialogViewHolder(this);
         tactileAreaLeft.setDialogViewHolder(this);
         tactileAreaRight.setDialogViewHolder(this);
+
+        // On dit qu'on est pret.
+        try {
+            chatOut.sendMessage("READY");
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -106,11 +113,13 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
 
             if (END_DIALOG_MESSAGE.equals(messageBody)) {
                 // User déconnecté.
+
             } else if (messageBody.equals("ENIGME")){
                 Intent intent = new Intent(GameMazeActivity.this, EnigmaExploActivity.class);
                 startActivityForResult(intent, 10);
             }
             else {
+
                 try {
                     // On récupère le JSON envoyé.
                     JSONObject json = new JSONObject(messageBody);

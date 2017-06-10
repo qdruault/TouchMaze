@@ -3,6 +3,7 @@ package nf28.touchmaze.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.StanzaListener;
@@ -130,6 +131,9 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
         // Fin du game.
         if (END_DIALOG_MESSAGE.equals(messageBody)) {
             displayMessage = "Coéquipier parti.";
+        } else if (messageBody.equals("READY")) {
+            // Le partenaire est prêt, on lui envoie les murs de sa position de départ.
+            sendWallsMessage(); 
         } else {
             // On récupère la direction voulue.
             displayMessage = messageBody;
@@ -151,6 +155,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
             }
             Position2D oldPos = maze.getExplorerPosition();
             maze.moveTo(direction);
+
+            Toast.makeText(getApplicationContext(), maze.getExplorerPosition().toString(), Toast.LENGTH_SHORT).show();
 
             // On se prend un mur.
             if (oldPos.is(maze.getExplorerPosition())) {
@@ -192,20 +198,7 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
                 }
             }
 
-            // Normal.
-            String wallsMessage = "{";
-            wallsMessage += "\"top\" : " + new Direction2D(maze, "FRONT").apply().isTouchableByExplorer()+",";
-            wallsMessage += "\"bottom\" : " + new Direction2D(maze, "REAR").apply().isTouchableByExplorer()+",";
-            wallsMessage += "\"right\" : " + new Direction2D(maze, "RIGHT").apply().isTouchableByExplorer()+",";
-            wallsMessage += "\"left\" : " + new Direction2D(maze, "LEFT").apply().isTouchableByExplorer()+"}";
-
-
-            try {
-                // On lui renvoie les murs autour de lui.
-                chatOut.sendMessage(wallsMessage);
-            } catch (SmackException.NotConnectedException e) {
-                e.printStackTrace();
-            }
+            sendWallsMessage();
         }
     }
     @Override
@@ -265,5 +258,25 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
      */
     static boolean[] rectifyTouches(boolean[] t) {
         return new boolean[]{t[1], t[0], t[3], t[5], t[7], t[2], t[4], t[6]};
+    }
+
+    /**
+     * Envoie la position des murs.
+     */
+    private void sendWallsMessage() {
+        // Normal.
+        String wallsMessage = "{";
+        wallsMessage += "\"top\" : " + new Direction2D(maze, "FRONT").apply().isTouchableByExplorer()+",";
+        wallsMessage += "\"bottom\" : " + new Direction2D(maze, "REAR").apply().isTouchableByExplorer()+",";
+        wallsMessage += "\"right\" : " + new Direction2D(maze, "RIGHT").apply().isTouchableByExplorer()+",";
+        wallsMessage += "\"left\" : " + new Direction2D(maze, "LEFT").apply().isTouchableByExplorer()+"}";
+
+
+        try {
+            // On lui renvoie les murs autour de lui.
+            chatOut.sendMessage(wallsMessage);
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
+        }
     }
 }

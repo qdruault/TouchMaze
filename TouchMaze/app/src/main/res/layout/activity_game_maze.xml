@@ -25,7 +25,7 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
-        <nf28.touchmaze.layout.SurfaceLayout
+        <nf28.touchmaze.layout.WallLayout
             android:id="@+id/tactile_area_top"
             android:layout_width="280dp"
             android:layout_height="30dp"
@@ -38,7 +38,7 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp" />
 
-        <nf28.touchmaze.layout.SurfaceLayout
+        <nf28.touchmaze.layout.WallLayout
             android:id="@+id/tactile_area_bottom"
             android:layout_width="280dp"
             android:layout_height="30dp"
@@ -51,7 +51,7 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp" />
 
-        <nf28.touchmaze.layout.SurfaceLayout
+        <nf28.touchmaze.layout.WallLayout
             android:id="@+id/tactile_area_left"
             android:layout_width="30dp"
             android:layout_height="280dp"
@@ -64,7 +64,7 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp" />
 
-        <nf28.touchmaze.layout.SurfaceLayout
+        <nf28.touchmaze.layout.WallLayout
             android:id="@+id/tactile_area_right"
             android:layout_width="30dp"
             android:layout_height="280dp"

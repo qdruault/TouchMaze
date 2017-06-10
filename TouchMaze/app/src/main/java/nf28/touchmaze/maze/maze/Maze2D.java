@@ -31,7 +31,6 @@ public class Maze2D extends Maze{
     private List<Position2D> enigmas;
     public Obstacle[][] hobstacles;
     public Obstacle[][] vobstacles;
-    private GuideCommunicator gc;
 
     public Maze2D() throws InstantiationException, IllegalAccessException {
         BufferedReader br = null;
