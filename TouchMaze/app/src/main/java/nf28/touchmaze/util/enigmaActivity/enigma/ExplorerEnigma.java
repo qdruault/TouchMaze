@@ -79,6 +79,7 @@ public class ExplorerEnigma extends Enigma {
         switch (c.getName()){
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Circle":
                 explorerTab[p_exploTabIndex] = new Circle();
+                // Passage du tacticon au status ADDED
                 explorerTab[p_exploTabIndex].setStatus(Tacticon.Status.ADDED);
                 break;
             default:

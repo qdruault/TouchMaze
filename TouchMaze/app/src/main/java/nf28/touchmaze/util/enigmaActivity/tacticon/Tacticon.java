@@ -6,6 +6,10 @@ package nf28.touchmaze.util.enigmaActivity.tacticon;
 
 public class Tacticon {
 
+    // FIXED = actif et non mobile et non modifiable
+    // REPLECEABLE = non actif et non mobile et modifiable
+    // COMPLEMENTARY = actif et mobile et non modifiable
+    // ADDED = actif et non mobile et modifiable
     public enum Status {
         FIXED,
         REPLECEABLE,

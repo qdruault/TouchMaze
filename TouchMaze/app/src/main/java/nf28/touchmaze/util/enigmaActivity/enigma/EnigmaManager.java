@@ -60,24 +60,4 @@ public class EnigmaManager {
 
         return enigma;
     }
-
-    // Envoi des infos en JSON
-    // Sérialisation facile avec Jackson
-
-    // Question du destinataire ? Comment communiquent les deux applis ?
-    // Pouvoir faire passer les messages
-
-    //jsonContent = mapper.writeValueAsString(ExEnigma);
-    //ExplorerEnigma receivedEnigma = mapper.readValue(jsonContent, ExplorerEnigma.class);
-
-
-    // On crée les deux enigmes avec le manager
-    // On envoie l'enigme à l'explorateur en json
-    // L'explorateur fait son taff
-    // On envoie une notif de fin d'enigme au guide
-    // Les deux change d'activité lorsque l'enigme est terminée
-
-    // On peut decider d'hoster d'un coté ou de l'autre en fonction de ce qui est plus simple
-
-    //EnigmaManager.getInstance().createNewEnigma();
 }
