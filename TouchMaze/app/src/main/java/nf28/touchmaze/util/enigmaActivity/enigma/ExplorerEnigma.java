@@ -29,9 +29,6 @@ public class ExplorerEnigma extends Enigma {
 
     private Tacticon[] explorerComplementaryTab;
 
-    // Indicateur de la résolution de l'énigme.
-    private boolean isOver;
-
     public ExplorerEnigma(){
         super();
 
@@ -171,13 +168,28 @@ public class ExplorerEnigma extends Enigma {
             Log.d("completed", String.valueOf(explorerTab[i].getClass()));
             Log.d("completed", String.valueOf(chosenGuideTab[i].getClass()));
 
-            if (explorerTab[i].getStatus().equals(Tacticon.Status.REPLECEABLE) || !chosenGuideTab[i].getClass().equals(explorerTab[i].getClass())){
+            if (!chosenGuideTab[i].getClass().equals(explorerTab[i].getClass())){
                 completed = false;
             }
 
             i++;
         }
         return completed;
+    }
+
+    public boolean isFull(){
+        int i = 0;
+        boolean full = true;
+
+        while (full && i < chosenGuideTab.length){
+            // Si il y a au moins un tacticon Off
+            if (explorerTab[i].getStatus().equals(Tacticon.Status.REPLECEABLE)){
+                full = false;
+            }
+
+            i++;
+        }
+        return full;
     }
 
     public void randomizeComplementaryTab(){
@@ -228,16 +240,6 @@ public class ExplorerEnigma extends Enigma {
 
     public void setExplorerComplementaryTab(Tacticon[] explorerComplementaryTab) {
         this.explorerComplementaryTab = explorerComplementaryTab;
-    }
-
-
-    public boolean isOver() {
-        return isOver;
-    }
-
-
-    public void setOver(boolean isOver) {
-        this.isOver = isOver;
     }
 
 }

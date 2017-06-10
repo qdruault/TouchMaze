@@ -232,18 +232,28 @@ public class EnigmaExploActivity extends AppCompatActivity{
                                         moveAction = false;
 
                                         // Vérification de la fin de l'enigme
-                                        if (enigma.isCompleted()) {
-                                            // Envoie la fin de l'activité
-                                            String guideMessage = "STOP";
+                                        if (enigma.isFull()) {
+                                            if (enigma.isCompleted()) {
+                                                // Envoie la fin de l'activité
+                                                String guideMessage = "STOP";
                                             /*try {
                                                 chatOut.sendMessage(guideMessage);
                                             } catch (SmackException.NotConnectedException e) {
                                                 e.printStackTrace();
                                             }*/
 
-                                            Toast.makeText(EnigmaExploActivity.this, "FINI", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(EnigmaExploActivity.this, "FINI", Toast.LENGTH_SHORT).show();
 
-                                            //finishActivity(10);
+                                                //finishActivity(10);
+                                            }
+                                            else{
+                                                Toast.makeText(EnigmaExploActivity.this, "Stèle incorrecte", Toast.LENGTH_SHORT).show();
+
+                                                // Animation à l'écran
+                                                Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
+                                                main_layout.startAnimation(shakeAnim);
+                                            }
+
                                         }
 
                                         Log.d("Touch", "Déplacement");
