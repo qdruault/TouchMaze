@@ -35,12 +35,17 @@ import static nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon.Status.REPLEC
 
 public class EnigmaExploActivity extends AppCompatActivity{
 
+    // Date de demarrage du tacticon
     Date startTime = new Date();
+    // Date d'arret du tacticon
     Date endTime = new Date();
+
+    boolean threadIsRunning = false;
+
+    // Intent pour le module tactos
     Intent sendData = new Intent();
 
-    boolean threadEnCours = false;
-
+    // Types de tacticons
     public enum Tacticons {
         SPIRALE,
         CIRCLE,
@@ -49,12 +54,16 @@ public class EnigmaExploActivity extends AppCompatActivity{
         SNOW;
     }
 
+    // Compteur du nombre de touch effectué
+    int touchTap = 0;
+
     private boolean moveAction = false;
 
     private ExplorerEnigma enigma;
     private GuideEnigma gEnigma;
     private HashMap<ExplorerEnigma, GuideEnigma> enigmasMap;
 
+    // Controls
     private LinearLayout main_layout;
 
     private EnigmaSurfaceLayout ex_tab_0;
@@ -68,21 +77,21 @@ public class EnigmaExploActivity extends AppCompatActivity{
     private EnigmaSurfaceLayout comp_tab_1;
     private EnigmaSurfaceLayout comp_tab_2;
 
-    private Tacticon touchedTacticon;
-    private Tacticon selectedTacticon;
-    private int runningAreaIndex = -1;
-    private int selectedAreaIndex;
-
+    // Liste des surfaceLayout
     private ArrayList<EnigmaSurfaceLayout> surfaceLayouts;
 
-
-    int touchTap = 0;
+    // Gestions des tacticon/surfaceLayout touchés
+    private Tacticon touchedTacticon;
+    private Tacticon selectedTacticon;
+    private int runningAreaIndex;
+    private int selectedAreaIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enigma_explo);
 
+        // Controls
         main_layout = (LinearLayout) findViewById(R.id.main_layout);
 
         ex_tab_0 = (EnigmaSurfaceLayout) findViewById(R.id.ex_tab_0);
@@ -96,6 +105,7 @@ public class EnigmaExploActivity extends AppCompatActivity{
         comp_tab_1 = (EnigmaSurfaceLayout) findViewById(R.id.comp_tab_1);
         comp_tab_2 = (EnigmaSurfaceLayout) findViewById(R.id.comp_tab_2);
 
+        // Ajout des surfaceLayout dans la liste
         surfaceLayouts = new ArrayList<EnigmaSurfaceLayout>();
         surfaceLayouts.add(ex_tab_0);
         surfaceLayouts.add(ex_tab_1);
@@ -107,6 +117,7 @@ public class EnigmaExploActivity extends AppCompatActivity{
         surfaceLayouts.add(comp_tab_1);
         surfaceLayouts.add(comp_tab_2);
 
+        // Initialisation des numéros
         ex_tab_0.setNum(0);
         ex_tab_1.setNum(1);
         ex_tab_2.setNum(2);
@@ -118,6 +129,7 @@ public class EnigmaExploActivity extends AppCompatActivity{
         comp_tab_1.setNum(11);
         comp_tab_2.setNum(12);
 
+        // Récupération de l'énigme
         enigmasMap = EnigmaManager.getInstance().createNewEnigma();
 
         for (HashMap.Entry<ExplorerEnigma, GuideEnigma> entry : enigmasMap.entrySet()) {
@@ -125,6 +137,12 @@ public class EnigmaExploActivity extends AppCompatActivity{
             gEnigma = entry.getValue();
         }
 
+        // Envoie de l'enigme au guide en JSON
+        new Gson().toJson(gEnigma);
+        // ENVOI
+        //new Gson().fromJson(jsonStr, MyClass.class);
+
+        // Debug init (couleurs)
         debuginitSurfaceLayout(ex_tab_0);
         debuginitSurfaceLayout(ex_tab_1);
         debuginitSurfaceLayout(ex_tab_2);
@@ -132,47 +150,36 @@ public class EnigmaExploActivity extends AppCompatActivity{
         debuginitSurfaceLayout(ex_tab_4);
         debuginitSurfaceLayout(ex_tab_5);
 
-        //envoie de l'enigme en JSON
-        new Gson().toJson(gEnigma);
-        // ENVOI
-
-        //new Gson().fromJson(jsonStr, MyClass.class);
-
+        // Listener sur chaque surface layout
+        // Gestion des tap et des double tap en fonction des actions en cours / à effectuer
         for (final EnigmaSurfaceLayout sf : surfaceLayouts) {
 
             sf.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
 
-                    Log.d("Touch", String.valueOf(threadEnCours));
-                    if (!threadEnCours) {
+                    // Si aucun thread de tacticon est en cours, on gère l'event
+                    Log.d("Touch", String.valueOf(threadIsRunning));
+                    if (!threadIsRunning) {
 
-                        if (runningAreaIndex!=-1) {
-                            // Changement de la couleur
-                            for (final EnigmaSurfaceLayout colorsf : surfaceLayouts) {
-                                Log.d("Touch", "dans le for");
-                                if (colorsf.getNum() == runningAreaIndex) {
-                                    Log.d("Touch", "dans le if");
-                                    refreshColors(colorsf);
-                                    Log.d("Touch", "apes refresh color");
-                                }
-                            }
-                            runningAreaIndex = -1;
-                        }
-
-                        Log.d("Touch", "fin du thread");
-
+                          // Mis à jour du nombre de tap
                         touchTap++;
                         Log.d("Touch", "Debut" + String.valueOf(touchTap));
                         Log.d("Touch", "Debut" + String.valueOf(sf.getNum()));
 
-                        if (sf.getNum() < 10)
+                        // Récupération du tacticon touché
+                        if (sf.getNum() < 10) {
+                            // Tacticon de l'explorerTab
                             touchedTacticon = enigma.getExplorerTab()[sf.getNum()];
-                        else
+                        }
+                        else {
+                            // Tacticon du complementaryTab
                             touchedTacticon = enigma.getExplorerComplementaryTab()[sf.getNum() - 10];
+                        }
 
                         Log.d("Touch", String.valueOf(touchedTacticon.getStatus()));
 
+                        // Handler pour permettre le double tap
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -180,20 +187,26 @@ public class EnigmaExploActivity extends AppCompatActivity{
 
                                 // Lecture d'un tacticon
                                 if (touchTap == 1 && !moveAction) {
-                                    Toast.makeText(EnigmaExploActivity.this, "single touch lecture", Toast.LENGTH_SHORT).show();
                                     Log.d("Touch", "ST");
 
                                     // Si le tacticon est actif
                                     if (!touchedTacticon.getStatus().equals(REPLECEABLE)) {
-                                        // LANCER LE TACTICON
+                                        // Lancement du tacticon
                                         Log.d("Touch", "Lance le tacticon");
 
+                                        // Switch du type
                                         CircleThread circleThread = new CircleThread();
                                         circleThread.start();
+
+
                                         startTime.setTime(System.currentTimeMillis());
+                                        // Thread en cours sur 5 secondes
                                         endTime.setTime(System.currentTimeMillis() + 5000);
-                                        threadEnCours = true;
+
+                                        threadIsRunning = true;
                                         runningAreaIndex = sf.getNum();
+
+                                        // Feedback visuel
                                         sf.setBackgroundColor(getResources().getColor(R.color.green));
 
                                     } else {
@@ -203,25 +216,26 @@ public class EnigmaExploActivity extends AppCompatActivity{
 
                                 // Déplacement d'un tacticon
                                 else if (touchTap == 1 && moveAction) {
-                                    Toast.makeText(EnigmaExploActivity.this, "single touch movement", Toast.LENGTH_SHORT).show();
                                     Log.d("Touch", "ST");
 
                                     // Si le tacticon est remplacable ou added
                                     if (touchedTacticon.getStatus().equals(REPLECEABLE) || touchedTacticon.getStatus().equals(Tacticon.Status.ADDED)) {
-                                        // Déplacement du tacticon
+                                        // Déplacement du tacticon (le tacticon passe de repleceable à added)
                                         enigma.proposeTacticon(selectedTacticon, sf.getNum());
 
+                                        // Mise à jour des couleurs
                                         refreshColors(sf);
 
-                                        // Changement de la couleur
                                         for (final EnigmaSurfaceLayout colorsf : surfaceLayouts) {
                                             if (colorsf.getNum() == selectedAreaIndex) {
                                                 refreshColors(colorsf);
                                             }
                                         }
 
+                                        // Sortie de l'etat moveAction
                                         moveAction = false;
 
+                                        // Vérification de la fin de l'enigme
                                         if (enigma.isCompleted()) {
                                             //ENVOIE LA FIN DE L'ACTIVITE à L'AUTRE
                                         }
@@ -229,6 +243,8 @@ public class EnigmaExploActivity extends AppCompatActivity{
                                         Log.d("Touch", "Déplacement");
                                     } else {
                                         Log.d("Touch", "Tacticon non remplacable");
+
+                                        // Animation à l'écran
                                         Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
                                         main_layout.startAnimation(shakeAnim);
                                     }
@@ -237,57 +253,68 @@ public class EnigmaExploActivity extends AppCompatActivity{
 
                                 // Activation d'un tacticon à déplacer
                                 else if (touchTap == 2 && !moveAction) {
-                                    Toast.makeText(EnigmaExploActivity.this, "double touch", Toast.LENGTH_SHORT).show();
                                     Log.d("Touch", "DT");
 
                                     // Si le tacticon est complementaire
                                     if (touchedTacticon.getStatus().equals(Tacticon.Status.COMPLEMENTARY)) {
+
+                                        // Stocke le tacticon sélectionné et l'index
                                         selectedTacticon = touchedTacticon;
                                         selectedAreaIndex = sf.getNum();
 
+                                        // Feedback visuel
                                         sf.setBackgroundColor(getResources().getColor(R.color.pink));
+
+                                        // Passage dans l'etat moveAction
                                         moveAction = true;
 
                                         Log.d("Touch", "Selection du taction");
                                     } else {
                                         Log.d("Touch", "Taction non complementaire");
+
+                                        // Animation à l'écran
                                         Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
                                         main_layout.startAnimation(shakeAnim);
                                     }
+
+                                // Cas d'un double tap impossible
                                 } else if (touchTap == 2 && moveAction) {
                                     Log.d("Touch", "Tacticon selectionné : double tap impossible");
+
+                                    // Animation à l'écran
                                     Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
                                     main_layout.startAnimation(shakeAnim);
                                 }
 
+                                // Remise à 0 du compteur de tap
                                 touchTap = 0;
                                 Log.d("Touch", "Fin" + String.valueOf(touchTap));
+
+                        // Temps accordé pour réaliser le double tap : 0.5 sec
                             }
                         }, 500);
 
                     }
-                    else
+                    else {
                         Log.d("Touch", "Thread en cours");
+                    }
                     return false;
                 }
             });
         }
     }
 
+    /**
+     * Met à jour la couleur du surface layout en fonction du status de son tacticon
+     * @param p_esl
+     */
     public void refreshColors(EnigmaSurfaceLayout p_esl){
-
-        Log.d("Touch", "au debut du refresh color");
-
         Tacticon tacticon;
-
-        Log.d("Touch", "1");
 
         if (p_esl.getNum() < 10)
             tacticon = enigma.getExplorerTab()[p_esl.getNum()];
         else
             tacticon = enigma.getExplorerComplementaryTab()[p_esl.getNum()-10];
-
-        Log.d("Touch", "2");
 
         if (tacticon.getStatus().equals(Tacticon.Status.COMPLEMENTARY))
             p_esl.setBackgroundColor(getResources().getColor(R.color.orange));
@@ -296,9 +323,12 @@ public class EnigmaExploActivity extends AppCompatActivity{
         else if (tacticon.getStatus().equals(Tacticon.Status.FIXED))
             p_esl.setBackgroundColor(getResources().getColor(R.color.lightblue));
 
-        Log.d("Touch", "colors");
     }
 
+    /**
+     * Met les surface layout off en noir pour le debug
+     * @param p_surfaceLayout
+     */
     public void debuginitSurfaceLayout(EnigmaSurfaceLayout p_surfaceLayout){
         for (int i = 0; i < enigma.getExplorerTab().length; ++i) {
             if (p_surfaceLayout.getNum() == i) {
@@ -307,6 +337,7 @@ public class EnigmaExploActivity extends AppCompatActivity{
             }
         }
     }
+
 
     // Thread d'allumage du CIRCLE.
     private class CircleThread extends Thread{
@@ -318,7 +349,7 @@ public class EnigmaExploActivity extends AppCompatActivity{
                 startTime.setTime(System.currentTimeMillis());
                 Log.d("Touch", "dans le thread");
             }
-            threadEnCours = false;
+            threadIsRunning = false;
             Log.d("Touch", "apres false");
 
             runOnUiThread(new Runnable() {
