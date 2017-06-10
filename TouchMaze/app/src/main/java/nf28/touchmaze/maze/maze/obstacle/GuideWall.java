@@ -14,7 +14,7 @@ public class GuideWall extends Wall {
 
     @Override
     public boolean isVisibleByGuide() {
-        return true;
+        return false;
     }
 
     @Override

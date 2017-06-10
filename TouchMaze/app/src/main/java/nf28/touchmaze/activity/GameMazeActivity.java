@@ -116,6 +116,7 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
 
             } else if (messageBody.equals("ENIGME")){
                 Intent intent = new Intent(GameMazeActivity.this, EnigmaExploActivity.class);
+                intent.putExtra("PARTNER", partnerJID);
                 startActivityForResult(intent, 10);
             }
             else {
@@ -123,11 +124,17 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
                 try {
                     // On récupère le JSON envoyé.
                     JSONObject json = new JSONObject(messageBody);
-                    // On récupère les propriétés et on les affecte.
+                    // On récupère les propriétés des murs et on les affecte.
                     tactileAreaRight.setActiveWall(json.getBoolean("right"));
                     tactileAreaLeft.setActiveWall(json.getBoolean("left"));
                     tactileAreaTop.setActiveWall(json.getBoolean("top"));
                     tactileAreaBottom.setActiveWall(json.getBoolean("bottom"));
+                    // Nos coordonnées.
+                    int x = json.getInt("x");
+                    int y = json.getInt("y");
+                    TextView hostname = (TextView) findViewById(R.id.textHostName);
+                    String partner = partnerJID.substring(0, partnerJID.indexOf("@"));
+                    hostname.setText(String.format("Guidé par %s. x : %s y : %s", partner, x, y));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -200,7 +207,12 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Vérification de l'intent grace a son identifiant
         if (requestCode == 10) {
-            Toast.makeText(GameMazeActivity.this, "Enigme réussie !!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GameMazeActivity.this, "Enigme réussie !!", Toast.LENGTH_SHORT).show();String guideMessage = "STOP";
+            try {
+                chatOut.sendMessage("STOP");
+            } catch (SmackException.NotConnectedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

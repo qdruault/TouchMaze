@@ -153,10 +153,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
                     direction = new Direction2D(maze, "LEFT");
                     break;
             }
-            Position2D oldPos = maze.getExplorerPosition();
+            Position2D oldPos = new Position2D(maze.getExplorerPosition().x, maze.getExplorerPosition().y);
             maze.moveTo(direction);
-
-            Toast.makeText(getApplicationContext(), maze.getExplorerPosition().toString(), Toast.LENGTH_SHORT).show();
 
             // On se prend un mur.
             if (oldPos.is(maze.getExplorerPosition())) {
@@ -177,9 +175,10 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
                         chatOut.sendMessage("ENIGME");
                         // On lance l'enigme.
                         Intent intent = new Intent(GameMapActivity.this, EnigmaGuideActivity.class);
+                        intent.putExtra("PARTNER", partnerJID);
                         startActivityForResult(intent, 10);
                         // On stocke sa position pour la retirer après.
-                        enigmaToRemove = positionEnigma;
+                        enigmaToRemove = new Position2D(positionEnigma.x, positionEnigma.y);
                     } catch (SmackException.NotConnectedException e) {
                         e.printStackTrace();
                     }
@@ -266,6 +265,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
     private void sendWallsMessage() {
         // Normal.
         String wallsMessage = "{";
+        wallsMessage += "\"x\" : " + maze.getExplorerPosition().x +",";
+        wallsMessage += "\"y\" : " + maze.getExplorerPosition().y +",";
         wallsMessage += "\"top\" : " + new Direction2D(maze, "FRONT").apply().isTouchableByExplorer()+",";
         wallsMessage += "\"bottom\" : " + new Direction2D(maze, "REAR").apply().isTouchableByExplorer()+",";
         wallsMessage += "\"right\" : " + new Direction2D(maze, "RIGHT").apply().isTouchableByExplorer()+",";

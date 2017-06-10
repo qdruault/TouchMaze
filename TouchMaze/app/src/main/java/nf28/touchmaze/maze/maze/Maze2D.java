@@ -4,8 +4,11 @@ import nf28.touchmaze.maze.maze.obstacle.*;
 import nf28.touchmaze.maze.position.Position2D;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,16 +39,40 @@ public class Maze2D extends Maze{
         BufferedReader br = null;
         FileReader fr = null;
 
-        String FILENAME = "ressources\\Lab1.txt";
-
+        String Maze = "20 10\n" +
+                "\n" +
+                "11111111111111111111\n" +
+                "11111000000000002222\n" +
+                "11200011011111202210\n" +
+                "11101000010000000000\n" +
+                "00000022201232311120\n" +
+                "11000000001111323200\n" +
+                "00100030000000022003\n" +
+                "11122003000100030300\n" +
+                "02000000100000311030\n" +
+                "30002000000000111100\n" +
+                "11111111111111111111\n" +
+                "\n" +
+                "100000020103030200001\n" +
+                "100001020130303000031\n" +
+                "100012000000000000131\n" +
+                "120000000210000000101\n" +
+                "100100100000000000001\n" +
+                "101100100000001000301\n" +
+                "100000030100001303001\n" +
+                "100100003101103000101\n" +
+                "103130100001202000101\n" +
+                "102002100002000000001\n" +
+                "\n" +
+                "19 0\n" +
+                "\n" +
+                "0 0\n" +
+                "\n" +
+                "17 0 X 11 7 X 18 2";
         try {
-
-            fr = new FileReader(FILENAME);
-            br = new BufferedReader(fr);
+            br = new BufferedReader(new StringReader(Maze));
 
             String sCurrentLine;
-
-            br = new BufferedReader(new FileReader(FILENAME));
 
             String[] dims = br.readLine().split(" ");
 

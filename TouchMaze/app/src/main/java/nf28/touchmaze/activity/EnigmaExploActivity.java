@@ -36,7 +36,7 @@ import static nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon.Status.REPLEC
  * Created by Baptiste on 08/06/2017.
  */
 
-public class EnigmaExploActivity extends AppCompatActivity{
+public class EnigmaExploActivity extends ChatActivity {
 
     // Date de demarrage du tacticon
     Date startTime = new Date();
@@ -132,12 +132,12 @@ public class EnigmaExploActivity extends AppCompatActivity{
         }
 
         // Envoie de l'enigme au guide en JSON
-        /*String guideMessage = new Gson().toJson(gEnigma);
+        String guideMessage = new Gson().toJson(gEnigma);
         try {
             chatOut.sendMessage(guideMessage);
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();
-        }*/
+        }
 
         // Debug init (couleurs)
         debuginitSurfaceLayout(ex_tab_0);
@@ -159,7 +159,7 @@ public class EnigmaExploActivity extends AppCompatActivity{
                     Log.d("Touch", String.valueOf(threadIsRunning));
                     if (!threadIsRunning) {
 
-                          // Mis à jour du nombre de tap
+                        // Mis à jour du nombre de tap
                         touchTap++;
                         Log.d("Touch", "Debut" + String.valueOf(touchTap));
                         Log.d("Touch", "Debut" + String.valueOf(sf.getNum()));
@@ -168,8 +168,7 @@ public class EnigmaExploActivity extends AppCompatActivity{
                         if (sf.getNum() < 10) {
                             // Tacticon de l'explorerTab
                             touchedTacticon = enigma.getExplorerTab()[sf.getNum()];
-                        }
-                        else {
+                        } else {
                             // Tacticon du complementaryTab
                             touchedTacticon = enigma.getExplorerComplementaryTab()[sf.getNum() - 10];
                         }
@@ -192,7 +191,7 @@ public class EnigmaExploActivity extends AppCompatActivity{
                                         Log.d("Touch", "Lance le tacticon");
 
                                         // Creation du thread
-                                        TacticonThread tThread = new TacticonThread((ByteAdaptable)touchedTacticon);
+                                        TacticonThread tThread = new TacticonThread((ByteAdaptable) touchedTacticon);
                                         tThread.start();
 
                                         startTime.setTime(System.currentTimeMillis());
@@ -236,17 +235,17 @@ public class EnigmaExploActivity extends AppCompatActivity{
                                             if (enigma.isCompleted()) {
                                                 // Envoie la fin de l'activité
                                                 String guideMessage = "STOP";
-                                            /*try {
-                                                chatOut.sendMessage(guideMessage);
-                                            } catch (SmackException.NotConnectedException e) {
-                                                e.printStackTrace();
-                                            }*/
+                                                try {
+                                                    chatOut.sendMessage(guideMessage);
+                                                } catch (SmackException.NotConnectedException e) {
+                                                    e.printStackTrace();
+                                                }
 
                                                 Toast.makeText(EnigmaExploActivity.this, "FINI", Toast.LENGTH_SHORT).show();
 
-                                                //finishActivity(10);
-                                            }
-                                            else{
+                                                // setResult(RESULT_OK, new Intent());
+                                                finish();
+                                            } else {
                                                 Toast.makeText(EnigmaExploActivity.this, "Stèle incorrecte", Toast.LENGTH_SHORT).show();
 
                                                 // Animation à l'écran
@@ -293,7 +292,7 @@ public class EnigmaExploActivity extends AppCompatActivity{
                                         main_layout.startAnimation(shakeAnim);
                                     }
 
-                                // Cas d'un double tap impossible
+                                    // Cas d'un double tap impossible
                                 } else if (touchTap == 2 && moveAction) {
                                     Log.d("Touch", "Tacticon selectionné : double tap impossible");
 
@@ -306,12 +305,11 @@ public class EnigmaExploActivity extends AppCompatActivity{
                                 touchTap = 0;
                                 Log.d("Touch", "Fin" + String.valueOf(touchTap));
 
-                        // Temps accordé pour réaliser le double tap : 0.5 sec
+                                // Temps accordé pour réaliser le double tap : 0.5 sec
                             }
                         }, 500);
 
-                    }
-                    else {
+                    } else {
                         Log.d("Touch", "Thread en cours");
                     }
                     return false;
@@ -322,15 +320,16 @@ public class EnigmaExploActivity extends AppCompatActivity{
 
     /**
      * Met à jour la couleur du surface layout en fonction du status de son tacticon
+     *
      * @param p_esl
      */
-    public void refreshColors(EnigmaSurfaceLayout p_esl){
+    public void refreshColors(EnigmaSurfaceLayout p_esl) {
         Tacticon tacticon;
 
         if (p_esl.getNum() < 10)
             tacticon = enigma.getExplorerTab()[p_esl.getNum()];
         else
-            tacticon = enigma.getExplorerComplementaryTab()[p_esl.getNum()-10];
+            tacticon = enigma.getExplorerComplementaryTab()[p_esl.getNum() - 10];
 
         if (tacticon.getStatus().equals(Tacticon.Status.COMPLEMENTARY))
             p_esl.setBackgroundColor(getResources().getColor(R.color.orange));
@@ -343,29 +342,43 @@ public class EnigmaExploActivity extends AppCompatActivity{
 
     /**
      * Met les surface layout off en noir pour le debug
+     *
      * @param p_surfaceLayout
      */
-    public void debuginitSurfaceLayout(EnigmaSurfaceLayout p_surfaceLayout){
+    public void debuginitSurfaceLayout(EnigmaSurfaceLayout p_surfaceLayout) {
         for (int i = 0; i < enigma.getExplorerTab().length; ++i) {
             if (p_surfaceLayout.getNum() == i) {
                 if (enigma.getExplorerTab()[i].getStatus().equals(Tacticon.Status.REPLECEABLE))
-                   p_surfaceLayout.setBackgroundColor(getResources().getColor(black));
+                    p_surfaceLayout.setBackgroundColor(getResources().getColor(black));
             }
         }
     }
 
+    // Méthode d'envoi des données à l'appli Bluetooth.
+    public void traitementData(ByteAdaptable p_tacticon) {
+        // Création du tableau de bytes à envoyer.
+        byte[] data;
+
+        // On le remplit.
+        data = p_tacticon.SetToByte();
+
+        sendData.putExtra("BStream", data);
+        sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+        // On l'envoie à l'appli bluetooth.
+        sendBroadcast(sendData);
+    }
 
     // Thread d'allumage du tacticon.
-    private class TacticonThread extends Thread{
+    private class TacticonThread extends Thread {
         private ByteAdaptable tacticon;
 
-        public TacticonThread(ByteAdaptable p_tacticon){
+        public TacticonThread(ByteAdaptable p_tacticon) {
             tacticon = p_tacticon;
         }
 
         @Override
         public void run() {
-            while (startTime.compareTo(endTime)<0) {
+            while (startTime.compareTo(endTime) < 0) {
 
                 // Tant que les 5 sec ne sont pas écoulées, on run le tacticon
                 traitementData(tacticon);
@@ -388,20 +401,6 @@ public class EnigmaExploActivity extends AppCompatActivity{
                 }
             });
         }
-    }
-
-    // Méthode d'envoi des données à l'appli Bluetooth.
-    public void traitementData(ByteAdaptable p_tacticon) {
-        // Création du tableau de bytes à envoyer.
-        byte[] data;
-
-        // On le remplit.
-        data = p_tacticon.SetToByte();
-
-        sendData.putExtra("BStream", data);
-        sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
-        // On l'envoie à l'appli bluetooth.
-        sendBroadcast(sendData);
     }
 
 }

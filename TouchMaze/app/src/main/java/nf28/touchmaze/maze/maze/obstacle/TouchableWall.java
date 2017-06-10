@@ -14,7 +14,7 @@ public class TouchableWall extends Wall {
 
     @Override
     public boolean isVisibleByGuide() {
-        return false;
+        return true;
     }
 
     @Override

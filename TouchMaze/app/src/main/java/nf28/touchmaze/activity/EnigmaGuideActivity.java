@@ -1,5 +1,7 @@
 package nf28.touchmaze.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,23 +28,19 @@ import java.util.Random;
 
 import nf28.touchmaze.R;
 import nf28.touchmaze.layout.EnigmaSurfaceLayout;
-import nf28.touchmaze.layout.SurfaceLayout;
-import nf28.touchmaze.util.enigmaActivity.enigma.Enigma;
 import nf28.touchmaze.util.enigmaActivity.enigma.EnigmaManager;
 import nf28.touchmaze.util.enigmaActivity.enigma.ExplorerEnigma;
 import nf28.touchmaze.util.enigmaActivity.enigma.GuideEnigma;
 import nf28.touchmaze.util.enigmaActivity.tacticon.ByteAdaptable;
-import nf28.touchmaze.util.enigmaActivity.tacticon.Circle;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon;
 
 import static android.R.color.black;
-import static nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon.Status.REPLECEABLE;
 
 /**
  * Created by Baptiste on 08/06/2017.
  */
 
-public class EnigmaGuideActivity extends AppCompatActivity {
+public class EnigmaGuideActivity extends ChatActivity {
 
     // Date de demarrage du tacticon
     Date startTime = new Date();
@@ -154,12 +152,12 @@ public class EnigmaGuideActivity extends AppCompatActivity {
         randomizeTabs();
 
         // Debug
-        enigmasMap = EnigmaManager.getInstance().createNewEnigma();
+        /*enigmasMap = EnigmaManager.getInstance().createNewEnigma();
 
         for (HashMap.Entry<ExplorerEnigma, GuideEnigma> entry : enigmasMap.entrySet()) {
             enigma = entry.getValue();
         }
-
+        */
         debuginitSurfaceLayout();
 
 
@@ -355,12 +353,11 @@ public class EnigmaGuideActivity extends AppCompatActivity {
         }
     }
 
-    /*
+    /**
      * Réception d'un message du partenaire.
      * @param chat
      * @param message
      */
-    /*
     @Override
     public void processMessage(Chat chat, final Message message) {
         if (message.getFrom().equals(partnerJID + "/Smack")) {
@@ -370,14 +367,14 @@ public class EnigmaGuideActivity extends AppCompatActivity {
                 // User déconnecté.
             }
             else if (messageBody.equals("STOP")) {
-                // PASSER A L AUTRE ACTIVITE
+                Intent intent = getIntent();
+                finish();
             }
             else {
                 enigma = new Gson().fromJson(messageBody, GuideEnigma.class);
             }
         }
     }
-    */
 
     // Thread d'allumage du tacticon.
     private class TacticonThread extends Thread{
