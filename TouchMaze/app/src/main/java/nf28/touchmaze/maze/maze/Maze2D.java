@@ -37,7 +37,7 @@ public class Maze2D extends Maze{
         BufferedReader br = null;
         FileReader fr = null;
 
-        String FILENAME = "ressources\\Lab1";
+        String FILENAME = "ressources\\Lab1.txt";
 
         try {
 
@@ -145,33 +145,12 @@ public class Maze2D extends Maze{
 
 
     private boolean canMoveTo(Direction2D d){
-        return d.obstacle.apply(this).isTraversable();
+        return d.apply().isTraversable();
     }
 
-    public void init(GuideCommunicator gc){
-        this.gc = gc;
-        gc.addDirectionListener(direction2D -> {
-            moveTo(direction2D);
-            String s = "";
-            s += Direction2D.FRONT.obstacle.apply(this).isTouchableByExplorer()+",";
-            s += Direction2D.RIGHT.obstacle.apply(this).isTouchableByExplorer()+",";
-            s += Direction2D.REAR.obstacle.apply(this).isTouchableByExplorer()+",";
-            s += Direction2D.LEFT.obstacle.apply(this).isTouchableByExplorer();
-            gc.sendMessage("WALLS: "+s);
-        });
-        gc.startGame();
-    }
-
-    private void moveTo(Direction2D d){
+    public void moveTo(Direction2D d){
         if(canMoveTo(d)){
-            d.move.accept(explorer);
-            enigmas.stream().filter(p -> p.is(explorer)).findFirst().ifPresent( p -> {
-                gc.startEnigma();
-                enigmas.remove(p);
-            });
-            if(explorer.is(exit) && enigmas.isEmpty()){
-                gc.endGame(true);
-            }
+            d.accept();
         }
         else{
             /* Error handling */
@@ -184,6 +163,12 @@ public class Maze2D extends Maze{
     }
 
 
+    public Position2D getExit() {
+        return exit;
+    }
 
+    public List<Position2D> getEnigmas() {
+        return enigmas;
+    }
 
 }

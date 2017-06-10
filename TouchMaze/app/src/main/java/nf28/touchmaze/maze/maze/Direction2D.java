@@ -1,24 +1,41 @@
 package nf28.touchmaze.maze.maze;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
 import nf28.touchmaze.maze.maze.obstacle.Obstacle;
-import nf28.touchmaze.maze.position.Position2D;
+import nf28.touchmaze.maze.position.Position;
+public class Direction2D {
 
-public enum Direction2D {
-    LEFT("LEFT", m -> m.vobstacles[m.explorer.y][m.explorer.x], position -> {position.toLeft();}),
-    RIGHT("RIGHT", m -> m.vobstacles[m.explorer.y][m.explorer.x+1], position -> {position.toRight();}),
-    FRONT("FRONT", m -> m.hobstacles[m.explorer.y+1][m.explorer.x], position -> {position.toFront();}),
-    REAR("REAR", m -> m.hobstacles[m.explorer.y][m.explorer.x], position -> {position.toRear();});
+    private String name;
+    private Maze2D maze;
 
-    public String name;
-    public Function<Maze2D, Obstacle> obstacle;
-    Consumer<Position2D> move;
-
-    Direction2D(String name, Function<Maze2D, Obstacle> object, Consumer<Position2D> move) {
+    public Direction2D (Maze2D maze, String name) {
+        this.maze = maze;
         this.name = name;
-        this.obstacle = object;
-        this.move = move;
+    }
+
+    public Position accept() {
+        switch (name) {
+            case "LEFT" :
+                return maze.getExplorerPosition().toLeft();
+            case "RIGHT" :
+                return maze.getExplorerPosition().toRight();
+            case "FRONT" :
+                return maze.getExplorerPosition().toFront();
+            default:
+                return maze.getExplorerPosition().toRear();
+        }
+    }
+
+    public Obstacle apply() {
+        switch (name) {
+            case "LEFT" :
+                return maze.vobstacles[maze.explorer.y][maze.explorer.x];
+            case "RIGHT" :
+                return maze.vobstacles[maze.explorer.y][maze.explorer.x+1];
+            case "FRONT" :
+                return maze.hobstacles[maze.explorer.y+1][maze.explorer.x];
+            default:
+                return maze.hobstacles[maze.explorer.y][maze.explorer.x];
+        }
     }
 
 }
