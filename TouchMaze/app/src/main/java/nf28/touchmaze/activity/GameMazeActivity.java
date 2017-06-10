@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.chat.Chat;
@@ -105,7 +106,11 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
 
             if (END_DIALOG_MESSAGE.equals(messageBody)) {
                 // User déconnecté.
-            } else {
+            } else if (messageBody.equals("ENIGME")){
+                Intent intent = new Intent(GameMazeActivity.this, EnigmaExploActivity.class);
+                startActivityForResult(intent, 10);
+            }
+            else {
                 try {
                     // On récupère le JSON envoyé.
                     JSONObject json = new JSONObject(messageBody);
@@ -179,5 +184,14 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
      */
     static boolean[] rectifyTouches(boolean[] t) {
         return new boolean[]{t[1], t[0], t[3], t[5], t[7], t[2], t[4], t[6]};
+    }
+
+    // Récupération du resultat de la seconde activité.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Vérification de l'intent grace a son identifiant
+        if (requestCode == 10) {
+            Toast.makeText(GameMazeActivity.this, "Enigme réussie !!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

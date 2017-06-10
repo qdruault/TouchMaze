@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Space
         android:layout_width="match_parent"
@@ -13,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="TextView"
+        android:text="Stèle"
         android:textColor="@android:color/black"
         android:textSize="24sp" />
 
@@ -33,19 +35,22 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <nf28.touchmaze.layout.SurfaceLayout
+            <nf28.touchmaze.layout.EnigmaSurfaceLayout
+                android:id="@+id/ex_tab_0"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:background="@android:color/holo_blue_bright" />
 
-            <nf28.touchmaze.layout.SurfaceLayout
+            <nf28.touchmaze.layout.EnigmaSurfaceLayout
+                android:id="@+id/ex_tab_1"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:background="@android:color/holo_blue_bright" />
 
-            <nf28.touchmaze.layout.SurfaceLayout
+            <nf28.touchmaze.layout.EnigmaSurfaceLayout
+                android:id="@+id/ex_tab_2"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
@@ -69,19 +74,22 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <nf28.touchmaze.layout.SurfaceLayout
+            <nf28.touchmaze.layout.EnigmaSurfaceLayout
+                android:id="@+id/ex_tab_3"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:background="@android:color/holo_blue_bright" />
 
-            <nf28.touchmaze.layout.SurfaceLayout
+            <nf28.touchmaze.layout.EnigmaSurfaceLayout
+                android:id="@+id/ex_tab_4"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:background="@android:color/holo_blue_bright" />
 
-            <nf28.touchmaze.layout.SurfaceLayout
+            <nf28.touchmaze.layout.EnigmaSurfaceLayout
+                android:id="@+id/ex_tab_5"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
@@ -102,7 +110,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
-        android:text="TextView"
+        android:text="Glyphes"
         android:textColor="@android:color/black"
         android:textSize="24sp" />
 
@@ -118,23 +126,26 @@
             android:layout_weight="1" />
 
 
-        <nf28.touchmaze.layout.SurfaceLayout
+        <nf28.touchmaze.layout.EnigmaSurfaceLayout
+            android:id="@+id/comp_tab_0"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@android:color/holo_blue_bright" />
+            android:background="@color/orange" />
 
-        <nf28.touchmaze.layout.SurfaceLayout
+        <nf28.touchmaze.layout.EnigmaSurfaceLayout
+            android:id="@+id/comp_tab_1"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@android:color/holo_blue_bright" />
+            android:background="@color/orange" />
 
-        <nf28.touchmaze.layout.SurfaceLayout
+        <nf28.touchmaze.layout.EnigmaSurfaceLayout
+            android:id="@+id/comp_tab_2"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@android:color/holo_blue_bright" />
+            android:background="@color/orange" />
 
         <Space
             android:layout_width="wrap_content"
