@@ -105,7 +105,11 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
 
             if (END_DIALOG_MESSAGE.equals(messageBody)) {
                 // User déconnecté.
-            } else {
+            } else if (messageBody.equals("ENIGME")){
+                Intent intent = new Intent(GameMazeActivity.this, EnigmaExploActivity.class);
+                startActivityForResult(intent, 10);
+            }
+            else {
                 try {
                     // On récupère le JSON envoyé.
                     JSONObject json = new JSONObject(messageBody);

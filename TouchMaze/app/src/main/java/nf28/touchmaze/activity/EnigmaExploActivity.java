@@ -240,6 +240,10 @@ public class EnigmaExploActivity extends AppCompatActivity{
                                             } catch (SmackException.NotConnectedException e) {
                                                 e.printStackTrace();
                                             }*/
+
+                                            Toast.makeText(EnigmaExploActivity.this, "FINI", Toast.LENGTH_SHORT).show();
+
+                                            //finishActivity(10);
                                         }
 
                                         Log.d("Touch", "Déplacement");

@@ -1,5 +1,7 @@
 package nf28.touchmaze.util.enigmaActivity.enigma;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -159,13 +161,23 @@ public class ExplorerEnigma extends Enigma {
      * @return
      */
     public boolean isCompleted(){
-        for (int i = 0; i < chosenGuideTab.length; i++) {
+        int i = 0;
+        boolean completed = true;
+
+        while (completed && i < chosenGuideTab.length){
             // Si le tacticon est "Off" ou si le tacticon ne correspond pas à celui attendu
-            if (!explorerTab[i].getStatus().equals(Tacticon.Status.REPLECEABLE) || !chosenGuideTab[i].getClass().equals(explorerTab[i].getClass())){
-                return false;
+
+            Log.d("completed", String.valueOf(explorerTab[i].getStatus()));
+            Log.d("completed", String.valueOf(explorerTab[i].getClass()));
+            Log.d("completed", String.valueOf(chosenGuideTab[i].getClass()));
+
+            if (explorerTab[i].getStatus().equals(Tacticon.Status.REPLECEABLE) || !chosenGuideTab[i].getClass().equals(explorerTab[i].getClass())){
+                completed = false;
             }
+
+            i++;
         }
-        return true;
+        return completed;
     }
 
     public void randomizeComplementaryTab(){
