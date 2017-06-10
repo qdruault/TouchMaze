@@ -1,7 +1,19 @@
 package nf28.touchmaze.util.enigmaActivity.enigma;
 
+import java.util.ArrayList;
+import java.util.Random;
+
+import nf28.touchmaze.util.enigmaActivity.tacticon.Alternation;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Circle;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Cube;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Pointbypoint;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Rotation;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Shape;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Snow;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Split;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Stick;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Wave;
 
 /**
  * Classe Enigma pour l'explorateur.
@@ -56,17 +68,45 @@ public class ExplorerEnigma extends Enigma {
             if (tacticon.getStatus().equals(Tacticon.Status.REPLECEABLE)) {
                 // On crée un tacticon de meme type dans le tableau complémentaire
                 Class<? extends Tacticon> c = tacticon.getClass();
-                switch (c.getName()){
+                switch (c.getName()) {
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Circle":
                         explorerComplementaryTab[i] = new Circle();
-                        explorerComplementaryTab[i].setStatus(Tacticon.Status.COMPLEMENTARY);
+                        break;
+                    case "nf28.touchmaze.util.enigmaActivity.tacticon.Alternation":
+                        explorerComplementaryTab[i] = new Alternation();
+                        break;
+                    case "nf28.touchmaze.util.enigmaActivity.tacticon.Cube":
+                        explorerComplementaryTab[i] = new Cube();
+                        break;
+                    case "nf28.touchmaze.util.enigmaActivity.tacticon.Pointbypoint":
+                        explorerComplementaryTab[i] = new Pointbypoint();
+                        break;
+                    case "nf28.touchmaze.util.enigmaActivity.tacticon.Rotation":
+                        explorerComplementaryTab[i] = new Rotation();
+                        break;
+                    case "nf28.touchmaze.util.enigmaActivity.tacticon.Shape":
+                        explorerComplementaryTab[i] = new Shape();
+                        break;
+                    case "nf28.touchmaze.util.enigmaActivity.tacticon.Snow":
+                        explorerComplementaryTab[i] = new Snow();
+                        break;
+                    case "nf28.touchmaze.util.enigmaActivity.tacticon.Split":
+                        explorerComplementaryTab[i] = new Split();
+                        break;
+                    case "nf28.touchmaze.util.enigmaActivity.tacticon.Stick":
+                        explorerComplementaryTab[i] = new Stick();
+                        break;
+                    case "nf28.touchmaze.util.enigmaActivity.tacticon.Wave":
+                        explorerComplementaryTab[i] = new Wave();
                         break;
                     default:
                         break;
                 }
+                explorerComplementaryTab[i].setStatus(Tacticon.Status.COMPLEMENTARY);
                 i++;
             }
         }
+        randomizeComplementaryTab();
     }
 
     /**
@@ -79,12 +119,39 @@ public class ExplorerEnigma extends Enigma {
         switch (c.getName()){
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Circle":
                 explorerTab[p_exploTabIndex] = new Circle();
-                // Passage du tacticon au status ADDED
-                explorerTab[p_exploTabIndex].setStatus(Tacticon.Status.ADDED);
+                break;
+            case "nf28.touchmaze.util.enigmaActivity.tacticon.Alternation":
+                explorerTab[p_exploTabIndex] = new Alternation();
+                break;
+            case "nf28.touchmaze.util.enigmaActivity.tacticon.Cube":
+                explorerTab[p_exploTabIndex] = new Cube();
+                break;
+            case "nf28.touchmaze.util.enigmaActivity.tacticon.Pointbypoint":
+                explorerTab[p_exploTabIndex] = new Pointbypoint();
+                break;
+            case "nf28.touchmaze.util.enigmaActivity.tacticon.Rotation":
+                explorerTab[p_exploTabIndex] = new Rotation();
+                break;
+            case "nf28.touchmaze.util.enigmaActivity.tacticon.Shape":
+                explorerTab[p_exploTabIndex] = new Shape();
+                break;
+            case "nf28.touchmaze.util.enigmaActivity.tacticon.Snow":
+                explorerTab[p_exploTabIndex] = new Snow();
+                break;
+            case "nf28.touchmaze.util.enigmaActivity.tacticon.Split":
+                explorerTab[p_exploTabIndex] = new Split();
+                break;
+            case "nf28.touchmaze.util.enigmaActivity.tacticon.Stick":
+                explorerTab[p_exploTabIndex] = new Stick();
+                break;
+            case "nf28.touchmaze.util.enigmaActivity.tacticon.Wave":
+                explorerTab[p_exploTabIndex] = new Wave();
                 break;
             default:
                 break;
         }
+        // Passage du tacticon au status ADDED
+        explorerTab[p_exploTabIndex].setStatus(Tacticon.Status.ADDED);
     }
 
     /**
@@ -99,6 +166,36 @@ public class ExplorerEnigma extends Enigma {
             }
         }
         return true;
+    }
+
+    public void randomizeComplementaryTab(){
+        Tacticon savedTacticon;
+        ArrayList<Integer> position = new ArrayList<Integer>();
+        position.add(1);
+        position.add(2);
+        position.add(3);
+
+        Random rand = new Random();
+        // random entre 0 et position.size
+        int index = rand.nextInt(position.size());
+
+        savedTacticon = explorerComplementaryTab[index];
+        explorerComplementaryTab[index]=explorerComplementaryTab[0];
+        explorerComplementaryTab[0]=savedTacticon;
+
+        position.remove(index);
+
+        index = rand.nextInt(position.size());
+
+        savedTacticon = explorerComplementaryTab[index];
+        explorerComplementaryTab[index]=explorerComplementaryTab[1];
+        explorerComplementaryTab[1]=savedTacticon;
+
+        index = rand.nextInt(position.size());
+
+        savedTacticon = explorerComplementaryTab[index];
+        explorerComplementaryTab[index]=explorerComplementaryTab[2];
+        explorerComplementaryTab[2]=savedTacticon;
     }
 
 

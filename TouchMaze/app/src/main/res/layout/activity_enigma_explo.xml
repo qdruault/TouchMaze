@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="TextView"
+        android:text="Stèle"
         android:textColor="@android:color/black"
         android:textSize="24sp" />
 
@@ -110,7 +110,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
-        android:text="TextView"
+        android:text="Glyphes"
         android:textColor="@android:color/black"
         android:textSize="24sp" />
 

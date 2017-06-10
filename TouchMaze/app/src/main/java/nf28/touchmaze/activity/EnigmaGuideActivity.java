@@ -1,5 +1,6 @@
 package nf28.touchmaze.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.jivesoftware.smack.chat.Chat;
+import org.jivesoftware.smack.packet.Message;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -24,6 +31,8 @@ import nf28.touchmaze.util.enigmaActivity.enigma.Enigma;
 import nf28.touchmaze.util.enigmaActivity.enigma.EnigmaManager;
 import nf28.touchmaze.util.enigmaActivity.enigma.ExplorerEnigma;
 import nf28.touchmaze.util.enigmaActivity.enigma.GuideEnigma;
+import nf28.touchmaze.util.enigmaActivity.tacticon.ByteAdaptable;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Circle;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon;
 
 import static android.R.color.black;
@@ -35,9 +44,20 @@ import static nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon.Status.REPLEC
 
 public class EnigmaGuideActivity extends AppCompatActivity {
 
+    // Date de demarrage du tacticon
+    Date startTime = new Date();
+    // Date d'arret du tacticon
+    Date endTime = new Date();
+
+    boolean threadIsRunning = false;
+
+    // Intent pour le module tactos
+    Intent sendData = new Intent();
+
     private GuideEnigma enigma;
     private HashMap<ExplorerEnigma, GuideEnigma> enigmasMap;
 
+    // Controls
     private LinearLayout main_layout;
 
     private EnigmaSurfaceLayout tab_0;
@@ -61,26 +81,22 @@ public class EnigmaGuideActivity extends AppCompatActivity {
     private EnigmaSurfaceLayout tab_16;
     private EnigmaSurfaceLayout tab_17;
 
-    private Tacticon touchedTacticon;
-
+    // Liste des surface layout
     private ArrayList<EnigmaSurfaceLayout> tableau_up;
     private ArrayList<EnigmaSurfaceLayout> tableau_middle;
     private ArrayList<EnigmaSurfaceLayout> tableau_bottom;
 
     private ArrayList<ArrayList<EnigmaSurfaceLayout>> surfaceLayouts;
 
+    private Tacticon touchedTacticon;
+    private int runningAreaIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enigma_guide);
 
-        enigmasMap = EnigmaManager.getInstance().createNewEnigma();
-
-        for (HashMap.Entry<ExplorerEnigma, GuideEnigma> entry : enigmasMap.entrySet()) {
-            enigma = entry.getValue();
-        }
-
+        // Controls
         main_layout = (LinearLayout) findViewById(R.id.main_layout);
 
         tab_0 = (EnigmaSurfaceLayout) findViewById(R.id.tab_0);
@@ -104,6 +120,7 @@ public class EnigmaGuideActivity extends AppCompatActivity {
         tab_16 = (EnigmaSurfaceLayout) findViewById(R.id.tab_16);
         tab_17 = (EnigmaSurfaceLayout) findViewById(R.id.tab_17);
 
+        // Ajout des surfaceLayout dans la liste
         tableau_up = new ArrayList<EnigmaSurfaceLayout>();
         tableau_up.add(tab_0);
         tableau_up.add(tab_1);
@@ -133,22 +150,18 @@ public class EnigmaGuideActivity extends AppCompatActivity {
         surfaceLayouts.add(tableau_middle);
         surfaceLayouts.add(tableau_bottom);
 
-
+        // Initialisation des numéros et randomisation des positions
         randomizeTabs();
+
+        // Debug
+        enigmasMap = EnigmaManager.getInstance().createNewEnigma();
+
+        for (HashMap.Entry<ExplorerEnigma, GuideEnigma> entry : enigmasMap.entrySet()) {
+            enigma = entry.getValue();
+        }
 
         debuginitSurfaceLayout();
 
-        // 0 -> 5
-        // chosenTab
-        // 10 -> 15
-        // secondTab
-        // 100 -> 105
-        // thirdTab
-
-        //INTENT du gson ?
-
-        //new Gson().fromJson(jsonStr, MyClass.class);
-        //enigma = djespjdepjs
 
         for (ArrayList<EnigmaSurfaceLayout> tab : surfaceLayouts){
             for (final EnigmaSurfaceLayout sf : tab){
@@ -156,20 +169,45 @@ public class EnigmaGuideActivity extends AppCompatActivity {
 
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        Log.d("Touch", "Num du surfaceLayout" + String.valueOf(sf.getNum()));
 
-                        if (sf.getNum() < 10)
-                            touchedTacticon = enigma.getchosenGuideTab()[sf.getNum()];
-                        else if (sf.getNum() < 100)
-                            touchedTacticon = enigma.getSecondGuideTab()[sf.getNum() - 10];
-                        else
-                            touchedTacticon = enigma.getThirdGuideTab()[sf.getNum() - 100];
+                        // Si aucun thread de tacticon est en cours, on gère l'event
+                        Log.d("Touch", String.valueOf(threadIsRunning));
+                        if (!threadIsRunning) {
 
-                        Log.d("Touch", String.valueOf(touchedTacticon.getStatus()));
+                            Log.d("Touch", "Num du surfaceLayout" + String.valueOf(sf.getNum()));
 
-                        Log.d("Touch", "Lancement");
+                            // Si l'enigme à été set
+                            if (enigma != null) {
 
-                        // LANCER LE TACTICON
+                                // Premier tableau
+                                if (sf.getNum() < 10)
+                                    touchedTacticon = enigma.getchosenGuideTab()[sf.getNum()];
+                                // Second tableau
+                                else if (sf.getNum() < 100)
+                                    touchedTacticon = enigma.getSecondGuideTab()[sf.getNum() - 10];
+                                // Troisieme tableau
+                                else
+                                    touchedTacticon = enigma.getThirdGuideTab()[sf.getNum() - 100];
+
+                                Log.d("Touch", "Lance le tacticon");
+
+                                // Lancement du tacticon
+                                EnigmaGuideActivity.TacticonThread tThread = new EnigmaGuideActivity.TacticonThread((ByteAdaptable) touchedTacticon);
+                                tThread.start();
+
+                                startTime.setTime(System.currentTimeMillis());
+                                // Thread en cours sur 5 secondes
+                                endTime.setTime(System.currentTimeMillis() + 5000);
+
+                                threadIsRunning = true;
+                                runningAreaIndex = sf.getNum();
+
+                                // Feedback visuel
+                                sf.setBackgroundColor(getResources().getColor(R.color.green));
+                            }
+                        }else{
+                            Log.d("Touch", "Thread en cours");
+                        }
 
                         return false;
                     }
@@ -178,6 +216,10 @@ public class EnigmaGuideActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Donne une permutation possible pour 3 éléments
+     * @return
+     */
     public ArrayList<Integer> getPermutation(){
         ArrayList<Integer> position = new ArrayList<Integer>();
         ArrayList<Integer> order = new ArrayList<Integer>();
@@ -186,6 +228,7 @@ public class EnigmaGuideActivity extends AppCompatActivity {
         position.add(3);
 
         Random rand = new Random();
+        // random entre 0 et position.size
         int index = rand.nextInt(position.size());
 
         order.add(position.get(index));
@@ -203,7 +246,17 @@ public class EnigmaGuideActivity extends AppCompatActivity {
         return order;
     }
 
+    /**
+     * Place les 3 tableaux de manière aléatoire
+     */
     public void randomizeTabs(){
+
+        // 0 -> 5
+        // chosenTab
+        // 10 -> 15
+        // secondTab
+        // 100 -> 105
+        // thirdTab
 
         ArrayList<Integer> order = getPermutation();
 
@@ -213,12 +266,14 @@ public class EnigmaGuideActivity extends AppCompatActivity {
 
         int i = 0;
 
+        // Si le premier index est 1 alors le tableau du haut contient le premier tableau
         if (order.get(0)==1) {
             for (EnigmaSurfaceLayout sf : tableau_up) {
                 sf.setNum(i);
                 i++;
             }
         }
+        // Si le premier index est 2 alors le tableau du haut contient le deuxieme tableau
         else if (order.get(0)==2) {
             i = 10;
             for (EnigmaSurfaceLayout sf : tableau_up) {
@@ -226,6 +281,7 @@ public class EnigmaGuideActivity extends AppCompatActivity {
                 i++;
             }
         }
+        // Si le premier index est 3 alors le tableau du haut contient le troisieme tableau
         else if (order.get(0)==3) {
             i = 100;
             for (EnigmaSurfaceLayout sf : tableau_up) {
@@ -236,12 +292,14 @@ public class EnigmaGuideActivity extends AppCompatActivity {
 
         i = 0;
 
+        // Si le deuxieme index est 1 alors le tableau du milieu contient le premier tableau
         if (order.get(1)==1) {
             for (EnigmaSurfaceLayout sf : tableau_middle) {
                 sf.setNum(i);
                 i++;
             }
         }
+        // Si le deuxieme index est 2 alors le tableau du milieu contient le deuxieme tableau
         else if (order.get(1)==2) {
             i = 10;
             for (EnigmaSurfaceLayout sf : tableau_middle) {
@@ -249,6 +307,7 @@ public class EnigmaGuideActivity extends AppCompatActivity {
                 i++;
             }
         }
+        // Si le deuxieme index est 3 alors le tableau du milieu contient le troisieme tableau
         else if (order.get(1)==3) {
             i = 100;
             for (EnigmaSurfaceLayout sf : tableau_middle) {
@@ -259,12 +318,14 @@ public class EnigmaGuideActivity extends AppCompatActivity {
 
         i = 0;
 
+        // Si le troisieme index est 1 alors le tableau du bas contient le premier tableau
         if (order.get(2)==1) {
             for (EnigmaSurfaceLayout sf : tableau_bottom) {
                 sf.setNum(i);
                 i++;
             }
         }
+        // Si le troisieme index est 2 alors le tableau du bas contient le deuxieme tableau
         else if (order.get(2)==2) {
             i = 10;
             for (EnigmaSurfaceLayout sf : tableau_bottom) {
@@ -272,6 +333,7 @@ public class EnigmaGuideActivity extends AppCompatActivity {
                 i++;
             }
         }
+        // Si le troisieme index est 3 alors le tableau du bas contient le troisieme tableau
         else if (order.get(2)==3) {
             i = 100;
             for (EnigmaSurfaceLayout sf : tableau_bottom) {
@@ -281,6 +343,9 @@ public class EnigmaGuideActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Met les surface layout du chosenTab en noir pour le debug
+     */
     public void debuginitSurfaceLayout(){
         for (ArrayList<EnigmaSurfaceLayout> tab : surfaceLayouts){
             for (final EnigmaSurfaceLayout sf : tab){
@@ -288,6 +353,81 @@ public class EnigmaGuideActivity extends AppCompatActivity {
                     sf.setBackgroundColor(getResources().getColor(black));
             }
         }
+    }
+
+    /*
+     * Réception d'un message du partenaire.
+     * @param chat
+     * @param message
+     */
+    /*
+    @Override
+    public void processMessage(Chat chat, final Message message) {
+        if (message.getFrom().equals(partnerJID + "/Smack")) {
+            final String messageBody = message.getBody();
+
+            if (END_DIALOG_MESSAGE.equals(messageBody)) {
+                // User déconnecté.
+            }
+            else if (messageBody.equals("STOP")) {
+                // PASSER A L AUTRE ACTIVITE
+            }
+            else {
+                enigma = new Gson().fromJson(messageBody, GuideEnigma.class);
+            }
+        }
+    }
+    */
+
+    // Thread d'allumage du tacticon.
+    private class TacticonThread extends Thread{
+        private ByteAdaptable tacticon;
+
+        public TacticonThread(ByteAdaptable p_tacticon){
+            tacticon = p_tacticon;
+        }
+
+        @Override
+        public void run() {
+            while (startTime.compareTo(endTime)<0) {
+                // Tant que les 5 sec ne sont pas écoulées, on run le tacticon
+                traitementData(tacticon);
+                startTime.setTime(System.currentTimeMillis());
+                Log.d("Touch", "dans le thread");
+            }
+            // Fin du thread
+            threadIsRunning = false;
+
+            // runOnUiThread pour pouvoir changer la couleur des élément du layout
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // Changement de la couleur
+                    for (ArrayList<EnigmaSurfaceLayout> tab : surfaceLayouts){
+                        for (final EnigmaSurfaceLayout colorsf : tab){
+                            if (colorsf.getNum() == runningAreaIndex) {
+                                colorsf.setBackgroundColor(getResources().getColor(R.color.lightblue));
+                            }
+                        }
+                    }
+                }
+            });
+
+        }
+    }
+
+    // Méthode d'envoi des données à l'appli Bluetooth.
+    public void traitementData(ByteAdaptable p_tacticon) {
+        // Création du tableau de bytes à envoyer.
+        byte[] data;
+
+        // On le remplit.
+        data = p_tacticon.SetToByte();
+
+        sendData.putExtra("BStream", data);
+        sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+        // On l'envoie à l'appli bluetooth.
+        sendBroadcast(sendData);
     }
 
 }

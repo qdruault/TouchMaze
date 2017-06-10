@@ -5,24 +5,21 @@ import android.util.Log;
 import nf28.touchmaze.util.PinsDisplayer;
 
 /**
- * Created by Baptiste on 08/06/2017.
+ * Created by Baptiste on 10/06/2017.
  */
 
-public class Circle extends Tacticon{
-
+public class Snow extends Tacticon{
     // Pour connaitre l'étape de dessin du motif.
-    int compteur = 0;
+    static int compteur = 0;
 
     /**
-     * Fonction appelée toutes les 100 ms pour lever des picots qui simulent le
-     * mouvement d'une spirale.
-     *
+     * Fonction appelée toutes les 100 ms pour lever des picots
+     * qui simulent le mouvement d'une spirale.
      * @return le tableau à transmettre à l'appli bluetooth.
      */
-    @Override
     public byte[] SetToByte() {
-        boolean[] rightTouches = { false, false, false, false, false, false, false, false };
-        boolean[] leftTouches = { false, false, false, false, false, false, false, false };
+        boolean[] rightTouches = {false, false, false, false, false, false, false, false};
+        boolean[] leftTouches = {false, false, false, false, false, false, false, false};
 
         // Leve le picot qu'il faut.
         switch (compteur) {
@@ -30,38 +27,42 @@ public class Circle extends Tacticon{
                 leftTouches[0] = true;
                 break;
             case 1:
-                leftTouches[1] = true;
+                leftTouches[2] = true;
                 break;
             case 2:
+                leftTouches[4] = true;
                 rightTouches[0] = true;
                 break;
             case 3:
-                rightTouches[1] = true;
+                leftTouches[6] = true;
+                rightTouches[2] = true;
                 break;
             case 4:
-                rightTouches[3] = true;
+                leftTouches[1] = true;
+                rightTouches[4] = true;
                 break;
             case 5:
-                rightTouches[5] = true;
-                break;
-            case 6:
-                rightTouches[7] = true;
-                break;
-            case 7:
+                leftTouches[3] = true;
                 rightTouches[6] = true;
                 break;
-            case 8:
+            case 6:
+                leftTouches[5] = true;
+                rightTouches[1] = true;
+                break;
+            case 7:
                 leftTouches[7] = true;
+                rightTouches[3] = true;
+                break;
+            case 8:
+                rightTouches[5] = true;
                 break;
             case 9:
-                leftTouches[6] = true;
+                rightTouches[7] = true;
                 break;
             case 10:
-                leftTouches[4] = true;
+                // etape d'attente.
                 break;
-            case 11:
-                leftTouches[2] = true;
-                break;
+
         }
 
         Log.d("Pins", PinsDisplayer.setAndDisplay(leftTouches, rightTouches));
@@ -82,10 +83,10 @@ public class Circle extends Tacticon{
     }
 
     // Permet l'attente du Thread pour un temps donné.
-    void stopThread() {
+    void stopThread(){
         try {
             // Pause de 100 ms.
-            Thread.sleep(100);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -93,9 +94,7 @@ public class Circle extends Tacticon{
 
     /**
      * Convertir le tableau de bool en byte.
-     *
-     * @param p_tab
-     *            : le tableau de bool à convertir
+     * @param p_tab : le tableau de bool à convertir
      * @return
      */
     byte regularBoolToByte(boolean[] p_tab) {
@@ -108,10 +107,10 @@ public class Circle extends Tacticon{
     }
 
     /**
-     * Remet le tableau dans l'ordre. Don't ask me why. I don't know
+     * Remet le tableau dans l'ordre.
+     * Don't ask me why. I don't know
      */
     boolean[] rectifyTouches(boolean[] t) {
-        return new boolean[] { t[1], t[0], t[3], t[5], t[7], t[2], t[4], t[6] };
+        return new boolean[]{t[1], t[0], t[3], t[5], t[7], t[2], t[4], t[6]};
     }
-
 }

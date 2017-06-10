@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.jivesoftware.smack.SmackException;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ import nf28.touchmaze.layout.EnigmaSurfaceLayout;
 import nf28.touchmaze.util.enigmaActivity.enigma.EnigmaManager;
 import nf28.touchmaze.util.enigmaActivity.enigma.ExplorerEnigma;
 import nf28.touchmaze.util.enigmaActivity.enigma.GuideEnigma;
+import nf28.touchmaze.util.enigmaActivity.tacticon.ByteAdaptable;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Circle;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon;
 
@@ -44,15 +47,6 @@ public class EnigmaExploActivity extends AppCompatActivity{
 
     // Intent pour le module tactos
     Intent sendData = new Intent();
-
-    // Types de tacticons
-    public enum Tacticons {
-        SPIRALE,
-        CIRCLE,
-        WAVE,
-        SPLIT,
-        SNOW;
-    }
 
     // Compteur du nombre de touch effectué
     int touchTap = 0;
@@ -138,9 +132,12 @@ public class EnigmaExploActivity extends AppCompatActivity{
         }
 
         // Envoie de l'enigme au guide en JSON
-        new Gson().toJson(gEnigma);
-        // ENVOI
-        //new Gson().fromJson(jsonStr, MyClass.class);
+        /*String guideMessage = new Gson().toJson(gEnigma);
+        try {
+            chatOut.sendMessage(guideMessage);
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
+        }*/
 
         // Debug init (couleurs)
         debuginitSurfaceLayout(ex_tab_0);
@@ -194,10 +191,9 @@ public class EnigmaExploActivity extends AppCompatActivity{
                                         // Lancement du tacticon
                                         Log.d("Touch", "Lance le tacticon");
 
-                                        // Switch du type
-                                        CircleThread circleThread = new CircleThread();
-                                        circleThread.start();
-
+                                        // Creation du thread
+                                        TacticonThread tThread = new TacticonThread((ByteAdaptable)touchedTacticon);
+                                        tThread.start();
 
                                         startTime.setTime(System.currentTimeMillis());
                                         // Thread en cours sur 5 secondes
@@ -237,7 +233,13 @@ public class EnigmaExploActivity extends AppCompatActivity{
 
                                         // Vérification de la fin de l'enigme
                                         if (enigma.isCompleted()) {
-                                            //ENVOIE LA FIN DE L'ACTIVITE à L'AUTRE
+                                            // Envoie la fin de l'activité
+                                            String guideMessage = "STOP";
+                                            /*try {
+                                                chatOut.sendMessage(guideMessage);
+                                            } catch (SmackException.NotConnectedException e) {
+                                                e.printStackTrace();
+                                            }*/
                                         }
 
                                         Log.d("Touch", "Déplacement");
@@ -339,19 +341,27 @@ public class EnigmaExploActivity extends AppCompatActivity{
     }
 
 
-    // Thread d'allumage du CIRCLE.
-    private class CircleThread extends Thread{
+    // Thread d'allumage du tacticon.
+    private class TacticonThread extends Thread{
+        private ByteAdaptable tacticon;
+
+        public TacticonThread(ByteAdaptable p_tacticon){
+            tacticon = p_tacticon;
+        }
+
         @Override
         public void run() {
             while (startTime.compareTo(endTime)<0) {
-                // Tant que le flag est levé, on lance la séquence.
-                traitementData(Tacticons.CIRCLE);
+
+                // Tant que les 5 sec ne sont pas écoulées, on run le tacticon
+                traitementData(tacticon);
                 startTime.setTime(System.currentTimeMillis());
                 Log.d("Touch", "dans le thread");
             }
+            // Fin du thread
             threadIsRunning = false;
-            Log.d("Touch", "apres false");
 
+            // runOnUiThread pour pouvoir changer la couleur des élément du layout
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -363,23 +373,16 @@ public class EnigmaExploActivity extends AppCompatActivity{
                     }
                 }
             });
-
-            Log.d("Touch", "test");
-
         }
     }
 
     // Méthode d'envoi des données à l'appli Bluetooth.
-    public void traitementData(Tacticons t) {
+    public void traitementData(ByteAdaptable p_tacticon) {
         // Création du tableau de bytes à envoyer.
         byte[] data;
-        data = new byte[4];
+
         // On le remplit.
-        switch (t) {
-            case CIRCLE:
-                data = Circle.SetToByte();
-                break;
-        }
+        data = p_tacticon.SetToByte();
 
         sendData.putExtra("BStream", data);
         sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
