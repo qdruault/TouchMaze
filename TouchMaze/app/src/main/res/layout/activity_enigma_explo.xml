@@ -88,6 +88,7 @@
                 android:layout_margin="10dp"
                 android:background="@android:color/holo_blue_bright" />
 
+
             <nf28.touchmaze.layout.EnigmaSurfaceLayout
                 android:id="@+id/ex_tab_5"
                 android:layout_width="50dp"

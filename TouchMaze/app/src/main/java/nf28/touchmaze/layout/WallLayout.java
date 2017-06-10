@@ -1,40 +1,34 @@
 package nf28.touchmaze.layout;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Point;
-import android.graphics.PointF;
-import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import nf28.touchmaze.util.touch.DialogTouchEvent;
 import nf28.touchmaze.util.touch.TactileDialogViewHolder;
 
-import static nf28.touchmaze.util.PinsDisplayer.setAndDisplay;
 
 /**
  * Created by Baptiste on 05/06/2017.
  */
 
-public class SurfaceLayout extends View {
+public class WallLayout extends View {
 
-    private boolean activeWall = true;
+    private boolean activeWall;
 
     private TactileDialogViewHolder dialogViewHolder;
 
-    public SurfaceLayout(Context context) {
+    public WallLayout(Context context) {
         super(context);
     }
 
-    public SurfaceLayout(Context context, @Nullable AttributeSet attrs) {
+    public WallLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SurfaceLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public WallLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

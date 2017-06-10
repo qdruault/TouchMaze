@@ -1,6 +1,5 @@
 package nf28.touchmaze.util;
 
-import android.util.Log;
 
 /**
  * Created by Baptiste on 18/05/2017.

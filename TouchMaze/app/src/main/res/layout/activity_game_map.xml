@@ -11,8 +11,22 @@
         android:layout_width="388dp"
         android:layout_height="37dp"
         android:gravity="center_horizontal"
-        android:text="Carte"
+        android:text="Labyrinthe"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteX="102dp"
+        tools:layout_editor_absoluteY="4dp" />
+
+    <nf28.touchmaze.layout.MapLayout
+        android:id="@+id/tactile_area_top"
+        android:layout_width="0dp"
+        android:layout_height="262dp"
+        android:layout_column="1"
+        android:layout_columnSpan="1"
+        android:layout_columnWeight="2"
+        android:layout_row="0"
+        android:layout_rowWeight="1"
+        android:background="@color/colorAccent"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="41dp" />
+
 </android.support.constraint.ConstraintLayout>

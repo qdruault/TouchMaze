@@ -1,13 +1,11 @@
 package nf28.touchmaze.activity;
 
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
-import com.jaredrummler.android.processes.AndroidProcesses;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
@@ -17,7 +15,6 @@ import org.jivesoftware.smack.roster.RosterListener;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import nf28.touchmaze.R;
@@ -25,7 +22,6 @@ import nf28.touchmaze.contact.ContactsAdapter;
 import nf28.touchmaze.contact.RosterContactList;
 import nf28.touchmaze.contact.RosterStatusType;
 import nf28.touchmaze.login.DialogHandler;
-import nf28.touchmaze.util.SwitchApp;
 
 public class InvitationActivity extends AppCompatActivity {
 
