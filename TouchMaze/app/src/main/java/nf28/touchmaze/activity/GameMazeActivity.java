@@ -115,6 +115,7 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
 
             if (END_DIALOG_MESSAGE.equals(messageBody)) {
                 // User déconnecté.
+                finish();
             } else if (messageBody.equals("ENIGME")){
                 Intent intent = new Intent(GameMazeActivity.this, EnigmaExploActivity.class);
                 intent.putExtra("PARTNER", partnerJID);

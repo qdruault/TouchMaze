@@ -125,21 +125,18 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
      */
     @Override
     public void processMessage(Chat chat, Message message) {
-        String displayMessage;
         // On récupère le contenu du message.
         String messageBody = message.getBody();
-        // Fin du game.
         if (END_DIALOG_MESSAGE.equals(messageBody)) {
-            displayMessage = "Coéquipier parti.";
+            // User déconnecté.
+            finish();
         } else if (messageBody.equals("READY")) {
             // Le partenaire est prêt, on lui envoie les murs de sa position de départ.
             sendWallsMessage(); 
         } else {
-            // On récupère la direction voulue.
-            displayMessage = messageBody;
             // On essaye de bouger l'explorateur.
             Direction2D direction;
-            switch (displayMessage) {
+            switch (messageBody) {
                 case "right":
                     direction = new Direction2D(maze, "RIGHT");
                     break;
