@@ -30,6 +30,7 @@ import nf28.touchmaze.util.enigmaActivity.tacticon.Circle;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon;
 
 import static android.R.color.black;
+import static nf28.touchmaze.activity.ConnectionActivity.TESTMODE;
 import static nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon.Status.REPLECEABLE;
 
 /**
@@ -362,10 +363,14 @@ public class EnigmaExploActivity extends ChatActivity {
         // On le remplit.
         data = p_tacticon.SetToByte();
 
-        sendData.putExtra("BStream", data);
-        sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
-        // On l'envoie à l'appli bluetooth.
-        sendBroadcast(sendData);
+        if (!TESTMODE) {
+
+            sendData.putExtra("BStream", data);
+            sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+            // On l'envoie à l'appli bluetooth.
+            sendBroadcast(sendData);
+
+        }
     }
 
     // Thread d'allumage du tacticon.

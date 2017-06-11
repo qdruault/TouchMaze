@@ -35,6 +35,7 @@ import nf28.touchmaze.util.enigmaActivity.tacticon.ByteAdaptable;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon;
 
 import static android.R.color.black;
+import static nf28.touchmaze.activity.ConnectionActivity.TESTMODE;
 
 /**
  * Created by Baptiste on 08/06/2017.
@@ -421,10 +422,13 @@ public class EnigmaGuideActivity extends ChatActivity {
         // On le remplit.
         data = p_tacticon.SetToByte();
 
-        sendData.putExtra("BStream", data);
-        sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
-        // On l'envoie à l'appli bluetooth.
-        sendBroadcast(sendData);
+        if (!TESTMODE) {
+
+            sendData.putExtra("BStream", data);
+            sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+            // On l'envoie à l'appli bluetooth.
+            sendBroadcast(sendData);
+        }
     }
 
 }

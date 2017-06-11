@@ -93,6 +93,12 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             public void onClick(View v) {
                 // On récupère le contenu du bouton.
                 String direction = btn.getText().toString();
+
+                if (direction.equals("up"))
+                    direction = "down";
+                else if (direction.equals("down"))
+                    direction = "up";
+
                 try {
                     // On envoie au guide notre direction.
                     chatOut.sendMessage(direction);
@@ -155,6 +161,8 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
 
     @Override
     public void onDialogTouch(DialogTouchEvent event) {
+
+        Toast.makeText(GameMazeActivity.this, "Mur heurté", Toast.LENGTH_SHORT).show();
 
         // Picots à afficher et lever.
         boolean[] leftTouches = new boolean[]{true, true, true, true, true, true, true, true};

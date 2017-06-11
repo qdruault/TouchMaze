@@ -62,6 +62,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
         mapLayout = (MapLayout) findViewById(R.id.mapLayout);
         mapLayout.constructMazeV(maze);
 
+        mapLayout.setDialogViewHolder(this);
+
         Log.d("test", "test");
 
     }
@@ -218,6 +220,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
     @Override
     public void onDialogTouch(DialogTouchEvent event) {
 
+        Toast.makeText(GameMapActivity.this, "Mur touché", Toast.LENGTH_SHORT).show();
+
         // Picots à afficher et lever.
         boolean[] leftTouches = new boolean[]{true, true, true, true, true, true, true, true};
         boolean[] rightTouches = new boolean[]{true, true, true, true, true, true, true, true};
@@ -282,8 +286,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
         String wallsMessage = "{";
         wallsMessage += "\"x\" : " + maze.getExplorerPosition().x +",";
         wallsMessage += "\"y\" : " + maze.getExplorerPosition().y +",";
-        wallsMessage += "\"top\" : " + new Direction2D(maze, "FRONT").apply().isTouchableByExplorer()+",";
-        wallsMessage += "\"bottom\" : " + new Direction2D(maze, "REAR").apply().isTouchableByExplorer()+",";
+        wallsMessage += "\"top\" : " + new Direction2D(maze, "REAR").apply().isTouchableByExplorer()+",";
+        wallsMessage += "\"bottom\" : " + new Direction2D(maze, "FRONT").apply().isTouchableByExplorer()+",";
         wallsMessage += "\"right\" : " + new Direction2D(maze, "RIGHT").apply().isTouchableByExplorer()+",";
         wallsMessage += "\"left\" : " + new Direction2D(maze, "LEFT").apply().isTouchableByExplorer()+"}";
 

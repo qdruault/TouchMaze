@@ -18,8 +18,8 @@
 
     <nf28.touchmaze.layout.MapLayout
         android:id="@+id/mapLayout"
-        android:layout_width="580dp"
-        android:layout_height="280dp"
+        android:layout_width="700dp"
+        android:layout_height="400dp"
         android:layout_column="1"
         android:layout_columnSpan="1"
         android:layout_columnWeight="2"

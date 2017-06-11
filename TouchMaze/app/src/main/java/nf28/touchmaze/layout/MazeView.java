@@ -11,7 +11,9 @@ import nf28.touchmaze.maze.maze.Maze2D;
 import nf28.touchmaze.maze.maze.obstacle.Obstacle;
 import nf28.touchmaze.maze.position.Position2D;
 
-import static nf28.touchmaze.layout.MapLayout.ORIGIN;
+import static nf28.touchmaze.layout.MapLayout.MARGIN;
+import static nf28.touchmaze.layout.MapLayout.ORIGINX;
+import static nf28.touchmaze.layout.MapLayout.ORIGINY;
 import static nf28.touchmaze.layout.MapLayout.SQUARE_SIZE;
 import static nf28.touchmaze.layout.MapLayout.WALL_LONG_SIDE;
 import static nf28.touchmaze.layout.MapLayout.WALL_SHORT_SIDE;
@@ -31,14 +33,14 @@ public class MazeView {
     public MazeView(Maze2D maze){
 
         explorerV = new Rect();
-        explorerV.left = ORIGIN + SQUARE_SIZE + maze.getExplorerPosition().x * SQUARE_SIZE;
-        explorerV.top = ORIGIN + SQUARE_SIZE + maze.getExplorerPosition().y * SQUARE_SIZE;
+        explorerV.left = ORIGINX + MARGIN + maze.getExplorerPosition().x * WALL_LONG_SIDE;
+        explorerV.top = ORIGINY + MARGIN + maze.getExplorerPosition().y * WALL_LONG_SIDE;
         explorerV.right = explorerV.left + SQUARE_SIZE;
         explorerV.bottom = explorerV.top + SQUARE_SIZE;
 
         exitV = new Rect();
-        exitV.left = ORIGIN + SQUARE_SIZE + maze.getExit().x * SQUARE_SIZE;
-        exitV.top = ORIGIN + SQUARE_SIZE + maze.getExit().y * SQUARE_SIZE;
+        exitV.left = ORIGINX + MARGIN + maze.getExit().x * WALL_LONG_SIDE;
+        exitV.top = ORIGINY + MARGIN + maze.getExit().y * WALL_LONG_SIDE;
         exitV.right = exitV.left + SQUARE_SIZE;
         exitV.bottom = exitV.top + SQUARE_SIZE;
 
@@ -47,8 +49,8 @@ public class MazeView {
         for (Position2D pos : maze.getEnigmas()) {
 
             Rect enigma = new Rect();
-            enigma.left = ORIGIN + SQUARE_SIZE + pos.x * SQUARE_SIZE;
-            enigma.top = ORIGIN + SQUARE_SIZE + pos.y * SQUARE_SIZE;
+            enigma.left = ORIGINX + MARGIN + pos.x * WALL_LONG_SIDE;
+            enigma.top = ORIGINY + MARGIN + pos.y * WALL_LONG_SIDE;
             enigma.right = enigma.left + SQUARE_SIZE;
             enigma.bottom = enigma.top + SQUARE_SIZE;
 
@@ -61,8 +63,8 @@ public class MazeView {
             for (int j = 0; j < 21; j++) {
 
                     RectWall rect = new RectWall();
-                    rect.getRect().left = ORIGIN + SQUARE_SIZE + j * SQUARE_SIZE;
-                    rect.getRect().top = ORIGIN + SQUARE_SIZE + i * SQUARE_SIZE;
+                    rect.getRect().left = ORIGINX + j * WALL_LONG_SIDE;
+                    rect.getRect().top = ORIGINY + i * WALL_LONG_SIDE;
                     rect.getRect().right = rect.getRect().left + WALL_SHORT_SIDE;
                     rect.getRect().bottom = rect.getRect().top + WALL_LONG_SIDE;
 
@@ -79,8 +81,8 @@ public class MazeView {
             for (int j = 0; j < 20; j++) {
 
                     RectWall rect = new RectWall();
-                    rect.getRect().left = ORIGIN + SQUARE_SIZE + j * SQUARE_SIZE;
-                    rect.getRect().top = ORIGIN + SQUARE_SIZE + i * SQUARE_SIZE;
+                    rect.getRect().left = ORIGINX + j * WALL_LONG_SIDE;
+                    rect.getRect().top = ORIGINY + i * WALL_LONG_SIDE;
                     rect.getRect().right = rect.getRect().left + WALL_LONG_SIDE;
                     rect.getRect().bottom = rect.getRect().top + WALL_SHORT_SIDE;
 
@@ -93,8 +95,8 @@ public class MazeView {
     }
 
     public void updateExplorer(Position2D pos){
-        explorerV.left = ORIGIN + SQUARE_SIZE + pos.x * SQUARE_SIZE;
-        explorerV.top = ORIGIN + SQUARE_SIZE + pos.y * SQUARE_SIZE;
+        explorerV.left = ORIGINX + MARGIN + pos.x * WALL_LONG_SIDE;
+        explorerV.top = ORIGINY + MARGIN + pos.y * WALL_LONG_SIDE;
         explorerV.right = explorerV.left + SQUARE_SIZE;
         explorerV.bottom = explorerV.top + SQUARE_SIZE;
     }
