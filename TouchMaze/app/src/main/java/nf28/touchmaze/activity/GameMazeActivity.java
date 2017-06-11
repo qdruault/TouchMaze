@@ -120,6 +120,10 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
                 Intent intent = new Intent(GameMazeActivity.this, EnigmaExploActivity.class);
                 intent.putExtra("PARTNER", partnerJID);
                 startActivityForResult(intent, 10);
+            } else if (messageBody.equals("WIN")){
+                // Partie terminée = écran de victoire !
+                Intent intent = new Intent(GameMazeActivity.this, VictoryActivity.class);
+                startActivity(intent);
 
             } else if (messageBody.equals("BOOM")){
                 // On se prend un mur = animation.

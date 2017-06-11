@@ -185,10 +185,13 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
             // On la retire de la liste si résolue.
             if (enigmaToRemove != null) {
                 maze.getEnigmas().remove(enigmaToRemove);
-            } else if (maze.getExplorerPosition().is(maze.getExit())) {
-                // Sortie
+            } else if (maze.getExplorerPosition().is(maze.getExit()) && maze.getEnigmas().isEmpty()) {
+                // Sortie + toutes les enigmes résolues.
                 try {
                     chatOut.sendMessage("WIN");
+                    // Partie terminée = écran de victoire !
+                    Intent intent = new Intent(GameMapActivity.this, VictoryActivity.class);
+                    startActivity(intent);
                 } catch (SmackException.NotConnectedException e) {
                     e.printStackTrace();
                 }

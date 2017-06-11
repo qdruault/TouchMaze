@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout_victory"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="nf28.touchmaze.activity.VictoryActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="384dp"
+        android:layout_height="513dp"
+        android:gravity="center"
+        android:text="VICTOIRE !"
+        android:textColor="@color/colorPrimary"
+        android:textSize="36sp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-1dp" />
+</android.support.constraint.ConstraintLayout>
