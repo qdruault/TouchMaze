@@ -124,8 +124,11 @@ public class EnigmaExploActivity extends ChatActivity {
         comp_tab_1.setNum(11);
         comp_tab_2.setNum(12);
 
+        Intent i = getIntent();
+        int enigmaNB = i.getIntExtra("ENIGMANB", 0);
+
         // Récupération de l'énigme
-        enigmasMap = EnigmaManager.getInstance().createNewEnigma();
+        enigmasMap = EnigmaManager.getInstance().createNewEnigma(enigmaNB);
 
         for (HashMap.Entry<ExplorerEnigma, GuideEnigma> entry : enigmasMap.entrySet()) {
             enigma = entry.getKey();
@@ -407,6 +410,25 @@ public class EnigmaExploActivity extends ChatActivity {
                 }
             });
         }
+    }
+
+    /**
+     * Fermeture de l'activité.
+     */
+    @Override
+    protected void onDestroy() {
+        // On ferme tous les canaux.
+        if (chatOut != null) {
+            chatOut.close();
+        }
+        if (chatIn != null) {
+            chatIn.close();
+        }
+        if (chatManager != null) {
+            chatManager.removeChatListener(this);
+        }
+
+        super.onDestroy();
     }
 
 }

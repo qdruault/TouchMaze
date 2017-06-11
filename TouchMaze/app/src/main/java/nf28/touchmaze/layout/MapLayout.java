@@ -12,6 +12,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import nf28.touchmaze.maze.maze.Maze2D;
 import nf28.touchmaze.maze.position.Position2D;
 import nf28.touchmaze.util.PinsDisplayer;
@@ -179,6 +182,11 @@ public class MapLayout extends View {
 
     public void updateExplorerV(Position2D pos){
         mazeV.updateExplorer(pos);
+        postInvalidate();
+    }
+
+    public void updateEnigmasV (List<Position2D> enigmas){
+        mazeV.updateEnigmas(enigmas);
         postInvalidate();
     }
 

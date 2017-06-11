@@ -2,6 +2,7 @@ package nf28.touchmaze.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,8 +16,12 @@ import org.jivesoftware.smack.packet.Message;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import nf28.touchmaze.R;
 import nf28.touchmaze.layout.WallLayout;
+import nf28.touchmaze.util.enigmaActivity.resource.PredefinedEnigmas;
 import nf28.touchmaze.util.touch.DialogTouchEvent;
 import nf28.touchmaze.util.touch.TactileDialogViewHolder;
 
@@ -32,6 +37,9 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
     WallLayout tactileAreaLeft;
     WallLayout tactileAreaRight;
 
+    // Tableau contenant les numéros des enigme pré définies
+    private ArrayList<Integer> usablePredefinedTabs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +48,11 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
         TextView hostname = (TextView) findViewById(R.id.textHostName);
         String partner = partnerJID.substring(0, partnerJID.indexOf("@"));
         hostname.setText(String.format("Guidé par  %s", partner));
+
+        usablePredefinedTabs = new ArrayList<Integer>();
+        for (int i = 0; i < PredefinedEnigmas.getInstance().NB_PREDEFINED_ENIGMA; ++i) {
+            usablePredefinedTabs.add(i);
+        }
 
         // On accepte l'invitation.
         dialogHandler.acceptInvitation(partnerJID);
@@ -125,6 +138,28 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             } else if (messageBody.equals("ENIGME")){
                 Intent intent = new Intent(GameMazeActivity.this, EnigmaExploActivity.class);
                 intent.putExtra("PARTNER", partnerJID);
+
+                // Numéro d'enigme déterminé au hasard.
+                Random rand = new Random();
+                int index = rand.nextInt(usablePredefinedTabs.size());
+                int enigmaNb = usablePredefinedTabs.get(index);
+
+                Log.d("EM", String.valueOf(enigmaNb));
+
+                Log.d("EM", "size " + String.valueOf(usablePredefinedTabs.size()));
+
+                // Suppression de l'énigme déjà utilisée du tableau.
+                usablePredefinedTabs.remove(enigmaNb);
+
+                Log.d("EM", "size " + String.valueOf(usablePredefinedTabs.size()));
+
+                Log.d("EM", String.valueOf("restants"));
+                for (Integer integer : usablePredefinedTabs) {
+                    Log.d("EM", String.valueOf(integer));
+                }
+
+                intent.putExtra("ENIGMANB", enigmaNb);
+
                 startActivityForResult(intent, 10);
             } else if (messageBody.equals("WIN")){
                 // Partie terminée = écran de victoire !
@@ -233,4 +268,31 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             }
         }
     }
+
+    /**
+     * Fermeture de l'activité.
+     */
+    /*@Override
+    protected void onDestroy() {
+        // On ferme tous les canaux.
+        if (chatOut != null) {
+            try {
+                // On envoie un message de fin au coéquipier.
+                chatOut.sendMessage(END_DIALOG_MESSAGE);
+            } catch (SmackException.NotConnectedException e) {
+                e.printStackTrace();
+            }
+        }
+        if (chatOut != null) {
+            chatOut.close();
+        }
+        if (chatIn != null) {
+            chatIn.close();
+        }
+        if (chatManager != null) {
+            chatManager.removeChatListener(this);
+        }
+
+        super.onDestroy();
+    }*/
 }

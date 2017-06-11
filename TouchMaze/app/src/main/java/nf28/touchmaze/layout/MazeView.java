@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import nf28.touchmaze.maze.maze.Maze2D;
 import nf28.touchmaze.maze.maze.obstacle.Obstacle;
@@ -99,6 +100,21 @@ public class MazeView {
         explorerV.top = ORIGINY + MARGIN + pos.y * WALL_LONG_SIDE;
         explorerV.right = explorerV.left + SQUARE_SIZE;
         explorerV.bottom = explorerV.top + SQUARE_SIZE;
+    }
+
+    public void updateEnigmas(List<Position2D> enigmas){
+        enigmasV = new ArrayList<Rect>();
+
+        for (Position2D pos : enigmas) {
+
+            Rect enigma = new Rect();
+            enigma.left = ORIGINX + MARGIN + pos.x * WALL_LONG_SIDE;
+            enigma.top = ORIGINY + MARGIN + pos.y * WALL_LONG_SIDE;
+            enigma.right = enigma.left + SQUARE_SIZE;
+            enigma.bottom = enigma.top + SQUARE_SIZE;
+
+            this.enigmasV.add(enigma);
+        }
     }
 
     public Rect getExplorerV() {

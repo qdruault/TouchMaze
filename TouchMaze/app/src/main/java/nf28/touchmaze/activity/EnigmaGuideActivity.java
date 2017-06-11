@@ -431,4 +431,23 @@ public class EnigmaGuideActivity extends ChatActivity {
         }
     }
 
+    /**
+     * Fermeture de l'activité.
+     */
+    @Override
+    protected void onDestroy() {
+        // On ferme tous les canaux.
+        if (chatOut != null) {
+            chatOut.close();
+        }
+        if (chatIn != null) {
+            chatIn.close();
+        }
+        if (chatManager != null) {
+            chatManager.removeChatListener(this);
+        }
+
+        super.onDestroy();
+    }
+
 }

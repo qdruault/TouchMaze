@@ -1,5 +1,7 @@
 package nf28.touchmaze.util.enigmaActivity.enigma;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -17,9 +19,6 @@ public class EnigmaManager {
 
     public static EnigmaManager instance;
 
-    // Tableau contenant les numéros des enigme pré définies
-    private ArrayList<Integer> usablePredefinedTabs;
-
     public static EnigmaManager getInstance(){
         if (instance == null)
             instance = new EnigmaManager();
@@ -27,36 +26,18 @@ public class EnigmaManager {
     }
 
     private EnigmaManager(){
-        usablePredefinedTabs = new ArrayList<Integer>();
-        for (int i = 0; i < PredefinedEnigmas.getInstance().NB_PREDEFINED_ENIGMA; ++i) {
-            usablePredefinedTabs.add(i);
-        }
     }
 
-    public HashMap<ExplorerEnigma, GuideEnigma> createNewEnigma(){
-
-        // Numéro d'enigme déterminé au hasard.
-        Random rand = new Random();
-        int index = rand.nextInt(usablePredefinedTabs.size());
-        int enigmaNb = usablePredefinedTabs.get(index);
+    public HashMap<ExplorerEnigma, GuideEnigma> createNewEnigma(int enigmaNB){
 
         // Création des enigmes à partir de la classe ressource
-        ExplorerEnigma predefinedExEnigma = new ExplorerEnigma(PredefinedEnigmas.getInstance().exEnigmas[enigmaNb]);
-        GuideEnigma predefinedGuideEnigma = new GuideEnigma(PredefinedEnigmas.getInstance().guideEnigmas[enigmaNb]);
+        ExplorerEnigma predefinedExEnigma = new ExplorerEnigma(PredefinedEnigmas.getInstance().exEnigmas[enigmaNB]);
+        GuideEnigma predefinedGuideEnigma = new GuideEnigma(PredefinedEnigmas.getInstance().guideEnigmas[enigmaNB]);
 
         // Création de la variable de retour
         HashMap<ExplorerEnigma, GuideEnigma> enigma = new HashMap<ExplorerEnigma, GuideEnigma>();
 
         enigma.put(predefinedExEnigma, predefinedGuideEnigma);
-
-        System.out.println(enigmaNb);
-        System.out.println("restants");
-
-        // Suppression de l'énigme déjà utilisée du tableau.
-        usablePredefinedTabs.remove(enigmaNb);
-        for (Integer integer : usablePredefinedTabs) {
-            System.out.println(integer);
-        }
 
         return enigma;
     }
