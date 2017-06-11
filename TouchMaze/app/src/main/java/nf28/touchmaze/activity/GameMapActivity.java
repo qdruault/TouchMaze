@@ -2,6 +2,7 @@ package nf28.touchmaze.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 import nf28.touchmaze.R;
 import nf28.touchmaze.layout.EnigmaSurfaceLayout;
+import nf28.touchmaze.layout.MapLayout;
 import nf28.touchmaze.layout.ShapeLayout;
 import nf28.touchmaze.maze.maze.Direction2D;
 import nf28.touchmaze.maze.maze.Maze2D;
@@ -34,7 +36,7 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
     private InvitationResultHandler invitationResultHandler;
     private Maze2D maze;
 
-    private ShapeLayout shapeLayout;
+    private MapLayout mapLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,10 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
             e.printStackTrace();
         }
 
-        shapeLayout = (ShapeLayout) findViewById(R.id.shapeLayout);
+        mapLayout = (MapLayout) findViewById(R.id.mapLayout);
+        mapLayout.constructMazeV(maze);
+
+        Log.d("test", "test");
 
     }
 
@@ -160,6 +165,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
             }
             Position2D oldPos = new Position2D(maze.getExplorerPosition().x, maze.getExplorerPosition().y);
             maze.moveTo(direction);
+
+            mapLayout.updateExplorerV(maze.getExplorerPosition());
 
             // On se prend un mur.
             if (oldPos.is(maze.getExplorerPosition())) {

@@ -16,25 +16,17 @@
         tools:layout_editor_absoluteX="102dp"
         tools:layout_editor_absoluteY="4dp" />
 
-    <nf28.touchmaze.layout.ShapeLayout
-        android:id="@+id/shapeLayout"
-        android:layout_width="0dp"
-        android:layout_height="25dp"
-        android:background="@color/orange"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="76dp" />
-
     <nf28.touchmaze.layout.MapLayout
-        android:id="@+id/tactile_area_top"
-        android:layout_width="0dp"
-        android:layout_height="262dp"
+        android:id="@+id/mapLayout"
+        android:layout_width="580dp"
+        android:layout_height="280dp"
         android:layout_column="1"
         android:layout_columnSpan="1"
         android:layout_columnWeight="2"
         android:layout_row="0"
         android:layout_rowWeight="1"
-        android:background="@color/colorAccent"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="207dp" />
+        android:background="@color/orange"
+        tools:layout_editor_absoluteX="6dp"
+        tools:layout_editor_absoluteY="15dp" />
 
 </android.support.constraint.ConstraintLayout>

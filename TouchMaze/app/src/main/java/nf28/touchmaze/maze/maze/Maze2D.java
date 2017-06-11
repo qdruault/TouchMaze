@@ -66,7 +66,7 @@ public class Maze2D extends Maze{
                 "\n" +
                 "19 0\n" +
                 "\n" +
-                "0 0\n" +
+                "0 9\n" +
                 "\n" +
                 "17 0 X 11 7 X 18 2";
         try {
