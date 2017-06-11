@@ -242,8 +242,6 @@ public class EnigmaExploActivity extends ChatActivity {
                                                     e.printStackTrace();
                                                 }
 
-                                                Toast.makeText(EnigmaExploActivity.this, "FINI", Toast.LENGTH_SHORT).show();
-
                                                 // setResult(RESULT_OK, new Intent());
                                                 finish();
                                             } else {
@@ -259,6 +257,7 @@ public class EnigmaExploActivity extends ChatActivity {
                                         Log.d("Touch", "Déplacement");
                                     } else {
                                         Log.d("Touch", "Tacticon non remplacable");
+                                        Toast.makeText(EnigmaExploActivity.this, "Glyphe non remplacable !", Toast.LENGTH_SHORT).show();
 
                                         // Animation à l'écran
                                         Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
@@ -287,6 +286,7 @@ public class EnigmaExploActivity extends ChatActivity {
                                         Log.d("Touch", "Selection du taction");
                                     } else {
                                         Log.d("Touch", "Taction non complementaire");
+                                        Toast.makeText(EnigmaExploActivity.this, "Glyphe non déplacable !", Toast.LENGTH_SHORT).show();
 
                                         // Animation à l'écran
                                         Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
@@ -296,6 +296,7 @@ public class EnigmaExploActivity extends ChatActivity {
                                     // Cas d'un double tap impossible
                                 } else if (touchTap == 2 && moveAction) {
                                     Log.d("Touch", "Tacticon selectionné : double tap impossible");
+                                    Toast.makeText(EnigmaExploActivity.this, "Une glyphe est séléctionnée !", Toast.LENGTH_SHORT).show();
 
                                     // Animation à l'écran
                                     Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);

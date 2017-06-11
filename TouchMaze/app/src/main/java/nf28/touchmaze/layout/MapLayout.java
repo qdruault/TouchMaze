@@ -129,11 +129,11 @@ public class MapLayout extends View {
                 if (mazeV.getHobstaclesV()[i][j].getId() == 1) {
                     canv.drawRect(mazeV.getHobstaclesV()[i][j].getRect(), paint);
                 }
-                else if (mazeV.getVobstaclesV()[i][j].getId() == 2) {
-                    canv.drawRect(mazeV.getVobstaclesV()[i][j].getRect(), playerPaint);
+                else if (mazeV.getHobstaclesV()[i][j].getId() == 2) {
+                    canv.drawRect(mazeV.getHobstaclesV()[i][j].getRect(), playerPaint);
                 }
-                else if (mazeV.getVobstaclesV()[i][j].getId() == 3) {
-                    canv.drawRect(mazeV.getVobstaclesV()[i][j].getRect(), objPaint);
+                else if (mazeV.getHobstaclesV()[i][j].getId() == 3) {
+                    canv.drawRect(mazeV.getHobstaclesV()[i][j].getRect(), objPaint);
                 }
             }
         }

@@ -225,7 +225,7 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Vérification de l'intent grace a son identifiant
         if (requestCode == 10) {
-            Toast.makeText(GameMazeActivity.this, "Enigme réussie !!", Toast.LENGTH_SHORT).show();String guideMessage = "STOP";
+            Toast.makeText(GameMazeActivity.this, "Stèle complétée !!", Toast.LENGTH_SHORT).show();String guideMessage = "STOP";
             try {
                 chatOut.sendMessage("STOP");
             } catch (SmackException.NotConnectedException e) {

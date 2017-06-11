@@ -286,8 +286,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
         String wallsMessage = "{";
         wallsMessage += "\"x\" : " + maze.getExplorerPosition().x +",";
         wallsMessage += "\"y\" : " + maze.getExplorerPosition().y +",";
-        wallsMessage += "\"top\" : " + new Direction2D(maze, "REAR").apply().isTouchableByExplorer()+",";
-        wallsMessage += "\"bottom\" : " + new Direction2D(maze, "FRONT").apply().isTouchableByExplorer()+",";
+        wallsMessage += "\"top\" : " + new Direction2D(maze, "FRONT").apply().isTouchableByExplorer()+",";
+        wallsMessage += "\"bottom\" : " + new Direction2D(maze, "REAR").apply().isTouchableByExplorer()+",";
         wallsMessage += "\"right\" : " + new Direction2D(maze, "RIGHT").apply().isTouchableByExplorer()+",";
         wallsMessage += "\"left\" : " + new Direction2D(maze, "LEFT").apply().isTouchableByExplorer()+"}";
 
