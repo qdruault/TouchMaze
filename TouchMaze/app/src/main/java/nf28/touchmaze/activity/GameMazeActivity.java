@@ -3,6 +3,8 @@ package nf28.touchmaze.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -113,14 +115,22 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
 
             if (END_DIALOG_MESSAGE.equals(messageBody)) {
                 // User déconnecté.
-
+                finish();
             } else if (messageBody.equals("ENIGME")){
                 Intent intent = new Intent(GameMazeActivity.this, EnigmaExploActivity.class);
                 intent.putExtra("PARTNER", partnerJID);
                 startActivityForResult(intent, 10);
-            }
-            else {
+            } else if (messageBody.equals("WIN")){
+                // Partie terminée = écran de victoire !
+                Intent intent = new Intent(GameMazeActivity.this, VictoryActivity.class);
+                startActivity(intent);
 
+            } else if (messageBody.equals("BOOM")){
+                // On se prend un mur = animation.
+                Animation shakeAnim = AnimationUtils.loadAnimation(GameMazeActivity.this, R.anim.shake);
+                findViewById(R.id.main_layout_explo).startAnimation(shakeAnim);
+
+            } else {
                 try {
                     // On récupère le JSON envoyé.
                     JSONObject json = new JSONObject(messageBody);

@@ -22,13 +22,15 @@
         </activity>
         <activity android:name=".activity.InvitationActivity" />
         <activity android:name=".activity.GameMazeActivity" />
-        <activity android:name=".activity.GameMapActivity"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".activity.ChatActivity"></activity>
-        <activity android:name=".activity.EnigmaExploActivity"></activity>
-        <activity android:name=".activity.EnigmaGuideActivity"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".activity.GameMapActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".activity.ChatActivity" />
+        <activity android:name=".activity.EnigmaExploActivity" />
+        <activity
+            android:name=".activity.EnigmaGuideActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.VictoryActivity"></activity>
     </application>
 
 </manifest>
