@@ -22,15 +22,27 @@ import java.util.HashMap;
 
 import nf28.touchmaze.R;
 import nf28.touchmaze.layout.EnigmaSurfaceLayout;
+import nf28.touchmaze.util.PinsDisplayer;
 import nf28.touchmaze.util.enigmaActivity.enigma.EnigmaManager;
 import nf28.touchmaze.util.enigmaActivity.enigma.ExplorerEnigma;
 import nf28.touchmaze.util.enigmaActivity.enigma.GuideEnigma;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Alternation;
 import nf28.touchmaze.util.enigmaActivity.tacticon.ByteAdaptable;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Circle;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Cube;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Pointbypoint;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Rotation;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Shape;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Snow;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Split;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Stick;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Wave;
 
 import static android.R.color.black;
 import static nf28.touchmaze.activity.ConnectionActivity.TESTMODE;
+import static nf28.touchmaze.activity.GameMazeActivity.rectifyTouches;
+import static nf28.touchmaze.activity.GameMazeActivity.regularBoolToByte;
 import static nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon.Status.REPLECEABLE;
 
 /**
@@ -195,7 +207,43 @@ public class EnigmaExploActivity extends ChatActivity {
                                         Log.d("Touch", "Lance le tacticon");
 
                                         // Creation du thread
-                                        TacticonThread tThread = new TacticonThread((ByteAdaptable) touchedTacticon);
+                                        EnigmaExploActivity.TacticonThread tThread = null;
+
+                                        Tacticon.Type t = touchedTacticon.getType();
+
+                                        switch (t){
+                                            case CIRCLE:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Circle());
+                                                break;
+                                            case ALTERNATION:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Alternation());
+                                                break;
+                                            case CUBE:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Cube());
+                                                break;
+                                            case SPLIT:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Split());
+                                                break;
+                                            case STICK:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Stick());
+                                                break;
+                                            case SNOW:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Snow());
+                                                break;
+                                            case WAVE:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Wave());
+                                                break;
+                                            case POINT:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Pointbypoint());
+                                                break;
+                                            case SHAPE:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Shape());
+                                                break;
+                                            case ROTATION:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Rotation());
+                                                break;
+                                        }
+
                                         tThread.start();
 
                                         startTime.setTime(System.currentTimeMillis());
@@ -409,6 +457,32 @@ public class EnigmaExploActivity extends ChatActivity {
                     }
                 }
             });
+
+            // Picots à afficher et lever.
+            boolean[] leftTouches = new boolean[]{false, false, false, false, false, false, false, false};
+            boolean[] rightTouches = new boolean[]{false, false, false, false, false, false, false, false};
+
+            // Affichage.
+            String picots = PinsDisplayer.setAndDisplay(leftTouches, rightTouches);
+
+            byte[] data = new byte[4];
+            data[0] = 0x1b;
+            data[1] = 0x01;
+            data[2] = regularBoolToByte(rectifyTouches(leftTouches));
+            data[3] = regularBoolToByte(rectifyTouches(rightTouches));
+
+            sendData = new Intent();
+
+            if (!TESTMODE) {
+                sendData.putExtra("BStream", data);
+                sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+            } else {
+                sendData.putExtra("Picots", picots);
+                sendData.setAction("com.example.labocred.bluetooth.Test");
+            }
+
+            // Envoie de l'intent pour le module tactos.
+            sendBroadcast(sendData);
         }
     }
 

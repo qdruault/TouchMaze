@@ -28,24 +28,24 @@ import nf28.touchmaze.util.touch.TactileDialogViewHolder;
 public class MapLayout extends View {
 
     //EMULATEUR
-
+/*
     public static final int ORIGINX = 40;
     public static final int ORIGINY = 20;
     public static final int MARGIN = 8;
     public static final int SQUARE_SIZE = 48;
     public static final int WALL_LONG_SIDE = 56;
-    public static final int WALL_SHORT_SIDE = 8;
+    public static final int WALL_SHORT_SIDE = 8;*/
 
 
     // TEL
-    /*
+
     public static final int ORIGINX = 60;
     public static final int ORIGINY = 10;
     public static final int MARGIN = 12;
     public static final int SQUARE_SIZE = 72;
     public static final int WALL_LONG_SIDE = 84;
     public static final int WALL_SHORT_SIDE = 12;
-    */
+
 
     private MazeView mazeV;
 

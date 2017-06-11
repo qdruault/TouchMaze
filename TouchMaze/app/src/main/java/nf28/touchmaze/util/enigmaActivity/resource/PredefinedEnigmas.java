@@ -43,12 +43,26 @@ public class PredefinedEnigmas {
         exEnigmas[0].getchosenGuideTab()[4] = new Split();
         exEnigmas[0].getchosenGuideTab()[5] = new Stick();
 
+        exEnigmas[0].getchosenGuideTab()[0].setType(Tacticon.Type.ALTERNATION);
+        exEnigmas[0].getchosenGuideTab()[1].setType(Tacticon.Type.CIRCLE);
+        exEnigmas[0].getchosenGuideTab()[2].setType(Tacticon.Type.POINT);
+        exEnigmas[0].getchosenGuideTab()[3].setType(Tacticon.Type.ROTATION);
+        exEnigmas[0].getchosenGuideTab()[4].setType(Tacticon.Type.SPLIT);
+        exEnigmas[0].getchosenGuideTab()[5].setType(Tacticon.Type.STICK);
+
         exEnigmas[0].getExplorerTab()[0] = new Alternation();
         exEnigmas[0].getExplorerTab()[1] = new Circle();
         exEnigmas[0].getExplorerTab()[2] = new Pointbypoint();
         exEnigmas[0].getExplorerTab()[3] = new Rotation();
         exEnigmas[0].getExplorerTab()[4] = new Split();
         exEnigmas[0].getExplorerTab()[5] = new Stick();
+
+        exEnigmas[0].getExplorerTab()[0].setType(Tacticon.Type.ALTERNATION);
+        exEnigmas[0].getExplorerTab()[1].setType(Tacticon.Type.CIRCLE);
+        exEnigmas[0].getExplorerTab()[2].setType(Tacticon.Type.POINT);
+        exEnigmas[0].getExplorerTab()[3].setType(Tacticon.Type.ROTATION);
+        exEnigmas[0].getExplorerTab()[4].setType(Tacticon.Type.SPLIT);
+        exEnigmas[0].getExplorerTab()[5].setType(Tacticon.Type.STICK);
 
         exEnigmas[0].getExplorerTab()[3].setStatus(Tacticon.Status.REPLECEABLE);
         exEnigmas[0].getExplorerTab()[4].setStatus(Tacticon.Status.REPLECEABLE);
@@ -72,6 +86,20 @@ public class PredefinedEnigmas {
         guideEnigmas[0].getThirdGuideTab()[4] = new Snow();
         guideEnigmas[0].getThirdGuideTab()[5] = new Shape();
 
+        guideEnigmas[0].getSecondGuideTab()[0].setType(Tacticon.Type.WAVE);
+        guideEnigmas[0].getSecondGuideTab()[1].setType(Tacticon.Type.SNOW);
+        guideEnigmas[0].getSecondGuideTab()[2].setType(Tacticon.Type.SHAPE);
+        guideEnigmas[0].getSecondGuideTab()[3].setType(Tacticon.Type.ALTERNATION);
+        guideEnigmas[0].getSecondGuideTab()[4].setType(Tacticon.Type.CIRCLE);
+        guideEnigmas[0].getSecondGuideTab()[5].setType(Tacticon.Type.POINT);
+
+        guideEnigmas[0].getThirdGuideTab()[0].setType(Tacticon.Type.ALTERNATION);
+        guideEnigmas[0].getThirdGuideTab()[1].setType(Tacticon.Type.SPLIT);
+        guideEnigmas[0].getThirdGuideTab()[2].setType(Tacticon.Type.STICK);
+        guideEnigmas[0].getThirdGuideTab()[3].setType(Tacticon.Type.ROTATION);
+        guideEnigmas[0].getThirdGuideTab()[4].setType(Tacticon.Type.SNOW);
+        guideEnigmas[0].getThirdGuideTab()[5].setType(Tacticon.Type.SHAPE);
+
         //Enigme predefinie 2
         exEnigmas[1] = new ExplorerEnigma();
 
@@ -88,6 +116,20 @@ public class PredefinedEnigmas {
         exEnigmas[1].getExplorerTab()[3] = new Alternation();
         exEnigmas[1].getExplorerTab()[4] = new Circle();
         exEnigmas[1].getExplorerTab()[5] = new Pointbypoint();
+
+        exEnigmas[1].getchosenGuideTab()[0].setType(Tacticon.Type.ROTATION);
+        exEnigmas[1].getchosenGuideTab()[1].setType(Tacticon.Type.WAVE);
+        exEnigmas[1].getchosenGuideTab()[2].setType(Tacticon.Type.SHAPE);
+        exEnigmas[1].getchosenGuideTab()[3].setType(Tacticon.Type.ALTERNATION);
+        exEnigmas[1].getchosenGuideTab()[4].setType(Tacticon.Type.CIRCLE);
+        exEnigmas[1].getchosenGuideTab()[5].setType(Tacticon.Type.POINT);
+
+        exEnigmas[1].getExplorerTab()[0].setType(Tacticon.Type.ROTATION);
+        exEnigmas[1].getExplorerTab()[1].setType(Tacticon.Type.WAVE);
+        exEnigmas[1].getExplorerTab()[2].setType(Tacticon.Type.SHAPE);
+        exEnigmas[1].getExplorerTab()[3].setType(Tacticon.Type.ALTERNATION);
+        exEnigmas[1].getExplorerTab()[4].setType(Tacticon.Type.CIRCLE);
+        exEnigmas[1].getExplorerTab()[5].setType(Tacticon.Type.POINT);
 
         exEnigmas[1].getExplorerTab()[0].setStatus(Tacticon.Status.REPLECEABLE);
         exEnigmas[1].getExplorerTab()[2].setStatus(Tacticon.Status.REPLECEABLE);
@@ -111,6 +153,20 @@ public class PredefinedEnigmas {
         guideEnigmas[1].getThirdGuideTab()[4] = new Pointbypoint();
         guideEnigmas[1].getThirdGuideTab()[5] = new Split();
 
+        guideEnigmas[1].getSecondGuideTab()[0].setType(Tacticon.Type.ROTATION);
+        guideEnigmas[1].getSecondGuideTab()[1].setType(Tacticon.Type.CIRCLE);
+        guideEnigmas[1].getSecondGuideTab()[2].setType(Tacticon.Type.POINT);
+        guideEnigmas[1].getSecondGuideTab()[3].setType(Tacticon.Type.WAVE);
+        guideEnigmas[1].getSecondGuideTab()[4].setType(Tacticon.Type.ALTERNATION);
+        guideEnigmas[1].getSecondGuideTab()[5].setType(Tacticon.Type.STICK);
+
+        guideEnigmas[1].getThirdGuideTab()[0].setType(Tacticon.Type.ROTATION);
+        guideEnigmas[1].getThirdGuideTab()[1].setType(Tacticon.Type.STICK);
+        guideEnigmas[1].getThirdGuideTab()[2].setType(Tacticon.Type.WAVE);
+        guideEnigmas[1].getThirdGuideTab()[3].setType(Tacticon.Type.ALTERNATION);
+        guideEnigmas[1].getThirdGuideTab()[4].setType(Tacticon.Type.POINT);
+        guideEnigmas[1].getThirdGuideTab()[5].setType(Tacticon.Type.SPLIT);
+
         //Enigme predefinie 3
         exEnigmas[2] = new ExplorerEnigma();
 
@@ -127,6 +183,20 @@ public class PredefinedEnigmas {
         exEnigmas[2].getExplorerTab()[3] = new Rotation();
         exEnigmas[2].getExplorerTab()[4] = new Pointbypoint();
         exEnigmas[2].getExplorerTab()[5] = new Alternation();
+
+        exEnigmas[2].getchosenGuideTab()[0].setType(Tacticon.Type.SPLIT);
+        exEnigmas[2].getchosenGuideTab()[1].setType(Tacticon.Type.STICK);
+        exEnigmas[2].getchosenGuideTab()[2].setType(Tacticon.Type.SHAPE);
+        exEnigmas[2].getchosenGuideTab()[3].setType(Tacticon.Type.ROTATION);
+        exEnigmas[2].getchosenGuideTab()[4].setType(Tacticon.Type.POINT);
+        exEnigmas[2].getchosenGuideTab()[5].setType(Tacticon.Type.ALTERNATION);
+
+        exEnigmas[2].getExplorerTab()[0].setType(Tacticon.Type.SPLIT);
+        exEnigmas[2].getExplorerTab()[1].setType(Tacticon.Type.STICK);
+        exEnigmas[2].getExplorerTab()[2].setType(Tacticon.Type.SHAPE);
+        exEnigmas[2].getExplorerTab()[3].setType(Tacticon.Type.ROTATION);
+        exEnigmas[2].getExplorerTab()[4].setType(Tacticon.Type.POINT);
+        exEnigmas[2].getExplorerTab()[5].setType(Tacticon.Type.ALTERNATION);
 
         exEnigmas[2].getExplorerTab()[2].setStatus(Tacticon.Status.REPLECEABLE);
         exEnigmas[2].getExplorerTab()[4].setStatus(Tacticon.Status.REPLECEABLE);
@@ -150,6 +220,20 @@ public class PredefinedEnigmas {
         guideEnigmas[2].getThirdGuideTab()[3] = new Rotation();
         guideEnigmas[2].getThirdGuideTab()[4] = new Wave();
         guideEnigmas[2].getThirdGuideTab()[5] = new Alternation();
+
+        guideEnigmas[2].getSecondGuideTab()[0].setType(Tacticon.Type.SPLIT);
+        guideEnigmas[2].getSecondGuideTab()[1].setType(Tacticon.Type.CIRCLE);
+        guideEnigmas[2].getSecondGuideTab()[2].setType(Tacticon.Type.WAVE);
+        guideEnigmas[2].getSecondGuideTab()[3].setType(Tacticon.Type.ROTATION);
+        guideEnigmas[2].getSecondGuideTab()[4].setType(Tacticon.Type.POINT);
+        guideEnigmas[2].getSecondGuideTab()[5].setType(Tacticon.Type.SHAPE);
+
+        guideEnigmas[2].getThirdGuideTab()[0].setType(Tacticon.Type.CIRCLE);
+        guideEnigmas[2].getThirdGuideTab()[1].setType(Tacticon.Type.STICK);
+        guideEnigmas[2].getThirdGuideTab()[2].setType(Tacticon.Type.POINT);
+        guideEnigmas[2].getThirdGuideTab()[3].setType(Tacticon.Type.ROTATION);
+        guideEnigmas[2].getThirdGuideTab()[4].setType(Tacticon.Type.WAVE);
+        guideEnigmas[2].getThirdGuideTab()[5].setType(Tacticon.Type.ALTERNATION);
 
     }
 

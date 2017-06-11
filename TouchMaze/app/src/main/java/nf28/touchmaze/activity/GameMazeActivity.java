@@ -225,6 +225,39 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
         // Envoie de l'intent pour le module tactos.
         sendBroadcast(sendData);
 
+        try {
+            // Pause de 100 ms.
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Picots à afficher et lever.
+        leftTouches = new boolean[]{false, false, false, false, false, false, false, false};
+        rightTouches = new boolean[]{false, false, false, false, false, false, false, false};
+
+        // Affichage.
+        picots = PinsDisplayer.setAndDisplay(leftTouches, rightTouches);
+
+        data = new byte[4];
+        data[0] = 0x1b;
+        data[1] = 0x01;
+        data[2] = regularBoolToByte(rectifyTouches(leftTouches));
+        data[3] = regularBoolToByte(rectifyTouches(rightTouches));
+
+        sendData = new Intent();
+
+        if (!TESTMODE) {
+            sendData.putExtra("BStream", data);
+            sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+        } else {
+            sendData.putExtra("Picots", picots);
+            sendData.setAction("com.example.labocred.bluetooth.Test");
+        }
+
+        // Envoie de l'intent pour le module tactos.
+        sendBroadcast(sendData);
+
     }
 
     @Override

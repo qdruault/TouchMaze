@@ -8,7 +8,7 @@ import nf28.touchmaze.util.PinsDisplayer;
  * Created by Baptiste on 10/06/2017.
  */
 
-public class Alternation extends Tacticon{
+public class Alternation extends Tacticon implements ByteAdaptable{
     // Pour connaitre l'étape de dessin du motif.
     int compteur = 0;
 

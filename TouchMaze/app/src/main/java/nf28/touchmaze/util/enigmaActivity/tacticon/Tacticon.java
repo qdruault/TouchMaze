@@ -4,7 +4,7 @@ package nf28.touchmaze.util.enigmaActivity.tacticon;
  * Created by Baptiste on 08/06/2017.
  */
 
-public abstract class Tacticon implements ByteAdaptable{
+public class Tacticon{
 
     // FIXED = actif et non mobile et non modifiable
     // REPLECEABLE = non actif et non mobile et modifiable
@@ -16,6 +16,21 @@ public abstract class Tacticon implements ByteAdaptable{
         COMPLEMENTARY,
         ADDED
     }
+
+    public enum Type {
+        ALTERNATION,
+        CIRCLE,
+        CUBE,
+        POINT,
+        ROTATION,
+        SHAPE,
+        SNOW,
+        SPLIT,
+        STICK,
+        WAVE
+    }
+
+    private Type type;
 
     private Status status;
 
@@ -29,5 +44,13 @@ public abstract class Tacticon implements ByteAdaptable{
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 }
