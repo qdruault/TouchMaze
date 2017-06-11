@@ -15,6 +15,8 @@ import org.jivesoftware.smack.packet.Stanza;
 import java.util.UUID;
 
 import nf28.touchmaze.R;
+import nf28.touchmaze.layout.EnigmaSurfaceLayout;
+import nf28.touchmaze.layout.ShapeLayout;
 import nf28.touchmaze.maze.maze.Direction2D;
 import nf28.touchmaze.maze.maze.Maze2D;
 import nf28.touchmaze.maze.position.Position2D;
@@ -22,6 +24,8 @@ import nf28.touchmaze.util.PinsDisplayer;
 import nf28.touchmaze.util.touch.DialogTouchEvent;
 import nf28.touchmaze.util.touch.TactileDialogViewHolder;
 
+import static android.R.color.black;
+import static nf28.touchmaze.R.color.orange;
 import static nf28.touchmaze.activity.ConnectionActivity.TESTMODE;
 
 public class GameMapActivity extends ChatActivity  implements TactileDialogViewHolder {
@@ -29,6 +33,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
     private boolean partnerConnected;
     private InvitationResultHandler invitationResultHandler;
     private Maze2D maze;
+
+    private ShapeLayout shapeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        shapeLayout = (ShapeLayout) findViewById(R.id.shapeLayout);
 
     }
 
