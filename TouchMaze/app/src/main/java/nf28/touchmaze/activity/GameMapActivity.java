@@ -2,6 +2,7 @@ package nf28.touchmaze.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,9 @@ import org.jivesoftware.smack.packet.Stanza;
 import java.util.UUID;
 
 import nf28.touchmaze.R;
+import nf28.touchmaze.layout.EnigmaSurfaceLayout;
+import nf28.touchmaze.layout.MapLayout;
+import nf28.touchmaze.layout.ShapeLayout;
 import nf28.touchmaze.maze.maze.Direction2D;
 import nf28.touchmaze.maze.maze.Maze2D;
 import nf28.touchmaze.maze.position.Position2D;
@@ -22,6 +26,8 @@ import nf28.touchmaze.util.PinsDisplayer;
 import nf28.touchmaze.util.touch.DialogTouchEvent;
 import nf28.touchmaze.util.touch.TactileDialogViewHolder;
 
+import static android.R.color.black;
+import static nf28.touchmaze.R.color.orange;
 import static nf28.touchmaze.activity.ConnectionActivity.TESTMODE;
 
 public class GameMapActivity extends ChatActivity  implements TactileDialogViewHolder {
@@ -29,6 +35,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
     private boolean partnerConnected;
     private InvitationResultHandler invitationResultHandler;
     private Maze2D maze;
+
+    private MapLayout mapLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +58,13 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        mapLayout = (MapLayout) findViewById(R.id.mapLayout);
+        mapLayout.constructMazeV(maze);
+
+        mapLayout.setDialogViewHolder(this);
+
+        Log.d("test", "test");
 
     }
 
@@ -133,7 +148,7 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
         } else if (messageBody.equals("READY")) {
             // Le partenaire est prêt, on lui envoie les murs de sa position de départ.
             sendWallsMessage(); 
-        } else {
+        } else if (messageBody.equals("right")|| messageBody.equals("up")|| messageBody.equals("down")|| messageBody.equals("left")){
             // On essaye de bouger l'explorateur.
             Direction2D direction;
             switch (messageBody) {
@@ -150,8 +165,13 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
                     direction = new Direction2D(maze, "LEFT");
                     break;
             }
+
+            Log.d("POSITION", String.valueOf(maze.getExplorerPosition().x) + " " + String.valueOf(maze.getExplorerPosition().y));
+
             Position2D oldPos = new Position2D(maze.getExplorerPosition().x, maze.getExplorerPosition().y);
             maze.moveTo(direction);
+
+            Log.d("POSITION", String.valueOf(maze.getExplorerPosition().x) + " " + String.valueOf(maze.getExplorerPosition().y));
 
             // On se prend un mur.
             if (oldPos.is(maze.getExplorerPosition())) {
@@ -175,7 +195,10 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
                         intent.putExtra("PARTNER", partnerJID);
                         startActivityForResult(intent, 10);
                         // On stocke sa position pour la retirer après.
-                        enigmaToRemove = new Position2D(positionEnigma.x, positionEnigma.y);
+
+                        //enigmaToRemove = new Position2D(positionEnigma.x, positionEnigma.y);
+                        enigmaToRemove = positionEnigma;
+
                     } catch (SmackException.NotConnectedException e) {
                         e.printStackTrace();
                     }
@@ -184,7 +207,13 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
 
             // On la retire de la liste si résolue.
             if (enigmaToRemove != null) {
+
+                Log.d("POSITION", "List des enigmes: " + String.valueOf(maze.getEnigmas().size()));
+                Log.d("POSITION", "Enigme à enlever : " + String.valueOf(enigmaToRemove.x) + " " + String.valueOf(enigmaToRemove.y));
                 maze.getEnigmas().remove(enigmaToRemove);
+                mapLayout.updateEnigmasV(maze.getEnigmas());
+                Log.d("POSITION", "List des enigmes: " + String.valueOf(maze.getEnigmas().size()));
+
             } else if (maze.getExplorerPosition().is(maze.getExit()) && maze.getEnigmas().isEmpty()) {
                 // Sortie + toutes les enigmes résolues.
                 try {
@@ -197,11 +226,15 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
                 }
             }
 
+            mapLayout.updateExplorerV(maze.getExplorerPosition());
+
             sendWallsMessage();
         }
     }
     @Override
     public void onDialogTouch(DialogTouchEvent event) {
+
+        Toast.makeText(GameMapActivity.this, "Mur touché", Toast.LENGTH_SHORT).show();
 
         // Picots à afficher et lever.
         boolean[] leftTouches = new boolean[]{true, true, true, true, true, true, true, true};
@@ -217,6 +250,39 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
         data[3] = regularBoolToByte(rectifyTouches(rightTouches));
 
         Intent sendData = new Intent();
+
+        if (!TESTMODE) {
+            sendData.putExtra("BStream", data);
+            sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+        } else {
+            sendData.putExtra("Picots", picots);
+            sendData.setAction("com.example.labocred.bluetooth.Test");
+        }
+
+        // Envoie de l'intent pour le module tactos.
+        sendBroadcast(sendData);
+
+        try {
+            // Pause de 100 ms.
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Picots à afficher et lever.
+        leftTouches = new boolean[]{false, false, false, false, false, false, false, false};
+        rightTouches = new boolean[]{false, false, false, false, false, false, false, false};
+
+        // Affichage.
+        picots = PinsDisplayer.setAndDisplay(leftTouches, rightTouches);
+
+        data = new byte[4];
+        data[0] = 0x1b;
+        data[1] = 0x01;
+        data[2] = regularBoolToByte(rectifyTouches(leftTouches));
+        data[3] = regularBoolToByte(rectifyTouches(rightTouches));
+
+        sendData = new Intent();
 
         if (!TESTMODE) {
             sendData.putExtra("BStream", data);
@@ -280,4 +346,31 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
             e.printStackTrace();
         }
     }
+
+    /**
+     * Fermeture de l'activité.
+     */
+    /*@Override
+    protected void onDestroy() {
+        // On ferme tous les canaux.
+        if (chatOut != null) {
+            try {
+                // On envoie un message de fin au coéquipier.
+                chatOut.sendMessage(END_DIALOG_MESSAGE);
+            } catch (SmackException.NotConnectedException e) {
+                e.printStackTrace();
+            }
+        }
+        if (chatOut != null) {
+            chatOut.close();
+        }
+        if (chatIn != null) {
+            chatIn.close();
+        }
+        if (chatManager != null) {
+            chatManager.removeChatListener(this);
+        }
+
+        super.onDestroy();
+    }*/
 }

@@ -70,33 +70,43 @@ public class ExplorerEnigma extends Enigma {
                 switch (c.getName()) {
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Circle":
                         explorerComplementaryTab[i] = new Circle();
+                        explorerComplementaryTab[i].setType(Tacticon.Type.CIRCLE);
                         break;
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Alternation":
                         explorerComplementaryTab[i] = new Alternation();
+                        explorerComplementaryTab[i].setType(Tacticon.Type.ALTERNATION);
                         break;
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Cube":
                         explorerComplementaryTab[i] = new Cube();
+                        explorerComplementaryTab[i].setType(Tacticon.Type.CUBE);
                         break;
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Pointbypoint":
                         explorerComplementaryTab[i] = new Pointbypoint();
+                        explorerComplementaryTab[i].setType(Tacticon.Type.POINT);
                         break;
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Rotation":
                         explorerComplementaryTab[i] = new Rotation();
+                        explorerComplementaryTab[i].setType(Tacticon.Type.ROTATION);
                         break;
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Shape":
                         explorerComplementaryTab[i] = new Shape();
+                        explorerComplementaryTab[i].setType(Tacticon.Type.SHAPE);
                         break;
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Snow":
                         explorerComplementaryTab[i] = new Snow();
+                        explorerComplementaryTab[i].setType(Tacticon.Type.SNOW);
                         break;
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Split":
                         explorerComplementaryTab[i] = new Split();
+                        explorerComplementaryTab[i].setType(Tacticon.Type.SPLIT);
                         break;
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Stick":
                         explorerComplementaryTab[i] = new Stick();
+                        explorerComplementaryTab[i].setType(Tacticon.Type.STICK);
                         break;
                     case "nf28.touchmaze.util.enigmaActivity.tacticon.Wave":
                         explorerComplementaryTab[i] = new Wave();
+                        explorerComplementaryTab[i].setType(Tacticon.Type.WAVE);
                         break;
                     default:
                         break;
@@ -118,33 +128,43 @@ public class ExplorerEnigma extends Enigma {
         switch (c.getName()){
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Circle":
                 explorerTab[p_exploTabIndex] = new Circle();
+                explorerTab[p_exploTabIndex].setType(Tacticon.Type.CIRCLE);
                 break;
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Alternation":
                 explorerTab[p_exploTabIndex] = new Alternation();
+                explorerTab[p_exploTabIndex].setType(Tacticon.Type.ALTERNATION);
                 break;
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Cube":
                 explorerTab[p_exploTabIndex] = new Cube();
+                explorerTab[p_exploTabIndex].setType(Tacticon.Type.CUBE);
                 break;
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Pointbypoint":
                 explorerTab[p_exploTabIndex] = new Pointbypoint();
+                explorerTab[p_exploTabIndex].setType(Tacticon.Type.POINT);
                 break;
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Rotation":
                 explorerTab[p_exploTabIndex] = new Rotation();
+                explorerTab[p_exploTabIndex].setType(Tacticon.Type.ROTATION);
                 break;
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Shape":
                 explorerTab[p_exploTabIndex] = new Shape();
+                explorerTab[p_exploTabIndex].setType(Tacticon.Type.SHAPE);
                 break;
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Snow":
                 explorerTab[p_exploTabIndex] = new Snow();
+                explorerTab[p_exploTabIndex].setType(Tacticon.Type.SNOW);
                 break;
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Split":
                 explorerTab[p_exploTabIndex] = new Split();
+                explorerTab[p_exploTabIndex].setType(Tacticon.Type.SPLIT);
                 break;
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Stick":
                 explorerTab[p_exploTabIndex] = new Stick();
+                explorerTab[p_exploTabIndex].setType(Tacticon.Type.STICK);
                 break;
             case "nf28.touchmaze.util.enigmaActivity.tacticon.Wave":
                 explorerTab[p_exploTabIndex] = new Wave();
+                explorerTab[p_exploTabIndex].setType(Tacticon.Type.WAVE);
                 break;
             default:
                 break;

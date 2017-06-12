@@ -1,6 +1,7 @@
 package nf28.touchmaze.util.touch;
 
 import android.graphics.PointF;
+import android.util.Log;
 
 import java.util.ArrayList;
 

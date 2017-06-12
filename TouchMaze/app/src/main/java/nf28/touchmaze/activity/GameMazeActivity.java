@@ -2,6 +2,7 @@ package nf28.touchmaze.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,8 +16,12 @@ import org.jivesoftware.smack.packet.Message;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import nf28.touchmaze.R;
 import nf28.touchmaze.layout.WallLayout;
+import nf28.touchmaze.util.enigmaActivity.resource.PredefinedEnigmas;
 import nf28.touchmaze.util.touch.DialogTouchEvent;
 import nf28.touchmaze.util.touch.TactileDialogViewHolder;
 
@@ -32,6 +37,9 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
     WallLayout tactileAreaLeft;
     WallLayout tactileAreaRight;
 
+    // Tableau contenant les numéros des enigme pré définies
+    private ArrayList<Integer> usablePredefinedTabs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +48,11 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
         TextView hostname = (TextView) findViewById(R.id.textHostName);
         String partner = partnerJID.substring(0, partnerJID.indexOf("@"));
         hostname.setText(String.format("Guidé par  %s", partner));
+
+        usablePredefinedTabs = new ArrayList<Integer>();
+        for (int i = 0; i < PredefinedEnigmas.getInstance().NB_PREDEFINED_ENIGMA; ++i) {
+            usablePredefinedTabs.add(i);
+        }
 
         // On accepte l'invitation.
         dialogHandler.acceptInvitation(partnerJID);
@@ -93,6 +106,12 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             public void onClick(View v) {
                 // On récupère le contenu du bouton.
                 String direction = btn.getText().toString();
+
+                if (direction.equals("up"))
+                    direction = "down";
+                else if (direction.equals("down"))
+                    direction = "up";
+
                 try {
                     // On envoie au guide notre direction.
                     chatOut.sendMessage(direction);
@@ -119,6 +138,28 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             } else if (messageBody.equals("ENIGME")){
                 Intent intent = new Intent(GameMazeActivity.this, EnigmaExploActivity.class);
                 intent.putExtra("PARTNER", partnerJID);
+
+                // Numéro d'enigme déterminé au hasard.
+                Random rand = new Random();
+                int index = rand.nextInt(usablePredefinedTabs.size());
+                int enigmaNb = usablePredefinedTabs.get(index);
+
+                Log.d("EM", String.valueOf(enigmaNb));
+
+                Log.d("EM", "size " + String.valueOf(usablePredefinedTabs.size()));
+
+                // Suppression de l'énigme déjà utilisée du tableau.
+                usablePredefinedTabs.remove(enigmaNb);
+
+                Log.d("EM", "size " + String.valueOf(usablePredefinedTabs.size()));
+
+                Log.d("EM", String.valueOf("restants"));
+                for (Integer integer : usablePredefinedTabs) {
+                    Log.d("EM", String.valueOf(integer));
+                }
+
+                intent.putExtra("ENIGMANB", enigmaNb);
+
                 startActivityForResult(intent, 10);
             } else if (messageBody.equals("WIN")){
                 // Partie terminée = écran de victoire !
@@ -156,6 +197,8 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
     @Override
     public void onDialogTouch(DialogTouchEvent event) {
 
+        Toast.makeText(GameMazeActivity.this, "Mur heurté", Toast.LENGTH_SHORT).show();
+
         // Picots à afficher et lever.
         boolean[] leftTouches = new boolean[]{true, true, true, true, true, true, true, true};
         boolean[] rightTouches = new boolean[]{true, true, true, true, true, true, true, true};
@@ -170,6 +213,39 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
         data[3] = regularBoolToByte(rectifyTouches(rightTouches));
 
         Intent sendData = new Intent();
+
+        if (!TESTMODE) {
+            sendData.putExtra("BStream", data);
+            sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+        } else {
+            sendData.putExtra("Picots", picots);
+            sendData.setAction("com.example.labocred.bluetooth.Test");
+        }
+
+        // Envoie de l'intent pour le module tactos.
+        sendBroadcast(sendData);
+
+        try {
+            // Pause de 100 ms.
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Picots à afficher et lever.
+        leftTouches = new boolean[]{false, false, false, false, false, false, false, false};
+        rightTouches = new boolean[]{false, false, false, false, false, false, false, false};
+
+        // Affichage.
+        picots = PinsDisplayer.setAndDisplay(leftTouches, rightTouches);
+
+        data = new byte[4];
+        data[0] = 0x1b;
+        data[1] = 0x01;
+        data[2] = regularBoolToByte(rectifyTouches(leftTouches));
+        data[3] = regularBoolToByte(rectifyTouches(rightTouches));
+
+        sendData = new Intent();
 
         if (!TESTMODE) {
             sendData.putExtra("BStream", data);
@@ -217,7 +293,7 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Vérification de l'intent grace a son identifiant
         if (requestCode == 10) {
-            Toast.makeText(GameMazeActivity.this, "Enigme réussie !!", Toast.LENGTH_SHORT).show();String guideMessage = "STOP";
+            Toast.makeText(GameMazeActivity.this, "Stèle complétée !!", Toast.LENGTH_SHORT).show();String guideMessage = "STOP";
             try {
                 chatOut.sendMessage("STOP");
             } catch (SmackException.NotConnectedException e) {
@@ -225,4 +301,31 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             }
         }
     }
+
+    /**
+     * Fermeture de l'activité.
+     */
+    /*@Override
+    protected void onDestroy() {
+        // On ferme tous les canaux.
+        if (chatOut != null) {
+            try {
+                // On envoie un message de fin au coéquipier.
+                chatOut.sendMessage(END_DIALOG_MESSAGE);
+            } catch (SmackException.NotConnectedException e) {
+                e.printStackTrace();
+            }
+        }
+        if (chatOut != null) {
+            chatOut.close();
+        }
+        if (chatIn != null) {
+            chatIn.close();
+        }
+        if (chatManager != null) {
+            chatManager.removeChatListener(this);
+        }
+
+        super.onDestroy();
+    }*/
 }

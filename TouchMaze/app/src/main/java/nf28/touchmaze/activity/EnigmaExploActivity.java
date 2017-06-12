@@ -22,14 +22,27 @@ import java.util.HashMap;
 
 import nf28.touchmaze.R;
 import nf28.touchmaze.layout.EnigmaSurfaceLayout;
+import nf28.touchmaze.util.PinsDisplayer;
 import nf28.touchmaze.util.enigmaActivity.enigma.EnigmaManager;
 import nf28.touchmaze.util.enigmaActivity.enigma.ExplorerEnigma;
 import nf28.touchmaze.util.enigmaActivity.enigma.GuideEnigma;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Alternation;
 import nf28.touchmaze.util.enigmaActivity.tacticon.ByteAdaptable;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Circle;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Cube;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Pointbypoint;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Rotation;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Shape;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Snow;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Split;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Stick;
 import nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon;
+import nf28.touchmaze.util.enigmaActivity.tacticon.Wave;
 
 import static android.R.color.black;
+import static nf28.touchmaze.activity.ConnectionActivity.TESTMODE;
+import static nf28.touchmaze.activity.GameMazeActivity.rectifyTouches;
+import static nf28.touchmaze.activity.GameMazeActivity.regularBoolToByte;
 import static nf28.touchmaze.util.enigmaActivity.tacticon.Tacticon.Status.REPLECEABLE;
 
 /**
@@ -123,8 +136,11 @@ public class EnigmaExploActivity extends ChatActivity {
         comp_tab_1.setNum(11);
         comp_tab_2.setNum(12);
 
+        Intent i = getIntent();
+        int enigmaNB = i.getIntExtra("ENIGMANB", 0);
+
         // Récupération de l'énigme
-        enigmasMap = EnigmaManager.getInstance().createNewEnigma();
+        enigmasMap = EnigmaManager.getInstance().createNewEnigma(enigmaNB);
 
         for (HashMap.Entry<ExplorerEnigma, GuideEnigma> entry : enigmasMap.entrySet()) {
             enigma = entry.getKey();
@@ -191,7 +207,43 @@ public class EnigmaExploActivity extends ChatActivity {
                                         Log.d("Touch", "Lance le tacticon");
 
                                         // Creation du thread
-                                        TacticonThread tThread = new TacticonThread((ByteAdaptable) touchedTacticon);
+                                        EnigmaExploActivity.TacticonThread tThread = null;
+
+                                        Tacticon.Type t = touchedTacticon.getType();
+
+                                        switch (t){
+                                            case CIRCLE:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Circle());
+                                                break;
+                                            case ALTERNATION:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Alternation());
+                                                break;
+                                            case CUBE:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Cube());
+                                                break;
+                                            case SPLIT:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Split());
+                                                break;
+                                            case STICK:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Stick());
+                                                break;
+                                            case SNOW:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Snow());
+                                                break;
+                                            case WAVE:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Wave());
+                                                break;
+                                            case POINT:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Pointbypoint());
+                                                break;
+                                            case SHAPE:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Shape());
+                                                break;
+                                            case ROTATION:
+                                                tThread = new EnigmaExploActivity.TacticonThread((ByteAdaptable) new Rotation());
+                                                break;
+                                        }
+
                                         tThread.start();
 
                                         startTime.setTime(System.currentTimeMillis());
@@ -241,8 +293,6 @@ public class EnigmaExploActivity extends ChatActivity {
                                                     e.printStackTrace();
                                                 }
 
-                                                Toast.makeText(EnigmaExploActivity.this, "FINI", Toast.LENGTH_SHORT).show();
-
                                                 // setResult(RESULT_OK, new Intent());
                                                 finish();
                                             } else {
@@ -258,6 +308,7 @@ public class EnigmaExploActivity extends ChatActivity {
                                         Log.d("Touch", "Déplacement");
                                     } else {
                                         Log.d("Touch", "Tacticon non remplacable");
+                                        Toast.makeText(EnigmaExploActivity.this, "Glyphe non remplacable !", Toast.LENGTH_SHORT).show();
 
                                         // Animation à l'écran
                                         Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
@@ -286,6 +337,7 @@ public class EnigmaExploActivity extends ChatActivity {
                                         Log.d("Touch", "Selection du taction");
                                     } else {
                                         Log.d("Touch", "Taction non complementaire");
+                                        Toast.makeText(EnigmaExploActivity.this, "Glyphe non déplacable !", Toast.LENGTH_SHORT).show();
 
                                         // Animation à l'écran
                                         Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
@@ -295,6 +347,7 @@ public class EnigmaExploActivity extends ChatActivity {
                                     // Cas d'un double tap impossible
                                 } else if (touchTap == 2 && moveAction) {
                                     Log.d("Touch", "Tacticon selectionné : double tap impossible");
+                                    Toast.makeText(EnigmaExploActivity.this, "Une glyphe est séléctionnée !", Toast.LENGTH_SHORT).show();
 
                                     // Animation à l'écran
                                     Animation shakeAnim = AnimationUtils.loadAnimation(EnigmaExploActivity.this, R.anim.shake);
@@ -362,10 +415,14 @@ public class EnigmaExploActivity extends ChatActivity {
         // On le remplit.
         data = p_tacticon.SetToByte();
 
-        sendData.putExtra("BStream", data);
-        sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
-        // On l'envoie à l'appli bluetooth.
-        sendBroadcast(sendData);
+        if (!TESTMODE) {
+
+            sendData.putExtra("BStream", data);
+            sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+            // On l'envoie à l'appli bluetooth.
+            sendBroadcast(sendData);
+
+        }
     }
 
     // Thread d'allumage du tacticon.
@@ -400,7 +457,52 @@ public class EnigmaExploActivity extends ChatActivity {
                     }
                 }
             });
+
+            // Picots à afficher et lever.
+            boolean[] leftTouches = new boolean[]{false, false, false, false, false, false, false, false};
+            boolean[] rightTouches = new boolean[]{false, false, false, false, false, false, false, false};
+
+            // Affichage.
+            String picots = PinsDisplayer.setAndDisplay(leftTouches, rightTouches);
+
+            byte[] data = new byte[4];
+            data[0] = 0x1b;
+            data[1] = 0x01;
+            data[2] = regularBoolToByte(rectifyTouches(leftTouches));
+            data[3] = regularBoolToByte(rectifyTouches(rightTouches));
+
+            sendData = new Intent();
+
+            if (!TESTMODE) {
+                sendData.putExtra("BStream", data);
+                sendData.setAction("com.example.labocred.bluetooth.StreamBluetooth");
+            } else {
+                sendData.putExtra("Picots", picots);
+                sendData.setAction("com.example.labocred.bluetooth.Test");
+            }
+
+            // Envoie de l'intent pour le module tactos.
+            sendBroadcast(sendData);
         }
+    }
+
+    /**
+     * Fermeture de l'activité.
+     */
+    @Override
+    protected void onDestroy() {
+        // On ferme tous les canaux.
+        if (chatOut != null) {
+            chatOut.close();
+        }
+        if (chatIn != null) {
+            chatIn.close();
+        }
+        if (chatManager != null) {
+            chatManager.removeChatListener(this);
+        }
+
+        super.onDestroy();
     }
 
 }

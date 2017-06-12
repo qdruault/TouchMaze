@@ -27,7 +27,7 @@ public class ConnectionActivity extends AppCompatActivity {
     Button loginButton;
     DialogHandler dialogHandler;
 
-    public final static boolean TESTMODE = true;
+    public final static boolean TESTMODE = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

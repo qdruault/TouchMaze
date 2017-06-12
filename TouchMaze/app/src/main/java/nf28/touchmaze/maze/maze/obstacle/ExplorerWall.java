@@ -1,5 +1,7 @@
 package nf28.touchmaze.maze.maze.obstacle;
 
+
+// MUR DE L'EXPLORATEUR
 public class ExplorerWall extends Wall {
 
     public static final int ID = 2;

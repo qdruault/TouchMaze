@@ -8,7 +8,7 @@ import nf28.touchmaze.util.PinsDisplayer;
  * Created by Baptiste on 08/06/2017.
  */
 
-public class Circle extends Tacticon{
+public class Circle extends Tacticon implements ByteAdaptable{
 
     // Pour connaitre l'étape de dessin du motif.
     int compteur = 0;
@@ -19,7 +19,6 @@ public class Circle extends Tacticon{
      *
      * @return le tableau à transmettre à l'appli bluetooth.
      */
-    @Override
     public byte[] SetToByte() {
         boolean[] rightTouches = { false, false, false, false, false, false, false, false };
         boolean[] leftTouches = { false, false, false, false, false, false, false, false };
