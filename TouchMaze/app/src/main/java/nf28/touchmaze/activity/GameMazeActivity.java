@@ -42,6 +42,8 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
     // Tableau contenant les numéros des enigme pré définies
     private ArrayList<Integer> usablePredefinedTabs;
 
+    private boolean enigme_recue = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,7 +154,18 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             if (END_DIALOG_MESSAGE.equals(messageBody)) {
                 // User déconnecté.
                 finish();
-            } else if (messageBody.equals("ENIGME")){
+            } else if (messageBody.equals("ENIGME") && !enigme_recue){
+
+                Log.d("threasd", "enigme recue");
+                enigme_recue = true;
+
+                try {
+
+                    chatOut.sendMessage("ENIGMERECUE");
+                } catch (SmackException.NotConnectedException e) {
+                    e.printStackTrace();
+                }
+
                 Intent intent = new Intent(GameMazeActivity.this, EnigmaExploActivity.class);
                 intent.putExtra("PARTNER", partnerJID);
 
@@ -177,6 +190,9 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
 
                 intent.putExtra("ENIGMANB", enigmaNb);
 
+                enigme_recue = false;
+
+                Log.d("threasd", "demarrage de l'act");
                 startActivityForResult(intent, 10);
             } else if (messageBody.equals("WIN")){
                 // Partie terminée = écran de victoire !
@@ -317,6 +333,7 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             } catch (SmackException.NotConnectedException e) {
                 e.printStackTrace();
             }
+            enigme_recue=false;
         }
     }
 

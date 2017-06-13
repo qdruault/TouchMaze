@@ -25,12 +25,15 @@ import nf28.touchmaze.maze.maze.Maze2D;
 import nf28.touchmaze.maze.position.Position2D;
 import nf28.touchmaze.util.PinsDisplayer;
 import nf28.touchmaze.util.TutoAlertDialogFragment;
+import nf28.touchmaze.util.enigmaActivity.tacticon.ByteAdaptable;
 import nf28.touchmaze.util.touch.DialogTouchEvent;
 import nf28.touchmaze.util.touch.TactileDialogViewHolder;
 
 import static android.R.color.black;
 import static nf28.touchmaze.R.color.orange;
 import static nf28.touchmaze.activity.ConnectionActivity.TESTMODE;
+import static nf28.touchmaze.activity.GameMazeActivity.rectifyTouches;
+import static nf28.touchmaze.activity.GameMazeActivity.regularBoolToByte;
 
 public class GameMapActivity extends ChatActivity  implements TactileDialogViewHolder {
 
@@ -39,6 +42,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
     private Maze2D maze;
 
     private MapLayout mapLayout;
+
+    private boolean enigmerecu = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +169,9 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
             finish();
         } else if (messageBody.equals("READY")) {
             // Le partenaire est prêt, on lui envoie les murs de sa position de départ.
-            sendWallsMessage(); 
+            sendWallsMessage();
+        } else if (messageBody.equals("ENIGMERECUE")) {
+            enigmerecu=true;
         } else if (messageBody.equals("right")|| messageBody.equals("up")|| messageBody.equals("down")|| messageBody.equals("left")){
             // On essaye de bouger l'explorateur.
             Direction2D direction;
@@ -205,8 +212,9 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
             for (Position2D positionEnigma : maze.getEnigmas()) {
                 if (positionEnigma.is(maze.getExplorerPosition())) {
                     // ON prévient l'explo de l'enigme.
-                    try {
-                        chatOut.sendMessage("ENIGME");
+                        MessageThread mt = new MessageThread();
+                        mt.start();
+
                         // On lance l'enigme.
                         Intent intent = new Intent(GameMapActivity.this, EnigmaGuideActivity.class);
                         intent.putExtra("PARTNER", partnerJID);
@@ -215,10 +223,6 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
 
                         //enigmaToRemove = new Position2D(positionEnigma.x, positionEnigma.y);
                         enigmaToRemove = positionEnigma;
-
-                    } catch (SmackException.NotConnectedException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
 
@@ -370,6 +374,27 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
         // Vérification de l'intent grace a son identifiant
         if (requestCode == 10) {
             Toast.makeText(GameMapActivity.this, "Stèle complétée !!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Thread d'allumage du tacticon.
+    private class MessageThread extends Thread {
+        @Override
+        public void run() {
+            while (!enigmerecu) {
+                try {
+                    Log.d("threasd", "dans le thread");
+                    Log.d("threasd", String.valueOf(enigmerecu));
+                    chatOut.sendMessage("ENIGME");
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (SmackException.NotConnectedException e) {
+                    e.printStackTrace();
+                }
+            }
+            Log.d("threasd", String.valueOf(enigmerecu));
+            enigmerecu = false;
         }
     }
 
