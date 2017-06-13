@@ -1,5 +1,6 @@
 package nf28.touchmaze.activity;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import nf28.touchmaze.R;
 import nf28.touchmaze.layout.EnigmaSurfaceLayout;
 import nf28.touchmaze.util.PinsDisplayer;
+import nf28.touchmaze.util.TutoAlertDialogFragment;
 import nf28.touchmaze.util.enigmaActivity.enigma.EnigmaManager;
 import nf28.touchmaze.util.enigmaActivity.enigma.ExplorerEnigma;
 import nf28.touchmaze.util.enigmaActivity.enigma.GuideEnigma;
@@ -379,6 +381,20 @@ public class EnigmaExploActivity extends ChatActivity {
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();
         }
+
+        showDialog();
+    }
+
+    public void showDialog() {
+        String message = "Vous rencontrez une énigme !\n" +
+                "La stèle en haut de votre écran est imcomplète. Touchez les différentes glyphes pour déterminer les glyphes présentes.\n " +
+                "Informez votre cooéquipier des glyphes présentes sur votre stèle, il pourra alors vous communiquez les glyphes manquantes et leurs emplacements.\n " +
+                "Complétez votre stèle avec un double tapant sur les glyphes à votre disposition en bas de votre écran et en tapant sur une case vide.\n" +
+                "La sortie s'ouvre uniquement lorsque les trois énigmes sont résolues.";
+
+        DialogFragment newFragment = TutoAlertDialogFragment.newInstance(
+                message);
+        newFragment.show(getFragmentManager(), "dialog");
     }
 
     /**

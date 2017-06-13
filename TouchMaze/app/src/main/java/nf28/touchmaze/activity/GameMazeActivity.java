@@ -1,5 +1,6 @@
 package nf28.touchmaze.activity;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ import java.util.Random;
 
 import nf28.touchmaze.R;
 import nf28.touchmaze.layout.WallLayout;
+import nf28.touchmaze.util.TutoAlertDialogFragment;
 import nf28.touchmaze.util.enigmaActivity.resource.PredefinedEnigmas;
 import nf28.touchmaze.util.touch.DialogTouchEvent;
 import nf28.touchmaze.util.touch.TactileDialogViewHolder;
@@ -85,6 +87,21 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             e.printStackTrace();
         }
 
+        showDialog();
+
+    }
+
+    public void showDialog() {
+        String message = "Vous êtes perdu dans le labyrinte !\n" +
+                "Coopérez avec votre partenaire pour résoudre les énigmes et trouver la sortie.\n" +
+                "Les boutons de direction vous permettent de vous déplacer" +
+                "et les zones tactiles vous permettent de sentir les murs autour de vous.\n" +
+                "La sortie s'ouvre uniquement lorsque les trois énigmes sont résolues.\n" +
+                "Attention, certains murs ne sont détectables que par l'un des deux joueurs, communiquez et avancez en équipe !";
+
+        DialogFragment newFragment = TutoAlertDialogFragment.newInstance(
+                message);
+        newFragment.show(getFragmentManager(), "dialog");
     }
 
     /**
@@ -293,7 +310,8 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Vérification de l'intent grace a son identifiant
         if (requestCode == 10) {
-            Toast.makeText(GameMazeActivity.this, "Stèle complétée !!", Toast.LENGTH_SHORT).show();String guideMessage = "STOP";
+            Toast.makeText(GameMazeActivity.this, "Stèle complétée !!", Toast.LENGTH_SHORT).show();
+            String guideMessage = "STOP";
             try {
                 chatOut.sendMessage("STOP");
             } catch (SmackException.NotConnectedException e) {

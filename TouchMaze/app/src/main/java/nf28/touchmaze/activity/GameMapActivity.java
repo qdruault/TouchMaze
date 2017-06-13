@@ -1,5 +1,6 @@
 package nf28.touchmaze.activity;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ import nf28.touchmaze.maze.maze.Direction2D;
 import nf28.touchmaze.maze.maze.Maze2D;
 import nf28.touchmaze.maze.position.Position2D;
 import nf28.touchmaze.util.PinsDisplayer;
+import nf28.touchmaze.util.TutoAlertDialogFragment;
 import nf28.touchmaze.util.touch.DialogTouchEvent;
 import nf28.touchmaze.util.touch.TactileDialogViewHolder;
 
@@ -66,6 +68,21 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
 
         Log.d("test", "test");
 
+        showDialog();
+
+    }
+
+    public void showDialog() {
+        String message = "Vous êtes le guide !\n" +
+                "Coopérez avec votre partenaire pour résoudre les énigmes et le guider vers la sortie.|n" +
+                "La carte à l'écran est tactile et permet de sentir les murs du labyrinthe.\n" +
+                "Le carré vert représente votre coéquipier, les carrés rouges les énigmes et le carré bleu la sortie.\n" +
+                "La sortie s'ouvre uniquement lorsque les trois énigmes sont résolues.\n" +
+                "Attention, certains murs ne sont détectables que par l'un des deux joueurs, communiquez et avancez en équipe !";
+
+        DialogFragment newFragment = TutoAlertDialogFragment.newInstance(
+                message);
+        newFragment.show(getFragmentManager(), "dialog");
     }
 
     /**
@@ -344,6 +361,15 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
             chatOut.sendMessage(wallsMessage);
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();
+        }
+    }
+
+    // Récupération du resultat de la seconde activité.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Vérification de l'intent grace a son identifiant
+        if (requestCode == 10) {
+            Toast.makeText(GameMapActivity.this, "Stèle complétée !!", Toast.LENGTH_SHORT).show();
         }
     }
 
