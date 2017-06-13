@@ -43,7 +43,7 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
 
     private MapLayout mapLayout;
 
-    private boolean enigmerecu = false;
+    private boolean enigmeAck = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,8 +170,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
         } else if (messageBody.equals("READY")) {
             // Le partenaire est prêt, on lui envoie les murs de sa position de départ.
             sendWallsMessage();
-        } else if (messageBody.equals("ENIGMERECUE")) {
-            enigmerecu=true;
+        } else if (messageBody.equals("ENIGMEACK")) {
+            enigmeAck=true;
         } else if (messageBody.equals("right")|| messageBody.equals("up")|| messageBody.equals("down")|| messageBody.equals("left")){
             // On essaye de bouger l'explorateur.
             Direction2D direction;
@@ -381,10 +381,10 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
     private class MessageThread extends Thread {
         @Override
         public void run() {
-            while (!enigmerecu) {
+            while (!enigmeAck) {
                 try {
                     Log.d("threasd", "dans le thread");
-                    Log.d("threasd", String.valueOf(enigmerecu));
+                    Log.d("threasd", String.valueOf(enigmeAck));
                     chatOut.sendMessage("ENIGME");
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -393,8 +393,8 @@ public class GameMapActivity extends ChatActivity  implements TactileDialogViewH
                     e.printStackTrace();
                 }
             }
-            Log.d("threasd", String.valueOf(enigmerecu));
-            enigmerecu = false;
+            Log.d("threasd", String.valueOf(enigmeAck));
+            enigmeAck = false;
         }
     }
 

@@ -42,7 +42,7 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
     // Tableau contenant les numéros des enigme pré définies
     private ArrayList<Integer> usablePredefinedTabs;
 
-    private boolean enigme_recue = false;
+    private boolean enigmeAck = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,20 +154,25 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             if (END_DIALOG_MESSAGE.equals(messageBody)) {
                 // User déconnecté.
                 finish();
-            } else if (messageBody.equals("ENIGME") && !enigme_recue){
+            } else if (messageBody.equals("ENIGME") && !enigmeAck){
 
                 Log.d("threasd", "enigme recue");
-                enigme_recue = true;
+                enigmeAck = true;
+
+                Log.d("threasd", "avec chatout");
 
                 try {
-
-                    chatOut.sendMessage("ENIGMERECUE");
+                    chatOut.sendMessage("ENIGMEACK");
                 } catch (SmackException.NotConnectedException e) {
                     e.printStackTrace();
                 }
 
+                Log.d("threasd", "av intent");
+
                 Intent intent = new Intent(GameMazeActivity.this, EnigmaExploActivity.class);
                 intent.putExtra("PARTNER", partnerJID);
+
+                Log.d("threasd", "av choix enigme");
 
                 // Numéro d'enigme déterminé au hasard.
                 Random rand = new Random();
@@ -175,25 +180,25 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
                 int enigmaNb = usablePredefinedTabs.get(index);
 
                 Log.d("EM", String.valueOf(enigmaNb));
+                intent.putExtra("ENIGMANB", enigmaNb);
 
                 Log.d("EM", "size " + String.valueOf(usablePredefinedTabs.size()));
+
+                Log.d("threasd", "av remove");
 
                 // Suppression de l'énigme déjà utilisée du tableau.
-                usablePredefinedTabs.remove(enigmaNb);
+                usablePredefinedTabs.remove(index);
 
-                Log.d("EM", "size " + String.valueOf(usablePredefinedTabs.size()));
-
+                /*Log.d("EM", "size " + String.valueOf(usablePredefinedTabs.size()));
                 Log.d("EM", String.valueOf("restants"));
                 for (Integer integer : usablePredefinedTabs) {
                     Log.d("EM", String.valueOf(integer));
-                }
-
-                intent.putExtra("ENIGMANB", enigmaNb);
-
-                enigme_recue = false;
+                }*/
 
                 Log.d("threasd", "demarrage de l'act");
                 startActivityForResult(intent, 10);
+
+
             } else if (messageBody.equals("WIN")){
                 // Partie terminée = écran de victoire !
                 Intent intent = new Intent(GameMazeActivity.this, VictoryActivity.class);
@@ -333,7 +338,7 @@ public class GameMazeActivity extends ChatActivity implements TactileDialogViewH
             } catch (SmackException.NotConnectedException e) {
                 e.printStackTrace();
             }
-            enigme_recue=false;
+            enigmeAck=false;
         }
     }
 

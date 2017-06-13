@@ -514,7 +514,7 @@ public class EnigmaExploActivity extends ChatActivity {
     /**
      * Fermeture de l'activité.
      */
-    /*@Override
+    @Override
     protected void onDestroy() {
         // On ferme tous les canaux.
         if (chatOut != null) {
@@ -528,6 +528,6 @@ public class EnigmaExploActivity extends ChatActivity {
         }
 
         super.onDestroy();
-    }*/
+    }
 
 }
