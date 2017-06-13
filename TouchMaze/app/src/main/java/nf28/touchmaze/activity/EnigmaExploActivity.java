@@ -147,14 +147,6 @@ public class EnigmaExploActivity extends ChatActivity {
             gEnigma = entry.getValue();
         }
 
-        // Envoie de l'enigme au guide en JSON
-        String guideMessage = new Gson().toJson(gEnigma);
-        try {
-            chatOut.sendMessage(guideMessage);
-        } catch (SmackException.NotConnectedException e) {
-            e.printStackTrace();
-        }
-
         // Debug init (couleurs)
         debuginitSurfaceLayout(ex_tab_0);
         debuginitSurfaceLayout(ex_tab_1);
@@ -368,6 +360,24 @@ public class EnigmaExploActivity extends ChatActivity {
                     return false;
                 }
             });
+        }
+
+        // Pause pour laisser le temps à l'activité EnigmaGuideActivity de démarrer.
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Envoie de l'enigme au guide en JSON
+        String guideMessage = new Gson().toJson(gEnigma);
+        String testmessage = "coucou";
+        try {
+            chatOut.sendMessage(guideMessage);
+            //chatOut.sendMessage(testmessage);
+            Toast.makeText(EnigmaExploActivity.this, "Envoyé", Toast.LENGTH_SHORT).show();
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
         }
     }
 

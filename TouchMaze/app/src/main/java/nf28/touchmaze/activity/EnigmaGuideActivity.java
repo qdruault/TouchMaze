@@ -56,6 +56,8 @@ import static nf28.touchmaze.activity.GameMazeActivity.regularBoolToByte;
 
 public class EnigmaGuideActivity extends ChatActivity {
 
+    String testmessage;
+
     // Date de demarrage du tacticon
     Date startTime = new Date();
     // Date d'arret du tacticon
@@ -187,6 +189,9 @@ public class EnigmaGuideActivity extends ChatActivity {
                         if (!threadIsRunning) {
 
                             Log.d("Touch", "Num du surfaceLayout" + String.valueOf(sf.getNum()));
+
+                            if (testmessage != null)
+                                Log.d("Test", testmessage);
 
                             // Si l'enigme à été set
                             if (enigma != null) {
@@ -423,6 +428,7 @@ public class EnigmaGuideActivity extends ChatActivity {
             }
             else {
                 enigma = new Gson().fromJson(messageBody, GuideEnigma.class);
+                //testmessage = messageBody;
             }
         }
     }
