@@ -318,15 +318,15 @@ public class EnigmaExploActivity extends ChatActivity {
                                     // Si le tacticon est complementaire
                                     if (touchedTacticon.getStatus().equals(Tacticon.Status.COMPLEMENTARY)) {
 
+                                        // Passage dans l'etat moveAction
+                                        moveAction = true;
+
                                         // Stocke le tacticon sélectionné et l'index
                                         selectedTacticon = touchedTacticon;
                                         selectedAreaIndex = sf.getNum();
 
                                         // Feedback visuel
                                         sf.setBackgroundColor(getResources().getColor(R.color.pink));
-
-                                        // Passage dans l'etat moveAction
-                                        moveAction = true;
 
                                         Log.d("Touch", "Selection du taction");
                                     } else {
