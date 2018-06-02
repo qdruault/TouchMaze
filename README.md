@@ -42,4 +42,4 @@ Ceci reste un projet scolaire répondant à un cadre et à des délais précis. 
 
 ## Auteurs
 
-Projet développé das le cadre de l'UV NF28 à l'UTC par Baptiste DE FILIPPIS, Quentin DRUAULT-AUBIN, Théo HORDEQUIN et Thibault MERCIER.
+Projet développé dans le cadre de l'UV NF28 à l'UTC par Baptiste DE FILIPPIS, Quentin DRUAULT-AUBIN, Théo HORDEQUIN et Thibault MERCIER.
